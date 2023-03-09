@@ -1,0 +1,19 @@
+sand = 0
+canyon = 1
+mountain = 2
+flower = 3
+forest = 4
+water = 5
+grass = 6
+oracle = 7
+farm = 8
+tower = 9
+tavern = 10
+barn = 11
+harbor = 12
+paddock = 13
+city = 14
+
+
+even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
+odd = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j + 1), (i - 1, j + 1)
