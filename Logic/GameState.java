@@ -22,7 +22,7 @@ public class GameState {
 			new DrawCard();
 			break;
 		case PLAYSETTLEMENTS:
-			new PlaySettlements(factoryNumber, chosen, rowChosen);
+			new PlaySettlements();
 			break;
 		case PLAYLOCATIONTILE:
 			new PlayLocationTile();
@@ -39,19 +39,19 @@ public class GameState {
 		
 	}
 	public static ArrayList<Pair> getValidSettlements(Player p){
-		
+		return null;
 	}
 	public static ArrayList<Pair> getValidTavernSettlements(){
-		
+		return null;
 	}
 	public static ArrayList<Pair> getValidHarborMoves(){
-		
+		return null;
 	}
 	public static ArrayList<Pair> getValidBarnMoves(){
-		
+		return null;
 	}
 	public static ArrayList<Pair> getValidPaddockMoves(){
-	
+		return null;
 	}
 	
 	

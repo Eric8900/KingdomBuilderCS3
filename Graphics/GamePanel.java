@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import javax.imageio.ImageIO;
@@ -15,11 +16,13 @@ import javax.swing.JPanel;
 import javax.swing.RepaintManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
-public class GamePanel extends JPanel {
-    private BufferedImage[] BOARDS = new BufferedImage[8];
-    private HashMap<BufferedImage, Boolean> boards;
+public class GamePanel extends JPanel implements MouseListener {
+    private BufferedImage[] BOARDS = new BufferedImage[16];
+    private int[][][] boardConfig = new int[4][10][10];
+    private BufferedImage[] boards = new BufferedImage[4];
     public GamePanel() {
         try {
+            boolean[] used = new boolean[16];
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
             BOARDS[2] = ImageIO.read(GamePanel.class.getResource("/Images/Board3.png"));
@@ -28,7 +31,54 @@ public class GamePanel extends JPanel {
             BOARDS[5] = ImageIO.read(GamePanel.class.getResource("/Images/Board6.png"));
             BOARDS[6] = ImageIO.read(GamePanel.class.getResource("/Images/Board7.png"));
             BOARDS[7] = ImageIO.read(GamePanel.class.getResource("/Images/Board8.png"));
-            
+            BOARDS[8] = ImageIO.read(GamePanel.class.getResource("/Images/Board9.png"));
+            BOARDS[9] = ImageIO.read(GamePanel.class.getResource("/Images/Board10.png"));
+            BOARDS[10] = ImageIO.read(GamePanel.class.getResource("/Images/Board11.png"));
+            BOARDS[11] = ImageIO.read(GamePanel.class.getResource("/Images/Board12.png"));
+            BOARDS[12] = ImageIO.read(GamePanel.class.getResource("/Images/Board13.png"));
+            BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
+            BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
+            BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
+            //BOARD RANDOMIZATION INITIALIZATION
+            for (int i = 0; i < 4; i++) {
+                int rand = (int) (Math.random() * 16);
+                while (used[rand]) {
+                    rand = (int) (Math.random() * 16);
+                }
+                used[rand] = true;
+                boards[i] = BOARDS[rand];
+                boolean rev = false;
+                if (rand > 7) {
+                    rev = true;
+                    rand -= 7;
+                }
+                else {
+                    rand++;
+                }
+                Scanner sc = new Scanner(new File("Boards/Board" + rand + ".txt"));
+                int[][] tempBoard = new int[10][10];
+                for (int j = 0; j < 10; j++) {
+                    for (int r = 0; r < 10; r++) {
+                        tempBoard[j][r] = sc.nextInt();
+                    }
+                }
+                if (!rev) boardConfig[i] = tempBoard;
+                else {
+                    //reversed one for the upside down cofig
+                    for (int j = 9; j >= 0; j--) {
+                        for (int r = 9; r >= 0; r--) {
+                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];      
+                        }
+                    }
+                }
+                for (int r = 0; r < 10; r++) {
+                    for (int c = 0; c < 10; c++) {
+                        System.out.print(boardConfig[i][r][c] + " ");
+                    }
+                    System.out.println();
+                }
+                System.out.println("NEW");
+            }
         }
         catch(Exception e) {
             System.out.println(e);
@@ -41,12 +91,36 @@ public class GamePanel extends JPanel {
         int startY = 75;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
-        //(startX + width) - (width + ((int)(20 / mult)))
-        int hOffset = ((width - ((int)(30 / mult))));
-        int vOffset = ((height - ((int)(17 / mult))));
-        g.drawImage(BOARDS[0], startX, startY, width, height, null);
-        g.drawImage(BOARDS[1], startX, startY + vOffset, width, height, null);
-        g.drawImage(BOARDS[2], startX + hOffset, startY, width, height, null);
-        g.drawImage(BOARDS[3], startX + hOffset, startY + vOffset, width, height, null);
+        int hOffset = ((width - ((int)(31 / mult))));
+        int vOffset = ((height - ((int)(18 / mult))));
+        g.drawImage(boards[0], startX, startY, width, height, null);
+        g.drawImage(boards[1], startX, startY + vOffset, width, height, null);
+        g.drawImage(boards[2], startX + hOffset, startY, width, height, null);
+        g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
+    }
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+    }
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    }
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    }
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 }
