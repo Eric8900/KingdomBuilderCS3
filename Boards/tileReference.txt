@@ -13,6 +13,7 @@ barn = 11
 harbor = 12
 paddock = 13
 city = 14
+oasis = 15
 
 
 even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
