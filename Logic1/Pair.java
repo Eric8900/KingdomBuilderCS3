@@ -1,3 +1,4 @@
+package Logic1;
 
 public class Pair {
 	int x,y;

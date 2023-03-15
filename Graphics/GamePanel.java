@@ -16,13 +16,15 @@ import javax.swing.JPanel;
 import javax.swing.RepaintManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
+import Logic1.*;
 public class GamePanel extends JPanel implements MouseListener {
-    private BufferedImage[] BOARDS = new BufferedImage[16];
-    private int[][][] boardConfig = new int[4][10][10];
     private int[][] initBoard = new int[20][20];
     private BufferedImage[] boards = new BufferedImage[4];
+    private static GameState gamestate;
     public GamePanel() {
+        gamestate = new GameState();
         try {
+            BufferedImage[] BOARDS = new BufferedImage[16];
             boolean[] used = new boolean[16];
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
@@ -41,6 +43,7 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
             //BOARD RANDOMIZATION INITIALIZATION
+            int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
                 int rand = (int) (Math.random() * 16);
                 while (used[rand]) {
@@ -108,6 +111,7 @@ public class GamePanel extends JPanel implements MouseListener {
         catch(Exception e) {
             System.out.println(e);
         }
+        GameState.board = new GameBoard(initBoard);
     }
     public void paint(Graphics g) {
         super.paintComponent(g);

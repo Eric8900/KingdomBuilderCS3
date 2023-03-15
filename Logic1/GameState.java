@@ -1,8 +1,9 @@
+package Logic1;
 import java.util.*;
 public class GameState {
 	public static ArrayList<Player> players;
-	public static GameHex [][] board; 
 	public static int playerTurn;
+	public static GameBoard board;
 	public static State currentState;
 	public static ArrayList<Integer> deck;
 	public static ArrayList<Integer> discard;
@@ -11,10 +12,7 @@ public class GameState {
 	}
 	public GameState() {
 		players = new ArrayList<Player>();
-		
 		playerTurn = 0;
-		createBoard();
-		
 	}
 	public static void update() {
 		switch(currentState){
@@ -34,9 +32,6 @@ public class GameState {
 			
 
 	}
-	}
-	public static void createBoard() {
-		
 	}
 	public static ArrayList<Pair> getValidSettlements(Player p){
 		return null;
