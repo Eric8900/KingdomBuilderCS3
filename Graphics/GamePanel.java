@@ -19,6 +19,7 @@ import javax.swing.text.AttributeSet.ColorAttribute;
 public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] BOARDS = new BufferedImage[16];
     private int[][][] boardConfig = new int[4][10][10];
+    private int[][] initBoard = new int[20][20];
     private BufferedImage[] boards = new BufferedImage[4];
     public GamePanel() {
         try {
@@ -79,6 +80,30 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
                 System.out.println("NEW");
             }
+            for (int i = 0; i < 19; i++) {
+                for (int j = 0; j < 19; j++) {
+                    int b = 0;
+                    int I = i;
+                    int J = j;
+                    // hard coding goes crazy
+                    if (j > 9) {
+                        b++;
+                        J -= 10;
+                    }
+                    if (i > 9) {
+                        if (j < 10) b = 2;
+                        if (j > 9) b = 3;
+                        I -= 10;
+                    }
+                    initBoard[i][j] = boardConfig[b][I][J];
+                }
+            }
+            for (int i = 0; i < 19; i++) {
+                for (int j = 0; j < 19; j++) {
+                    System.out.print(initBoard[i][j] + " ");
+                }
+                System.out.println();
+            }
         }
         catch(Exception e) {
             System.out.println(e);
@@ -94,8 +119,8 @@ public class GamePanel extends JPanel implements MouseListener {
         int hOffset = ((width - ((int)(31 / mult))));
         int vOffset = ((height - ((int)(18 / mult))));
         g.drawImage(boards[0], startX, startY, width, height, null);
-        g.drawImage(boards[1], startX, startY + vOffset, width, height, null);
-        g.drawImage(boards[2], startX + hOffset, startY, width, height, null);
+        g.drawImage(boards[1], startX + hOffset, startY, width, height, null);
+        g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
     }
     @Override
