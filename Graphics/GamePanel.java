@@ -24,6 +24,9 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] boards = new BufferedImage[4];
     private static GameState gamestate;
     private String cordXY = "YOOO";
+    private static int startX = 300;
+    private static int startY = 75;
+    private static BufferedImage boardSample;
     public GamePanel() {
         gamestate = new GameState();
         try {
@@ -45,6 +48,7 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
+            boardSample = BOARDS[0];
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
@@ -107,15 +111,20 @@ public class GamePanel extends JPanel implements MouseListener {
         catch(Exception e) {
             System.out.println(e);
         }
-        GameState.board = new GameBoard(initBoard);
+        GameState.board = new GameBoard(initBoard,boardSample, startX, startY);
+        GameHex[][] gm = GameState.board.GameMatrix;
+        for(int i = 0; i<gm.length; i++){
+            for(int j = 0; j<gm[i].length; j++){
+                System.out.print("(" + gm[i][j].x + ", " + gm[i][j].y + " ) ");
+            }
+            System.out.println();
+        }
         addMouseListener(this);
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
         g.drawString(cordXY, 50, 50);
         double mult = 1.2;
-        int startX = 300;
-        int startY = 75;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
         int hOffset = ((width - ((int)(31 / mult))));
