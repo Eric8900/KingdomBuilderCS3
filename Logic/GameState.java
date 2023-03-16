@@ -22,7 +22,7 @@ public class GameState {
 			new DrawCard();
 			break;
 		case PLAYSETTLEMENTS:
-			new PlaySettlements(factoryNumber, chosen, rowChosen);
+			new PlaySettlements();
 			break;
 		case PLAYLOCATIONTILE:
 			new PlayLocationTile();
