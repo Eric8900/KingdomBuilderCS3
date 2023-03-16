@@ -10,6 +10,7 @@ public class GameHex {
     public GameHex topRight;
     public GameHex botLeft;
     public GameHex botRight;
+    public int player;
     public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br) {
         this.x = x;
         this.y = y;

@@ -4,6 +4,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
@@ -21,6 +23,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private int[][] initBoard = new int[20][20];
     private BufferedImage[] boards = new BufferedImage[4];
     private static GameState gamestate;
+    private String cordXY = "YOOO";
     public GamePanel() {
         gamestate = new GameState();
         try {
@@ -75,13 +78,6 @@ public class GamePanel extends JPanel implements MouseListener {
                         }
                     }
                 }
-                for (int r = 0; r < 10; r++) {
-                    for (int c = 0; c < 10; c++) {
-                        System.out.print(boardConfig[i][r][c] + " ");
-                    }
-                    System.out.println();
-                }
-                System.out.println("NEW");
             }
             for (int i = 0; i < 19; i++) {
                 for (int j = 0; j < 19; j++) {
@@ -112,9 +108,11 @@ public class GamePanel extends JPanel implements MouseListener {
             System.out.println(e);
         }
         GameState.board = new GameBoard(initBoard);
+        addMouseListener(this);
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
+        g.drawString(cordXY, 50, 50);
         double mult = 1.2;
         int startX = 300;
         int startY = 75;
@@ -126,30 +124,30 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawImage(boards[1], startX + hOffset, startY, width, height, null);
         g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
+        g.setColor(new Color(50, 50, 50));
+        
     }
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+        int x = e.getX();
+        int y = e.getY();
+        repaint();
     }
     @Override
     public void mousePressed(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
     }
     @Override
     public void mouseReleased(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
     }
     @Override
     public void mouseEntered(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
     }
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
     }
 }
