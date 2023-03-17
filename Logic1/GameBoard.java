@@ -80,8 +80,8 @@ public class GameBoard {
         double hexSideLength = width/30;//sidelength of the hexagon is 1/30th of the width (this has been verified)
         int space_x = 2 * (int)(hexSideLength * Math.sin(Math.toRadians(60)));//horiztonal gap between the centers of two adj hexagons
         int space_y = 3 * (int)hexSideLength/2;//vertical gape between the centers of two adj hexagons (one on top and one below)
-        int first_x = startX + space_x;
-        int first_y = startY + space_x/2 + (int)hexSideLength/2;
+        int first_x = startX + space_x/2;
+        int first_y = startY + (int) hexSideLength/2;
         //first_x and first_y represent the x y coordinates of the first hexagon
         GameMatrix[0][0].x = first_x;
         GameMatrix[0][0].y = first_y;
