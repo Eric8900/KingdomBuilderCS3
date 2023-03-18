@@ -27,6 +27,11 @@ public class GamePanel extends JPanel implements MouseListener {
     private static int startX = 300;
     private static int startY = 75;
     private static BufferedImage boardSample;
+    private static int hex_row = -1;
+    private static int hex_col = -1;
+    private static int radius = 52;
+    private static int x = -1;
+    private static int y = -1;
     public GamePanel() {
         gamestate = new GameState();
         try {
@@ -119,6 +124,7 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             System.out.println();
         }
+        System.out.println("This is where it is "+ cordXY);
         addMouseListener(this);
     }
     public void paint(Graphics g) {
@@ -134,13 +140,30 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
         g.setColor(new Color(50, 50, 50));
+        g.drawString(cordXY,295, 75);
+        for(int i = 0; i<GameState.board.GameMatrix.length; i++){
+            for(int j = 0; j<GameState.board.GameMatrix[i].length; j++){
+                int x1 = GameState.board.GameMatrix[i][j].x;
+                int y1 = GameState.board.GameMatrix[i][j].y;
+                x1 = x1 - radius/2;
+                y1 = y1 - radius/2;
+                if(i == 0 || true)
+                g.drawOval(x1, y1, radius, radius);
+            }
+        }
+        /*g.fillOval(324 - radius/2, 100-radius/2, radius , radius);
+        g.fillOval(372 - radius/2, 100 - radius/2, radius, radius);
+        g.fillOval(420 - radius/2, 100 - radius/2, radius, radius);
+        g.fillOval(468 - radius/2, 100 - radius/2, radius, radius);
+        g.fillOval(348 - radius/2, 145 - radius/2, radius , radius);
+        g.fillOval(324 - radius/2, 190 -radius/2, radius , radius);*/
         
     }
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
-        int x = e.getX();
-        int y = e.getY();
+        x = e.getX();
+        y = e.getY();
         cordXY = x + " " + y;
         repaint();
     }
