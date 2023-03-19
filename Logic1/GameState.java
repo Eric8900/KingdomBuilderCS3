@@ -33,6 +33,13 @@ public class GameState {
 
 	}
 	}
+	public static State getState() {
+		return currentState;
+	}
+
+	public static void setState(State gs) {
+		currentState = gs;
+	}
 	public static ArrayList<Pair> getValidSettlements(Player p){
 		return null;
 	}
