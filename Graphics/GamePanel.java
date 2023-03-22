@@ -127,8 +127,8 @@ public class GamePanel extends JPanel implements MouseListener {
         double mult = 1.2;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
-        int hOffset = ((width - ((int)(31 / mult))));
-        int vOffset = ((height - ((int)(18 / mult))));
+        int hOffset = ((width - ((int)(32 / mult))));
+        int vOffset = ((height - ((int)(19 / mult))));
         g.drawImage(boards[0], startX, startY, width, height, null);
         g.drawImage(boards[1], startX + hOffset, startY, width, height, null);
         g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
