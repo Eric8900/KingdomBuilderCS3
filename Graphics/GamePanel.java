@@ -107,7 +107,7 @@ public class GamePanel extends JPanel implements MouseListener {
         catch(Exception e) {
             System.out.println(e);
         }
-        GameState.board = new GameBoard(initBoard);
+        GameState.board = new GameBoard(initBoard, 300, 75);
         addMouseListener(this);
     }
     public void paint(Graphics g) {
@@ -132,6 +132,7 @@ public class GamePanel extends JPanel implements MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
+        cordXY = x + " " + y;
         repaint();
     }
     @Override

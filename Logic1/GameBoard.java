@@ -7,7 +7,7 @@ public class GameBoard {
     //this class will be the graph
     public static GameHex[][] GameMatrix;
 
-    public GameBoard(int[][] init, BufferedImage board, int startX, int startY) {
+    public GameBoard(int[][] init, int startX, int startY) {
         GameMatrix = new GameHex[init.length][init[0].length];
         for (int i = 0; i < init.length; i++) {
             for (int j = 0; j < init[i].length; j++) {
@@ -20,7 +20,7 @@ public class GameBoard {
                 addNeighbors(GameMatrix[i][j], i, j);
             }
         }
-        setCoords(board,startX, startY);
+        setCoords(startX, startY);
     }
 
     /*monkey idea for init:
@@ -75,7 +75,7 @@ public class GameBoard {
             }
     }
 
-    public void setCoords(BufferedImage board, int startX, int startY){
+    public void setCoords(int startX, int startY){
         int space_x = 49;//horiztonal gap between the centers of two adj hexagons (approx by trial and error)
         int space_y = 43;//vertical gape between the centers of two adj hexagons (one on top and one below)
         int first_x = 324;//trial and error
