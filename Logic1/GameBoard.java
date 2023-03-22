@@ -76,19 +76,19 @@ public class GameBoard {
     }
 
     public void setCoords(BufferedImage board, int startX, int startY){
-        double width = 2 * board.getWidth();//total width of the rectangular board
-        double hexSideLength = width/30;//sidelength of the hexagon is 1/30th of the width (this has been verified)
-        int space_x = 2 * (int)(hexSideLength * Math.sin(Math.toRadians(60)));//horiztonal gap between the centers of two adj hexagons
-        int space_y = 3 * (int)hexSideLength/2;//vertical gape between the centers of two adj hexagons (one on top and one below)
-        int first_x = startX + space_x/2;
-        int first_y = startY + (int) hexSideLength/2;
+        int space_x = 49;//horiztonal gap between the centers of two adj hexagons (approx by trial and error)
+        int space_y = 43;//vertical gape between the centers of two adj hexagons (one on top and one below)
+        int first_x = 324;//trial and error
+        int first_y = 100;
         //first_x and first_y represent the x y coordinates of the first hexagon
         GameMatrix[0][0].x = first_x;
         GameMatrix[0][0].y = first_y;
         for(int i = 0; i<GameMatrix.length; i++){
+            //if(i == GameMatrix.length - 4) space_y--;
             for(int j = 0; j<GameMatrix[i].length; j++){
                GameMatrix[i][j].x = first_x + j * space_x;
                GameMatrix[i][j].y = first_y + i * space_y;
+                if(i >= GameMatrix.length - 4) GameMatrix[i][j].y--;
                if(i % 2 == 1){
                    GameMatrix[i][j].x += space_x/2;
                }
