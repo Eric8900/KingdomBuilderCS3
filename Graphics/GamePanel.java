@@ -119,13 +119,20 @@ public class GamePanel extends JPanel implements MouseListener {
         int width = (int)(620/mult);
         int height = (int)(528/mult);
         int hOffset = ((width - ((int)(32 / mult))));
-        int vOffset = ((height - ((int)(19 / mult))));
+        int vOffset = ((height - ((int)(18 / mult))));
         g.drawImage(boards[0], startX, startY, width, height, null);
         g.drawImage(boards[1], startX + hOffset, startY, width, height, null);
         g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
         g.setColor(new Color(50, 50, 50));
-        
+        //58(x) 52.8(y)
+        for (int i = 0; i < 20; i++) {
+            int y = 79 + (int) (42.5 * i);
+            for (int j = 0; j < 20; j++) {
+                int x = i % 2 == 0 ? 301 + (49 * j) : 326 + (49 * j);
+                g.drawOval(x, y, (int) 47, 48); //48 is hardcoded...
+            }
+        }
     }
     @Override
     public void mouseClicked(MouseEvent e) {
