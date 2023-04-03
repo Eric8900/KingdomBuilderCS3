@@ -131,10 +131,10 @@ public class GamePanel extends JPanel implements MouseListener {
             int y = (startY + 4) + (int) (42.5 * i);
             for (int j = 0; j < 20; j++) {
                 int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
-                g.drawOval(x, y, (int) 47, 48); //47 and 48 is hardcoded...
+                g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
                 //centers
-                System.out.print((x + (47 / 2)) + " " + (y + (48 / 2)) + " / ");
-                centers[i][j] = new Pair((x + (47 / 2)), (y + (48 / 2)));
+                System.out.print((x + (48 / 2)) + " " + (y + (48 / 2)) + " / ");
+                centers[i][j] = new Pair((x + (48 / 2)), (y + (48 / 2)));
             }
             System.out.println();
         }
