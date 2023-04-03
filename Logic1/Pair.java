@@ -1,16 +1,10 @@
 package Logic1;
 
 public class Pair {
-	int x,y;
-	public Pair(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public int first, second;
+	public Pair(int first, int second) {
+		this.first = first;
+		this.second = second;
 		
-	}
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
 	}
 }

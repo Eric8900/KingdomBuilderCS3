@@ -7,7 +7,7 @@ public class GameBoard {
     //this class will be the graph
     public static GameHex[][] GameMatrix;
 
-    public GameBoard(int[][] init, int startX, int startY) {
+    public GameBoard(int[][] init, Pair[][] centers, int startX, int startY) {
         GameMatrix = new GameHex[init.length][init[0].length];
         for (int i = 0; i < init.length; i++) {
             for (int j = 0; j < init[i].length; j++) {

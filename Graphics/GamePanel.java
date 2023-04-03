@@ -20,6 +20,7 @@ import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import Logic1.*;
 public class GamePanel extends JPanel implements MouseListener {
+    private static final String ArrayLis = null;
     private int[][] initBoard = new int[20][20];
     private BufferedImage[] boards = new BufferedImage[4];
     public static GameState gameState;
@@ -107,15 +108,14 @@ public class GamePanel extends JPanel implements MouseListener {
         catch(Exception e) {
             System.out.println(e);
         }
-        GameState.board = new GameBoard(initBoard, 300, 75);
         addMouseListener(this);
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
-        g.drawString(cordXY, 50, 50);
+        g.drawString(cordXY, 1300, 50);
         double mult = 1.2;
-        int startX = 300;
-        int startY = 75;
+        int startX = 0;
+        int startY = 0;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
         int hOffset = ((width - ((int)(32 / mult))));
@@ -126,13 +126,19 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
         g.setColor(new Color(50, 50, 50));
         //58(x) 52.8(y)
+        Pair[][] centers = new Pair[20][20];
         for (int i = 0; i < 20; i++) {
-            int y = 79 + (int) (42.5 * i);
+            int y = (startY + 4) + (int) (42.5 * i);
             for (int j = 0; j < 20; j++) {
-                int x = i % 2 == 0 ? 301 + (49 * j) : 326 + (49 * j);
-                g.drawOval(x, y, (int) 47, 48); //48 is hardcoded...
+                int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
+                g.drawOval(x, y, (int) 47, 48); //47 and 48 is hardcoded...
+                //centers
+                System.out.print((x + (47 / 2)) + " " + (y + (48 / 2)) + " / ");
+                centers[i][j] = new Pair((x + (47 / 2)), (y + (48 / 2)));
             }
+            System.out.println();
         }
+        GameState.board = new GameBoard(initBoard, centers, 300, 75);
     }
     @Override
     public void mouseClicked(MouseEvent e) {
