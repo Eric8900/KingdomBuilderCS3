@@ -140,6 +140,12 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         GameState.board = new GameBoard(initBoard, centers, 300, 75);
     }
+    private void drawPlayerUI(Graphics g) {
+        for(Player p : gameState.players){
+
+        }
+
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
