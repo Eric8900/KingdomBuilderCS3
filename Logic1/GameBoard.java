@@ -74,7 +74,7 @@ public class GameBoard {
             }
     }
 
-    public void setCoords(int startX, int startY){
+    /*public void setCoords(int startX, int startY){
         int space_x = 49;//horiztonal gap between the centers of two adj hexagons (approx by trial and error)
         int space_y = 43;//vertical gape between the centers of two adj hexagons (one on top and one below)
         int first_x = 324;//trial and error
@@ -93,7 +93,7 @@ public class GameBoard {
                }
             }
         }
-    }
+    }*/
 
     public boolean inBounds(int i, int j) {
         return i >= 0 && i < GameMatrix.length && j >= 0 && j < GameMatrix[i].length;
