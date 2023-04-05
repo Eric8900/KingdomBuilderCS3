@@ -139,11 +139,31 @@ public class GamePanel extends JPanel implements MouseListener {
             System.out.println();
         }
         GameState.board = new GameBoard(initBoard, centers, 300, 75);
+        drawAllPlayerUI(g);
     }
-    private void drawPlayerUI(Graphics g) {
-        for(Player p : gameState.players){
+    private void drawAllPlayerUI(Graphics g) {
+        //testing
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
 
-        }
+
+        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/5*3,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/5*4,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/5*3,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/5*4,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+
+
+
+
+
+    }
+    private void drawPlayerUI(Graphics g , Player p, int playerNum,int x, int y, int width, int height){
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        g.drawRoundRect(x,y,width,height,50,50);
+        g.drawString("Player " + (playerNum+1),x+10,y+25);
+        g.drawString(""+p.tilesLeft,x+width/2,y+25);
 
     }
     @Override

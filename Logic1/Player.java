@@ -7,6 +7,7 @@ public class Player {
     public int uniqueRows;
     public int[] freqRows;
     public boolean[] seenRow;
+
     public int tilesLeft;
     public Player(){
         tilesLeft = 40;
