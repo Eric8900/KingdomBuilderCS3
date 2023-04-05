@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] boards = new BufferedImage[4];
     public static GameState gameState;
     private String cordXY = "YOOO";
+    private static int curr_i = -1;
+    private static int curr_j = -1;
     public GamePanel() {
         gameState = new GameState();
         try {
@@ -138,7 +140,9 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             System.out.println();
         }
-        GameState.board = new GameBoard(initBoard, centers, 300, 75);
+        System.out.println("You clicked this hexagon: "+ curr_i +
+                " " + curr_j);
+        GameState.board = new GameBoard(initBoard, centers);
         drawAllPlayerUI(g);
     }
     private void drawAllPlayerUI(Graphics g) {
@@ -172,6 +176,16 @@ public class GamePanel extends JPanel implements MouseListener {
         int x = e.getX();
         int y = e.getY();
         cordXY = x + " " + y;
+        GameHex[][] gm = GameState.board.GameMatrix;
+        for(int i = 0; i<gm.length; i++){
+            for(int j = 0; j<gm[i].length; j++){
+                if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
+                    gm[i][j].highlighted = true;
+                    curr_i = i;
+                    curr_j = j;
+                }
+            }
+        }
         repaint();
     }
     @Override

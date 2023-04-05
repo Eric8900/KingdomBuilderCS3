@@ -11,7 +11,8 @@ public class GameHex {
     public GameHex botLeft;
     public GameHex botRight;
     public int player;
-    public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br) {
+    public boolean highlighted;
+    public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br, boolean highlighted) {
         this.x = x;
         this.y = y;
         terr = t;
@@ -21,5 +22,6 @@ public class GameHex {
         tr = topRight;
         bl = botLeft;
         br = botRight;
+        highlighted = false;
     }
 }

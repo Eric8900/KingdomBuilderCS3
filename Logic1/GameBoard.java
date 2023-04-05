@@ -7,11 +7,11 @@ public class GameBoard {
     //this class will be the graph
     public static GameHex[][] GameMatrix;
 
-    public GameBoard(int[][] init, Pair[][] centers, int startX, int startY) {
+    public GameBoard(int[][] init, Pair[][] centers) {
         GameMatrix = new GameHex[init.length][init[0].length];
         for (int i = 0; i < init.length; i++) {
             for (int j = 0; j < init[i].length; j++) {
-                GameMatrix[i][j] = new GameHex(centers[i][j].first, centers[i][j].second, init[i][j], null, null, null, null, null, null);
+                GameMatrix[i][j] = new GameHex(centers[i][j].first, centers[i][j].second, init[i][j], null, null, null, null, null, null, false);
             }
         }
         //6 pointers
@@ -20,7 +20,6 @@ public class GameBoard {
                 addNeighbors(GameMatrix[i][j], i, j);
             }
         }
-        setCoords(startX, startY);
     }
 
     /*monkey idea for init:
