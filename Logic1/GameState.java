@@ -13,6 +13,7 @@ public class GameState {
 	public GameState() {
 		players = new ArrayList<Player>();
 		playerTurn = 0;
+		currentState = State.DRAWCARD;
 	}
 	public static void update() {
 		switch(currentState){

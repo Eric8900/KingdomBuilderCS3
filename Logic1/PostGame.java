@@ -1,5 +1,5 @@
 package Logic1;
 
-public class DrawCard {
+public class PostGame {
     
 }
