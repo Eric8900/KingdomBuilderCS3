@@ -22,6 +22,8 @@ import Logic1.*;
 public class GamePanel extends JPanel implements MouseListener {
     private static final String ArrayLis = null;
     private int[][] initBoard = new int[20][20];
+    private int startX = 0;
+    private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
     public static GameState gameState;
     private String cordXY = "YOOO";
@@ -106,6 +108,20 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
                 System.out.println();
             }
+            //58(x) 52.8(y)
+            Pair[][] centers = new Pair[20][20];
+            for (int i = 0; i < 20; i++) {
+                int y = (startY + 4) + (int) (42.5 * i);
+                for (int j = 0; j < 20; j++) {
+                    int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
+                    //g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                    //centers
+                    System.out.print((x + (48 / 2)) + " " + (y + (48 / 2)) + " / ");
+                    centers[i][j] = new Pair((x + (48 / 2)), (y + (48 / 2)));
+                }
+                System.out.println();
+            }
+            GameState.board = new GameBoard(initBoard, centers);
         }
         catch(Exception e) {
             System.out.println(e);
@@ -116,8 +132,6 @@ public class GamePanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         g.drawString(cordXY, 1300, 50);
         double mult = 1.2;
-        int startX = 0;
-        int startY = 0;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
         int hOffset = ((width - ((int)(32 / mult))));
@@ -133,16 +147,15 @@ public class GamePanel extends JPanel implements MouseListener {
             int y = (startY + 4) + (int) (42.5 * i);
             for (int j = 0; j < 20; j++) {
                 int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
-                g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
-                //centers
-                System.out.print((x + (48 / 2)) + " " + (y + (48 / 2)) + " / ");
-                centers[i][j] = new Pair((x + (48 / 2)), (y + (48 / 2)));
+                if (GameState.board.GameMatrix[i][j].highlighted) {
+                    g.setColor(Color.RED);
+                    g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                    g.setColor(Color.BLACK);
+                }
             }
-            System.out.println();
         }
         System.out.println("You clicked this hexagon: "+ curr_i +
                 " " + curr_j);
-        GameState.board = new GameBoard(initBoard, centers);
         drawAllPlayerUI(g);
     }
     private void drawAllPlayerUI(Graphics g) {
