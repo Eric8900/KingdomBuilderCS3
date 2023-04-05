@@ -11,7 +11,7 @@ public class GameBoard {
         GameMatrix = new GameHex[init.length][init[0].length];
         for (int i = 0; i < init.length; i++) {
             for (int j = 0; j < init[i].length; j++) {
-                GameMatrix[i][j] = new GameHex(-1, -1, init[i][j], null, null, null, null, null, null);
+                GameMatrix[i][j] = new GameHex(centers[i][j].first, centers[i][j].second, init[i][j], null, null, null, null, null, null);
             }
         }
         //6 pointers
