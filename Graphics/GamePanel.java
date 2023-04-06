@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startX = 0;
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
+    private BufferedImage[] locationTiles = new BufferedImage[4];
     public static GameState gameState;
     private String cordXY = "YOOO";
     private static int curr_i = -1;
@@ -50,6 +51,10 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
+            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            locationTiles[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
@@ -181,8 +186,15 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
         g.drawString(""+p.tilesLeft,x+width/2,y+25);
+        drawPlayerLocationTiles(g,gameState.players.get(0),0,KingdomFrame.WIDTH/5*3,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+
 
     }
+    private void drawPlayerLocationTiles(Graphics g,Player p, int playerNum,int x, int y, int width, int height){
+        //g.fillOval();
+        g.drawImage(locationTiles[0],x+20,y+20,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
