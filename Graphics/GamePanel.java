@@ -186,13 +186,24 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
         g.drawString(""+p.tilesLeft,x+width/2,y+25);
-        drawPlayerLocationTiles(g,gameState.players.get(0),0,KingdomFrame.WIDTH/5*3,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
 
 
     }
     private void drawPlayerLocationTiles(Graphics g,Player p, int playerNum,int x, int y, int width, int height){
         //g.fillOval();
-        g.drawImage(locationTiles[0],x+20,y+20,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+        g.drawImage(locationTiles[0],x+10,y+20,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+        g.drawImage(locationTiles[1],x+width/2-10,y+20,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+        g.drawImage(locationTiles[2],x+10,y+height/2,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+        g.drawImage(locationTiles[3],x+width/2-10,y+height/2,locationTiles[0].getWidth()/2,locationTiles[0].getWidth()/2, null);
+
+        g.drawString(p.locationTiles.get(0).toString(),x+5+locationTiles[0].getWidth()/2/2,y+20+locationTiles[0].getWidth()/2);
+        g.drawString(p.locationTiles.get(1).toString(),x+locationTiles[0].getWidth()/2/2+width/2-15,y+20+locationTiles[0].getWidth()/2);
+        g.drawString(p.locationTiles.get(2).toString(),x+5+locationTiles[0].getWidth()/2/2,y+20+locationTiles[0].getWidth());
+        g.drawString(p.locationTiles.get(3).toString(),x+locationTiles[0].getWidth()/2/2+width/2-15,y+20+locationTiles[0].getWidth());
+        
+
+        
     }
 
     @Override

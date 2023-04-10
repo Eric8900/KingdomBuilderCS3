@@ -11,5 +11,12 @@ public class Player {
     public int tilesLeft;
     public Player(){
         tilesLeft = 40;
+        locationTiles = new ArrayList<Integer>(4);
+        locationTiles.add(0);
+        locationTiles.add(0);
+        locationTiles.add(0);
+        locationTiles.add(0);
+    
     }
+
 }
