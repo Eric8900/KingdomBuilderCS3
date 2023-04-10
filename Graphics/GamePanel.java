@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -26,6 +28,9 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locationTiles = new BufferedImage[4];
+    private BufferedImage[] settlements = new BufferedImage[4];
+    private BufferedImage cardBack;
+    private BufferedImage background;
     public static GameState gameState;
     private String cordXY = "YOOO";
     private static int curr_i = -1;
@@ -55,6 +60,13 @@ public class GamePanel extends JPanel implements MouseListener {
             locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             locationTiles[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            settlements[0] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-blue.png"));
+            settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
+            settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
+            settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
+            background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
+            
+            cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
@@ -135,6 +147,7 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
+        g.drawImage(background, 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.drawString(cordXY, 1300, 50);
         double mult = 1.2;
         int width = (int)(620/mult);
@@ -162,6 +175,30 @@ public class GamePanel extends JPanel implements MouseListener {
         System.out.println("You clicked this hexagon: "+ curr_i +
                 " " + curr_j);
         drawAllPlayerUI(g);
+        drawDeckDiscard(g);
+    }
+    private void drawDeckDiscard(Graphics g){
+        
+        double rads = Math.toRadians(90);
+        double sin = Math.abs(Math.sin(rads));
+        double cos = Math.abs(Math.cos(rads));
+        int w = (int) Math.floor(cardBack.getWidth() * cos + cardBack.getHeight() * sin);
+        int h = (int) Math.floor(cardBack.getHeight() * cos + cardBack.getWidth() * sin);
+        BufferedImage rotatedImage = new BufferedImage(w, h, cardBack.getType());
+        AffineTransform at = new AffineTransform();
+        at.translate(w / 2, h / 2);
+        at.rotate(rads,0, 0);
+        at.translate(-cardBack.getWidth() / 2, -cardBack.getHeight() / 2);
+        AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        rotateOp.filter(cardBack,rotatedImage);
+        
+        double scale = 1.2f;
+        g.drawImage(rotatedImage,0,865, (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale),null);
+        g.drawImage(rotatedImage,(int)(rotatedImage.getWidth()*scale),865, (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale),null);
+        g.drawString("Deck",  0, (int)(rotatedImage.getHeight()*scale)+865);
+        g.drawString("Discard",  (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale)+865);
+
+
     }
     private void drawAllPlayerUI(Graphics g) {
         //testing
@@ -182,10 +219,15 @@ public class GamePanel extends JPanel implements MouseListener {
 
     }
     private void drawPlayerUI(Graphics g , Player p, int playerNum,int x, int y, int width, int height){
+
+        double settlementScale = 0.5;
+
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
-        g.drawString(""+p.tilesLeft,x+width/2,y+25);
+        g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
+        g.drawImage(settlements[playerNum], x+width/3, y,(int)(settlements[playerNum].getWidth()*settlementScale),(int)(settlements[playerNum].getHeight()*settlementScale), null);
+
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
 
 
