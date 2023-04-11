@@ -21,6 +21,7 @@ import javax.swing.RepaintManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import Logic1.*;
+import Logic1.GameState.State;
 public class GamePanel extends JPanel implements MouseListener {
     private static final String ArrayLis = null;
     private int[][] initBoard = new int[20][20];
@@ -101,6 +102,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     }
                 }
             }
+            
             for (int i = 0; i < 19; i++) {
                 for (int j = 0; j < 19; j++) {
                     int b = 0;
@@ -255,14 +257,23 @@ public class GamePanel extends JPanel implements MouseListener {
         int y = e.getY();
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
-        for(int i = 0; i<gm.length; i++){
-            for(int j = 0; j<gm[i].length; j++){
-                if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
-                    gm[i][j].highlighted = true;
-                    curr_i = i;
-                    curr_j = j;
+        if (GameState.currentState == State.PLAYSETTLEMENTS) {
+            for(int i = 0; i<gm.length; i++){
+                for(int j = 0; j<gm[i].length; j++){
+                    if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
+                        
+                        gm[i][j].highlighted = true;
+                        curr_i = i;
+                        curr_j = j;
+                    }
                 }
             }
+        }
+        if (GameState.currentState == State.DRAWCARD) {
+
+        }
+        if (GameState.currentState == State.PLAYLOCATIONTILE) {
+
         }
         repaint();
     }

@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    private ArrayList<Integer> deck;
-    private ArrayList<Integer> discard;
-    private ArrayList<Integer> objectiveCards;
+    public ArrayList<Integer> deck;
+    public ArrayList<Integer> discard;
+    public ArrayList<Integer> objectiveCards;
+    public ArrayList<Integer> chosenObjectiveCards;
 
     //Deck constructor. Instantiates instance variables
+    
     public Deck(){
         deck = new ArrayList<>();
         discard = new ArrayList<>();
         objectiveCards = new ArrayList<>();
+        chosenObjectiveCards = new ArrayList<>();
         for(int i = 0; i<5; i++){
             for(int j = 0; j<5; j++){
                 deck.add(i);
@@ -23,6 +26,9 @@ public class Deck {
             objectiveCards.add(x);
         }
         shuffleObjectiveCards();
+        for (int i = 0; i < 3; i++) {
+            chosenObjectiveCards.add(objectiveCards.get(i));
+        }
     }
 
     //Shuffles the deck

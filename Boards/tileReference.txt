@@ -15,6 +15,16 @@ paddock = 13
 city = 14
 oasis = 15
 
+Miners = 0
+Discoverers = 1
+Lords = 2
+Fishermen = 3
+Citizens = 4
+Workers = 5
+Hermits = 6
+Farmers = 7
+Knights = 8
+Merchants = 9
 
 even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
 odd = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j + 1), (i - 1, j + 1)

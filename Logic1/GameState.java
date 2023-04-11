@@ -5,14 +5,14 @@ public class GameState {
 	public static int playerTurn;
 	public static GameBoard board;
 	public static State currentState;
-	public static ArrayList<Integer> deck;
-	public static ArrayList<Integer> discard;
+	public static Deck deck;
 	public enum State {
 		DRAWCARD,PLAYSETTLEMENTS, PLAYLOCATIONTILE,NEXTTURN
 	}
 	public GameState() {
 		players = new ArrayList<Player>();
 		playerTurn = 0;
+		deck = new Deck();
 		currentState = State.DRAWCARD;
 	}
 	public static void update() {
