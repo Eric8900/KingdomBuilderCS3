@@ -57,9 +57,9 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
-            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
-            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
-            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oracle.png"));
+            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oasis.png"));
+            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tavern.png"));
             locationTiles[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             settlements[0] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-blue.png"));
             settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
@@ -230,6 +230,8 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
         g.drawImage(settlements[playerNum], x+width/3, y,(int)(settlements[playerNum].getWidth()*settlementScale),(int)(settlements[playerNum].getHeight()*settlementScale), null);
 
+
+
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
 
 
@@ -249,6 +251,8 @@ public class GamePanel extends JPanel implements MouseListener {
 
         
     }
+
+
 
     @Override
     public void mouseClicked(MouseEvent e) {
