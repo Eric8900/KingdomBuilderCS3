@@ -40,7 +40,7 @@ public class GamePanel extends JPanel implements MouseListener {
         gameState = new GameState();
         try {
             BufferedImage[] BOARDS = new BufferedImage[16];
-            boolean[] used = new boolean[16];
+            boolean[] used = new boolean[8];
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
             BOARDS[2] = ImageIO.read(GamePanel.class.getResource("/Images/Board3.png"));
@@ -71,11 +71,15 @@ public class GamePanel extends JPanel implements MouseListener {
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
-                int rand = (int) (Math.random() * 16);
+                int rand = (int) (Math.random() * 8);
                 while (used[rand]) {
-                    rand = (int) (Math.random() * 16);
+                    rand = (int) (Math.random() * 8);
                 }
                 used[rand] = true;
+                int orientation = (int) (Math.random() * 2);
+                if (orientation == 1) {
+                    rand += 8;
+                }
                 boards[i] = BOARDS[rand];
                 boolean rev = false;
                 if (rand > 7) {
