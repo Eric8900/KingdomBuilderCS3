@@ -225,6 +225,11 @@ public class GamePanel extends JPanel implements MouseListener {
         double settlementScale = 0.5;
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        Color playerRectColor = new Color(0, 0, 0, 127);
+        g.setColor(playerRectColor);
+        g.fillRoundRect(x,y,width,height,50,50);
+        Color outLineColor = new Color(211, 211, 211);
+        g.setColor(outLineColor);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
         g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
