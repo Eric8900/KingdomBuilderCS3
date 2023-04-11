@@ -210,10 +210,10 @@ public class GamePanel extends JPanel implements MouseListener {
         gameState.players.add(new Player());
 
 
-        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/5*3,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/5*4,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/5*3,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/5*4,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
 
 
 
