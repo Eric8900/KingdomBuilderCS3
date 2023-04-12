@@ -21,6 +21,7 @@ import javax.swing.RepaintManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
 import Logic1.*;
+import Logic1.GameState.State;
 public class GamePanel extends JPanel implements MouseListener {
     private static final String ArrayLis = null;
     private int[][] initBoard = new int[20][20];
@@ -29,6 +30,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locationTiles = new BufferedImage[4];
     private BufferedImage[] settlements = new BufferedImage[4];
+    private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage cardBack;
     private BufferedImage background;
     public static GameState gameState;
@@ -56,16 +58,16 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
-            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
-            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
-            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
+            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oracle.png"));
+            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oasis.png"));
+            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tavern.png"));
             locationTiles[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             settlements[0] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-blue.png"));
             settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
             settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
             settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
             background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
-            
+            objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
@@ -101,6 +103,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     }
                 }
             }
+            
             for (int i = 0; i < 19; i++) {
                 for (int j = 0; j < 19; j++) {
                     int b = 0;
@@ -208,10 +211,10 @@ public class GamePanel extends JPanel implements MouseListener {
         gameState.players.add(new Player());
 
 
-        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/5*3,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/5*4,0,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/5*3,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/5*4,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/5,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
 
 
 
@@ -223,10 +226,17 @@ public class GamePanel extends JPanel implements MouseListener {
         double settlementScale = 0.5;
 
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
+        Color playerRectColor = new Color(0, 0, 0, 127);
+        g.setColor(playerRectColor);
+        g.fillRoundRect(x,y,width,height,50,50);
+        Color outLineColor = new Color(211, 211, 211);
+        g.setColor(outLineColor);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
         g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
         g.drawImage(settlements[playerNum], x+width/3, y,(int)(settlements[playerNum].getWidth()*settlementScale),(int)(settlements[playerNum].getHeight()*settlementScale), null);
+
+
 
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
 
@@ -248,6 +258,12 @@ public class GamePanel extends JPanel implements MouseListener {
         
     }
 
+    private void drawObjectiveCards(Graphics g){
+
+    }
+
+
+
     @Override
     public void mouseClicked(MouseEvent e) {
         // TODO Auto-generated method stub
@@ -255,14 +271,23 @@ public class GamePanel extends JPanel implements MouseListener {
         int y = e.getY();
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
-        for(int i = 0; i<gm.length; i++){
-            for(int j = 0; j<gm[i].length; j++){
-                if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
-                    gm[i][j].highlighted = true;
-                    curr_i = i;
-                    curr_j = j;
+        if (GameState.currentState == State.PLAYSETTLEMENTS) {
+            for(int i = 0; i<gm.length; i++){
+                for(int j = 0; j<gm[i].length; j++){
+                    if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
+                        
+                        gm[i][j].highlighted = true;
+                        curr_i = i;
+                        curr_j = j;
+                    }
                 }
             }
+        }
+        if (GameState.currentState == State.DRAWCARD) {
+
+        }
+        if (GameState.currentState == State.PLAYLOCATIONTILE) {
+
         }
         repaint();
     }
@@ -283,3 +308,4 @@ public class GamePanel extends JPanel implements MouseListener {
         // TODO Auto-generated method stub
     }
 }
+
