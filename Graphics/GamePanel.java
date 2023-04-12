@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locationTiles = new BufferedImage[4];
     private BufferedImage[] settlements = new BufferedImage[4];
+    private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage cardBack;
     private BufferedImage background;
     public static GameState gameState;
@@ -66,7 +67,7 @@ public class GamePanel extends JPanel implements MouseListener {
             settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
             settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
             background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
-            
+            objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
@@ -255,6 +256,10 @@ public class GamePanel extends JPanel implements MouseListener {
         
 
         
+    }
+
+    private void drawObjectiveCards(Graphics g){
+
     }
 
 
