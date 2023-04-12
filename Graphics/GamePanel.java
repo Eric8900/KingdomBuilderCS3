@@ -179,6 +179,7 @@ public class GamePanel extends JPanel implements MouseListener {
                 " " + curr_j);
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
+        drawObjectiveCards(g);
     }
     private void drawDeckDiscard(Graphics g){
         
@@ -259,7 +260,9 @@ public class GamePanel extends JPanel implements MouseListener {
     }
 
     private void drawObjectiveCards(Graphics g){
-
+        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*1/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
+        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*5/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
+        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*9/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
     }
 
 
