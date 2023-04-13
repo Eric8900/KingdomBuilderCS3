@@ -260,9 +260,9 @@ public class GamePanel extends JPanel implements MouseListener {
     }
 
     private void drawObjectiveCards(Graphics g){
-        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*1/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
-        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*5/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
-        g.drawImage(objectiveCards[0], getWidth()*8/15, getHeight()*9/16, (int)(objectiveCards[0].getWidth()*.5), (int)(objectiveCards[0].getHeight()*.5), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*5/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*9/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
     }
 
 
