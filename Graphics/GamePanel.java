@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] locationTiles = new BufferedImage[4];
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
+    private BufferedImage[] terrainCards = new BufferedImage[5];
     private BufferedImage cardBack;
     private BufferedImage background;
     public static GameState gameState;
@@ -66,6 +67,11 @@ public class GamePanel extends JPanel implements MouseListener {
             settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
             settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
             settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
+            terrainCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Canyon.png"));
+            terrainCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Desert.png"));
+            terrainCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Flower.png"));
+            terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
+            terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
             background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
@@ -179,6 +185,7 @@ public class GamePanel extends JPanel implements MouseListener {
                 " " + curr_j);
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
+        drawPlayerTerrainCards(g);
         drawObjectiveCards(g);
     }
     private void drawDeckDiscard(Graphics g){
@@ -258,6 +265,13 @@ public class GamePanel extends JPanel implements MouseListener {
 
         
     }
+    private void drawPlayerTerrainCards(Graphics g){
+        for(int i = 0;i<gameState.players.size();i++){
+
+            g.drawImage(terrainCards[gameState.players.get(i).chosenCard],1175,(terrainCards[gameState.players.get(i).chosenCard].getHeight()+75)*i,terrainCards[gameState.players.get(i).chosenCard].getWidth(),terrainCards[gameState.players.get(i).chosenCard].getHeight(),null);
+        }
+    }
+
 
     private void drawObjectiveCards(Graphics g){
         g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
