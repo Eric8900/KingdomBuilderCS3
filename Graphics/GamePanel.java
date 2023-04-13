@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] locationTiles = new BufferedImage[4];
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
+    private BufferedImage[] terrainCards = new BufferedImage[5];
     private BufferedImage cardBack;
     private BufferedImage background;
     public static GameState gameState;
@@ -68,6 +69,14 @@ public class GamePanel extends JPanel implements MouseListener {
             settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
             background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
+            terrainCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Canyon.png"));
+            terrainCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Desert.png"));
+            terrainCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Flower.png"));
+            terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
+            terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
+
+
+
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
@@ -178,6 +187,7 @@ public class GamePanel extends JPanel implements MouseListener {
         System.out.println("You clicked this hexagon: "+ curr_i +
                 " " + curr_j);
         drawAllPlayerUI(g);
+        drawPlayerTerrainCards(g);
         drawDeckDiscard(g);
     }
     private void drawDeckDiscard(Graphics g){
@@ -258,8 +268,11 @@ public class GamePanel extends JPanel implements MouseListener {
         
     }
 
-    private void drawObjectiveCards(Graphics g){
+    private void drawPlayerTerrainCards(Graphics g){
+        for(int i = 0;i<gameState.players.size();i++){
 
+            g.drawImage(terrainCards[gameState.players.get(i).chosenCard],1175,(terrainCards[gameState.players.get(i).chosenCard].getHeight()+75)*i,terrainCards[gameState.players.get(i).chosenCard].getWidth(),terrainCards[gameState.players.get(i).chosenCard].getHeight(),null);
+        }
     }
 
 
