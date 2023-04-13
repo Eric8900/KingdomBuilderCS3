@@ -40,6 +40,11 @@ public class GamePanel extends JPanel implements MouseListener {
     private static int curr_j = -1;
     public GamePanel() {
         gameState = new GameState();
+        //testing
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
         try {
             BufferedImage[] BOARDS = new BufferedImage[16];
             boolean[] used = new boolean[16];
@@ -212,11 +217,6 @@ public class GamePanel extends JPanel implements MouseListener {
 
     }
     private void drawAllPlayerUI(Graphics g) {
-        //testing
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
 
 
         drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
@@ -267,16 +267,15 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     private void drawPlayerTerrainCards(Graphics g){
         for(int i = 0;i<gameState.players.size();i++){
-
-            g.drawImage(terrainCards[gameState.players.get(i).chosenCard],1175,(terrainCards[gameState.players.get(i).chosenCard].getHeight()+75)*i,terrainCards[gameState.players.get(i).chosenCard].getWidth(),terrainCards[gameState.players.get(i).chosenCard].getHeight(),null);
+            g.drawImage(terrainCards[gameState.players.get(i).chosenCard],1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[gameState.players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[gameState.players.get(i).chosenCard].getHeight()*1.23),null);
         }
     }
 
 
     private void drawObjectiveCards(Graphics g){
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*5/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*9/16, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*7/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*13/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
     }
 
 
