@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-    public ArrayList<Integer> deck;
-    public ArrayList<Integer> discard;
-    public ArrayList<Integer> objectiveCards;
-    public ArrayList<Integer> chosenObjectiveCards;
+    private ArrayList<Integer> deck;
+    private ArrayList<Integer> discard;
+    private ArrayList<Integer> objectiveCards;
+    private ArrayList<Integer> chosenObjectiveCards;
 
     //Deck constructor. Instantiates instance variables
     
@@ -50,8 +50,8 @@ public class Deck {
     //returns the deck arraylist
     public ArrayList<Integer> getDeck(){return deck;}
 
-    //returns the objective cards
-    public ArrayList<Integer> getObjectiveCards(){return objectiveCards;}
+    //returns the chosen objective cards
+    public ArrayList<Integer> getChosenObjectiveCards(){return chosenObjectiveCards;}
 
     //returns the discard deck
     public ArrayList<Integer> getDiscard(){return discard;}

@@ -38,13 +38,10 @@ public class GamePanel extends JPanel implements MouseListener {
     private String cordXY = "YOOO";
     private static int curr_i = -1;
     private static int curr_j = -1;
+    private Deck deckClass = new Deck();
     public GamePanel() {
         gameState = new GameState();
-        //testing
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
+        beginGame();
         try {
             BufferedImage[] BOARDS = new BufferedImage[16];
             boolean[] used = new boolean[16];
@@ -78,7 +75,16 @@ public class GamePanel extends JPanel implements MouseListener {
             terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
             terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
             background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
-            objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
+            objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/MinersObjective.png"));
+            objectiveCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/DiscoverersObjective.PNG"));
+            objectiveCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/LordsObjective.PNG"));
+            objectiveCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/FishermenObjective.PNG"));
+            objectiveCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/CitizensObjective.PNG"));
+            objectiveCards[5] = ImageIO.read(GamePanel.class.getResource("/Images/WorkersObjective.png"));
+            objectiveCards[6] = ImageIO.read(GamePanel.class.getResource("/Images/HermitsObjective.PNG"));
+            objectiveCards[7] = ImageIO.read(GamePanel.class.getResource("/Images/FarmersObjective.PNG"));
+            objectiveCards[8] = ImageIO.read(GamePanel.class.getResource("/Images/KnightsObjective.PNG"));
+            objectiveCards[9] = ImageIO.read(GamePanel.class.getResource("/Images/MerchantsObjective.png"));
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
             //BOARD RANDOMIZATION INITIALIZATION
             int[][][] boardConfig = new int[4][10][10];
@@ -159,6 +165,14 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         addMouseListener(this);
     }
+
+    private void beginGame(){
+        //testing
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+        gameState.players.add(new Player());
+    }
     public void paint(Graphics g) {
         super.paintComponent(g);
         g.drawImage(background, 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -211,7 +225,13 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Color.BLACK);
         double scale = 1.0f;
         g.drawImage(cardBack,KingdomFrame.WIDTH*8/15,650, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
-        g.drawImage(cardBack,KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
+        if(deckClass.getDiscard().size()>0){
+            g.drawImage(terrainCards[deckClass.getDiscard().get(deckClass.getDiscard().size()-1)],KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
+        }else{
+            g.setColor(Color.WHITE);
+            g.drawRoundRect(KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale), 25, 25);
+            g.setColor(Color.BLACK);
+        }
         g.drawString("Deck",  KingdomFrame.WIDTH*8/15, 812);
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15, 987);
         g.setColor(Color.WHITE);
@@ -274,9 +294,9 @@ public class GamePanel extends JPanel implements MouseListener {
 
 
     private void drawObjectiveCards(Graphics g){
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*7/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[0], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*13/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*7/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*13/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
     }
 
 
