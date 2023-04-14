@@ -195,7 +195,7 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     private void drawDeckDiscard(Graphics g){
         
-        double rads = Math.toRadians(90);
+        /*double rads = Math.toRadians(90);
         double sin = Math.abs(Math.sin(rads));
         double cos = Math.abs(Math.cos(rads));
         int w = (int) Math.floor(cardBack.getWidth() * cos + cardBack.getHeight() * sin);
@@ -207,13 +207,14 @@ public class GamePanel extends JPanel implements MouseListener {
         at.translate(-cardBack.getWidth() / 2, -cardBack.getHeight() / 2);
         AffineTransformOp rotateOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
         rotateOp.filter(cardBack,rotatedImage);
-        
-        double scale = 1.2f;
-        g.drawImage(rotatedImage,0,865, (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale),null);
-        g.drawImage(rotatedImage,(int)(rotatedImage.getWidth()*scale),865, (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale),null);
-        g.drawString("Deck",  0, (int)(rotatedImage.getHeight()*scale)+865);
-        g.drawString("Discard",  (int)(rotatedImage.getWidth()*scale), (int)(rotatedImage.getHeight()*scale)+865);
-
+        */
+        g.setColor(Color.BLACK);
+        double scale = 1.0f;
+        g.drawImage(cardBack,KingdomFrame.WIDTH*8/15,650, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
+        g.drawImage(cardBack,KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
+        g.drawString("Deck",  KingdomFrame.WIDTH*8/15, 812);
+        g.drawString("Discard",  KingdomFrame.WIDTH*8/15, 987);
+        g.setColor(Color.WHITE);
 
     }
     private void drawAllPlayerUI(Graphics g) {
