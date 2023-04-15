@@ -8,6 +8,7 @@ public class GameState {
 	public static Deck deck;
 
 	public static ArrayList<Integer> objCards;
+	public static Sector[] sectors = new Sector[4];
 	public enum State {
 		DRAWCARD,PLAYSETTLEMENTS, PLAYLOCATIONTILE,NEXTTURN
 	}
@@ -17,6 +18,9 @@ public class GameState {
 		deck = new Deck();
 		currentState = State.DRAWCARD;
 		objCards = new ArrayList<>();
+		for(int i = 0; i<4; i++){
+			sectors[i] = new Sector(new Pair[4], i, new Pair[2]);
+		}
 	}
 	public static void update() {
 		switch(currentState){
