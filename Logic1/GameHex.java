@@ -12,6 +12,8 @@ public class GameHex {
     public GameHex botRight;
     public int player;
     public boolean highlighted;
+    public GameHex[] neighbors = new GameHex[6];
+    public int id;
     public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br, boolean highlighted) {
         this.x = x;
         this.y = y;
@@ -23,5 +25,12 @@ public class GameHex {
         bl = botLeft;
         br = botRight;
         highlighted = false;
+        player = -1;
+        neighbors[0] = l;
+        neighbors[1] = r;
+        neighbors[2] = tl;
+        neighbors[3] = tr;
+        neighbors[4] = bl;
+        neighbors[5] = br;
     }
 }

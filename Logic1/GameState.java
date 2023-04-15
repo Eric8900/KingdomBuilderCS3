@@ -6,6 +6,8 @@ public class GameState {
 	public static GameBoard board;
 	public static State currentState;
 	public static Deck deck;
+
+	public static ArrayList<Integer> objCards;
 	public enum State {
 		DRAWCARD,PLAYSETTLEMENTS, PLAYLOCATIONTILE,NEXTTURN
 	}
@@ -14,6 +16,7 @@ public class GameState {
 		playerTurn = 0;
 		deck = new Deck();
 		currentState = State.DRAWCARD;
+		objCards = new ArrayList<>();
 	}
 	public static void update() {
 		switch(currentState){

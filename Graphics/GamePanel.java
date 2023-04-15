@@ -34,13 +34,11 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] terrainCards = new BufferedImage[5];
     private BufferedImage cardBack;
     private BufferedImage background;
-    public static GameState gameState;
     private String cordXY = "YOOO";
     private static int curr_i = -1;
     private static int curr_j = -1;
     private Deck deckClass = new Deck();
     public GamePanel() {
-        gameState = new GameState();
         beginGame();
         try {
             BufferedImage[] BOARDS = new BufferedImage[16];
@@ -168,10 +166,11 @@ public class GamePanel extends JPanel implements MouseListener {
 
     private void beginGame(){
         //testing
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
-        gameState.players.add(new Player());
+        new GameState();
+        GameState.players.add(new Player());
+        GameState.players.add(new Player());
+        GameState.players.add(new Player());
+        GameState.players.add(new Player());
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -240,10 +239,10 @@ public class GamePanel extends JPanel implements MouseListener {
     private void drawAllPlayerUI(Graphics g) {
 
 
-        drawPlayerUI(g,gameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g,gameState.players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, GameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, GameState.players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, GameState.players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, GameState.players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
 
 
 
@@ -287,8 +286,8 @@ public class GamePanel extends JPanel implements MouseListener {
         
     }
     private void drawPlayerTerrainCards(Graphics g){
-        for(int i = 0;i<gameState.players.size();i++){
-            g.drawImage(terrainCards[gameState.players.get(i).chosenCard],1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[gameState.players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[gameState.players.get(i).chosenCard].getHeight()*1.23),null);
+        for(int i = 0; i< GameState.players.size(); i++){
+            g.drawImage(terrainCards[GameState.players.get(i).chosenCard],1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[GameState.players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[GameState.players.get(i).chosenCard].getHeight()*1.23),null);
         }
     }
 

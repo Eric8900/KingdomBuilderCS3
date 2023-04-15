@@ -7,8 +7,7 @@ public class Player {
     public int uniqueRows;
     public int[] freqRows;
     public boolean[] seenRow;
-
-
+    public int score;
     public int tilesLeft;
     public Player(){
         tilesLeft = 40;
@@ -18,6 +17,7 @@ public class Player {
         locationTiles.add(0);
         locationTiles.add(0);
         chosenCard = 1;
+        score = 0;
     
     }
 
