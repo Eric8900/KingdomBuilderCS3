@@ -38,6 +38,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private static int curr_i = -1;
     private static int curr_j = -1;
     private Deck deckClass = new Deck();
+    private boolean objectiveCardDisplay = false;
     public GamePanel() {
         beginGame();
         try {
@@ -175,6 +176,13 @@ public class GamePanel extends JPanel implements MouseListener {
     public void paint(Graphics g) {
         super.paintComponent(g);
         g.drawImage(background, 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        paintMainGameScene(g);
+
+    }
+    private void paintMainMenu(Graphics g){
+
+    }
+    private void paintMainGameScene(Graphics g){
         g.drawString(cordXY, 1300, 50);
         double mult = 1.2;
         int width = (int)(620/mult);
@@ -205,6 +213,9 @@ public class GamePanel extends JPanel implements MouseListener {
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
         drawObjectiveCards(g);
+        if(objectiveCardDisplay){
+            displayObjectiveCards(g);
+        }
     }
     private void drawDeckDiscard(Graphics g){
         
@@ -297,7 +308,15 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*7/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
         g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*13/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
     }
-
+    private void displayObjectiveCards(Graphics g){
+        Color shadeBackground = new Color(0, 0, 0, 127);
+        g.setColor(shadeBackground);
+        g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH*1/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH*2/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.drawImage(objectiveCards[deckClass.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH*3/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.setColor(Color.WHITE);
+    }
 
 
     @Override
@@ -307,16 +326,24 @@ public class GamePanel extends JPanel implements MouseListener {
         int y = e.getY();
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
+
         if (GameState.currentState == State.PLAYSETTLEMENTS) {
-            for(int i = 0; i<gm.length; i++){
-                for(int j = 0; j<gm[i].length; j++){
-                    if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
-                        
-                        gm[i][j].highlighted = true;
-                        curr_i = i;
-                        curr_j = j;
+            if(!objectiveCardDisplay){
+                for(int i = 0; i<gm.length; i++){
+                    for(int j = 0; j<gm[i].length; j++){
+                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
+
+                            gm[i][j].highlighted = true;
+                            curr_i = i;
+                            curr_j = j;
+                        }
                     }
                 }
+                if(x>KingdomFrame.WIDTH*8/15 && x<KingdomFrame.WIDTH*8/15+(int)(objectiveCards[0].getWidth()*.4) && y>KingdomFrame.HEIGHT*1/32 && y<KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)){
+                    objectiveCardDisplay = true;
+                }
+            }else{
+                objectiveCardDisplay = false;
             }
         }
         if (GameState.currentState == State.DRAWCARD) {
