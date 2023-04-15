@@ -9,6 +9,9 @@ public class Player {
     public boolean[] seenRow;
     public int score;
     public int tilesLeft;
+    public int maxRowCount;
+    public int sectorMin;//like one below but for least
+    public int sectorMax;//gives the amount of settelements in the sector with the most of player's owm
     public Player(){
         tilesLeft = 40;
         locationTiles = new ArrayList<Integer>(4);
