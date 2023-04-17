@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[5];
     private BufferedImage cardBack;
-    private BufferedImage background;
+    private BufferedImage[] backgrounds = new BufferedImage[2];
     private String cordXY = "YOOO";
     private static int curr_i = -1;
     private static int curr_j = -1;
@@ -73,7 +73,8 @@ public class GamePanel extends JPanel implements MouseListener {
             terrainCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Flower.png"));
             terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
             terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
-            background = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
+            backgrounds[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-MainMenuBackground.png"));
+            backgrounds[1] = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/MinersObjective.png"));
             objectiveCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/DiscoverersObjective.PNG"));
             objectiveCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/LordsObjective.PNG"));
@@ -175,14 +176,17 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(background, 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
-        paintMainGameScene(g);
+        paintMainMenu(g);
 
     }
     private void paintMainMenu(Graphics g){
+        g.drawImage(backgrounds[0], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.drawRoundRect(KingdomFrame.WIDTH/2, KingdomFrame.HEIGHT/2, 10, 10, 5,5);
+        g.setColor(new Color(211, 211, 211, 175));
 
     }
     private void paintMainGameScene(Graphics g){
+        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.drawString(cordXY, 1300, 50);
         double mult = 1.2;
         int width = (int)(620/mult);
