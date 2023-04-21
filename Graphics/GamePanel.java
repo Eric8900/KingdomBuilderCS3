@@ -310,8 +310,11 @@ public class GamePanel extends JPanel implements MouseListener {
         GameHex[][] gm = GameState.board.GameMatrix;
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
-                GameState.setState(State.PLAYSETTLEMENTS);
+                GameState.setState(State.DRAWCARD);
             }
+        }
+        if (GameState.currentState == State.DRAWCARD) {
+
         }
         if (GameState.currentState == State.PLAYSETTLEMENTS) {
             if(!objectiveCardDisplay){
@@ -331,9 +334,6 @@ public class GamePanel extends JPanel implements MouseListener {
             }else{
                 objectiveCardDisplay = false;
             }
-        }
-        if (GameState.currentState == State.DRAWCARD) {
-
         }
         if (GameState.currentState == State.PLAYLOCATIONTILE) {
 
