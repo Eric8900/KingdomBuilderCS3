@@ -163,7 +163,7 @@ public class GamePanel extends JPanel implements MouseListener {
             GameState.board = new GameBoard(initBoard, centers);
         }
         catch(Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         addMouseListener(this);
     }
