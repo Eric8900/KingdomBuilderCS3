@@ -6,6 +6,7 @@ public class GameState {
 	public static GameBoard board;
 	public static State currentState;
 	public static Deck deck;
+	public static int currentPlayer;
 
 	public static ArrayList<Integer> objCards;
 	public static Sector[] sectors = new Sector[4];
@@ -18,6 +19,10 @@ public class GameState {
 		deck = new Deck();
 		currentState = State.MAINMENU;
 		objCards = new ArrayList<>();
+		currentPlayer = 0;
+		for (int i = 0; i < 4; i++) {
+			players.add(new Player(i));
+		}
 		for(int i = 0; i<4; i++){
 			sectors[i] = new Sector(new Pair[4], i, new Pair[2]);
 		}
@@ -26,6 +31,9 @@ public class GameState {
 		switch(currentState){
 		case DRAWCARD:
 			new DrawCard();
+			break;
+		case CHOOSEACTION: 
+			new ChooseAction();
 			break;
 		case PLAYSETTLEMENTS:
 			new PlaySettlements();

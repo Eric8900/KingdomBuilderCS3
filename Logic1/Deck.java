@@ -46,6 +46,14 @@ public class Deck {
 
 
     //Accessor methods
+    public int getTop() {
+        return deck.get(0);
+    }
+
+    public void discardTop() {
+        discard.add(deck.get(0));
+        deck.remove(0);
+    }
 
     //returns the deck arraylist
     public ArrayList<Integer> getDeck(){return deck;}

@@ -12,6 +12,7 @@ public class GameHex {
     public GameHex botRight;
     public int player;
     public boolean highlighted;
+    public boolean isLocationTile;
     public int locationTileLeft;
     public GameHex[] neighbors = new GameHex[6];
     public int id;
@@ -33,5 +34,12 @@ public class GameHex {
         neighbors[3] = tr;
         neighbors[4] = bl;
         neighbors[5] = br;
+        if (t >= 7 && t != 14) {
+            isLocationTile = true;
+            locationTileLeft = 2;
+        }
+        else {
+            isLocationTile = false;
+        }
     }
 }
