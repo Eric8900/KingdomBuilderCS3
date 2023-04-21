@@ -10,7 +10,7 @@ public class GameState {
 	public static ArrayList<Integer> objCards;
 	public static Sector[] sectors = new Sector[4];
 	public enum State {
-		DRAWCARD,PLAYSETTLEMENTS, PLAYLOCATIONTILE,NEXTTURN, MAINMENU
+		DRAWCARD, CHOOSEACTION, PLAYSETTLEMENTS, PLAYLOCATIONTILE, NEXTTURN, MAINMENU
 	}
 	public GameState() {
 		players = new ArrayList<Player>();

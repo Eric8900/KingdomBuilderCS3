@@ -184,6 +184,7 @@ public class GamePanel extends JPanel implements MouseListener {
         if(GameState.getState() == State.PLAYSETTLEMENTS || GameState.getState() == State.PLAYLOCATIONTILE || GameState.getState() == State.DRAWCARD || GameState.getState() == State.NEXTTURN){
             paintMainGameScene(g);
         }
+        
     }
     private void paintMainMenu(Graphics g){
         g.drawImage(backgrounds[0], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -316,6 +317,10 @@ public class GamePanel extends JPanel implements MouseListener {
             }
         }
         else if (GameState.currentState == State.DRAWCARD) {
+            //reference: X: KingdomFrame.WIDTH*8/15 Y: 650 WIDTH: (int)(cardBack.getWidth()*scale) HEIGHT: (int)(cardBack.getHeight()*scale)
+            
+        }
+        else if (GameState.currentState == State.CHOOSEACTION) {
             
         }
         else if (GameState.currentState == State.PLAYSETTLEMENTS) {
