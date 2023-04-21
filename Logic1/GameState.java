@@ -37,9 +37,7 @@ public class GameState {
 			new NextTurn();
 			break;
 		default:
-			
-
-	}
+		}
 	}
 	public static State getState() {
 		return currentState;

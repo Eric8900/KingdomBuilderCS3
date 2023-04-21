@@ -315,10 +315,10 @@ public class GamePanel extends JPanel implements MouseListener {
                 GameState.setState(State.DRAWCARD);
             }
         }
-        if (GameState.currentState == State.DRAWCARD) {
+        else if (GameState.currentState == State.DRAWCARD) {
             
         }
-        if (GameState.currentState == State.PLAYSETTLEMENTS) {
+        else if (GameState.currentState == State.PLAYSETTLEMENTS) {
             if(!objectiveCardDisplay){
                 for(int i = 0; i<gm.length; i++){
                     for(int j = 0; j<gm[i].length; j++){
@@ -337,7 +337,7 @@ public class GamePanel extends JPanel implements MouseListener {
                 objectiveCardDisplay = false;
             }
         }
-        if (GameState.currentState == State.PLAYLOCATIONTILE) {
+        else if (GameState.currentState == State.PLAYLOCATIONTILE) {
 
         }
         repaint();
