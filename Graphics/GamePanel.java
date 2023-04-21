@@ -60,10 +60,6 @@ public class GamePanel extends JPanel implements MouseListener {
             BOARDS[13] = ImageIO.read(GamePanel.class.getResource("/Images/Board14.png"));
             BOARDS[14] = ImageIO.read(GamePanel.class.getResource("/Images/Board15.png"));
             BOARDS[15] = ImageIO.read(GamePanel.class.getResource("/Images/Board16.png"));
-            locationTiles[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oracle.png"));
-            locationTiles[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Oasis.png"));
-            locationTiles[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tavern.png"));
-            locationTiles[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Location-Tower.png"));
             settlements[0] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-blue.png"));
             settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
             settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
@@ -120,7 +116,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     }
                 }
             }
-            
+            TreeSet<Integer> LH = new TreeSet<>();
             for (int i = 0; i < 19; i++) {
                 for (int j = 0; j < 19; j++) {
                     int b = 0;
@@ -137,7 +133,13 @@ public class GamePanel extends JPanel implements MouseListener {
                         I -= 10;
                     }
                     initBoard[i][j] = boardConfig[b][I][J];
+                    if (initBoard[i][j] >= 7) LH.add(initBoard[i][j]);
                 }
+            }
+            int bruh = 0;
+            for (int i : LH) {
+                locationTiles[bruh] = ImageIO.read(GamePanel.class.getResource("/Images/LH" + i + ".png"));
+                bruh++;
             }
             for (int i = 0; i < 19; i++) {
                 for (int j = 0; j < 19; j++) {
@@ -314,7 +316,7 @@ public class GamePanel extends JPanel implements MouseListener {
             }
         }
         if (GameState.currentState == State.DRAWCARD) {
-
+            
         }
         if (GameState.currentState == State.PLAYSETTLEMENTS) {
             if(!objectiveCardDisplay){

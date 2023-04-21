@@ -12,6 +12,7 @@ public class GameHex {
     public GameHex botRight;
     public int player;
     public boolean highlighted;
+    public int locationTileLeft;
     public GameHex[] neighbors = new GameHex[6];
     public int id;
     public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br, boolean highlighted) {
