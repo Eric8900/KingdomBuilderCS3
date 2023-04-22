@@ -29,11 +29,7 @@ public class Sector {
         sectorBounds[0] = new Pair(startRow, startCol);
         sectorBounds[1] = new Pair(endRow, endCol);
     }
-    public void update(GameHex h){
-        for(int i = 0; i<settleCounts.length; i++){
-            if(settleCounts[i].first == h.player){
-                settleCounts[i].second++;
-            }
-        }
+    public void updateSettleCount(Player p){
+        settleCounts[p.num] = new Pair(p.num, p.sectorCount[p.num]);
     }
 }
