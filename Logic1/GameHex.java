@@ -1,5 +1,7 @@
 package Logic1;
 
+import Graphics.GamePanel;
+
 public class GameHex {
 	public int x;
     public int y;
@@ -51,10 +53,27 @@ public class GameHex {
         neighbors[4] = botLeft;
         neighbors[5] = botRight;
     }
+    //updates the loc tiles for when a player moves to a loc tile
     public void updateLocTile() {
+        boolean[] temp = new boolean[4];
         for (int i = 0; i < neighbors.length; i++) {
             if (neighbors[i].player > -1) {
-                locationTilePlayers[neighbors[i].player] = true;
+                temp[neighbors[i].player] = true;
+            }
+        }
+        locationTilePlayers = temp;
+    }
+    //move away from loc tile
+    public void playerMoveFromLocTile() {
+        boolean[] init = locationTilePlayers;
+        updateLocTile();
+        for (int i = 0; i < 4; i++) {
+            if (init[i] != locationTilePlayers[i] && !locationTilePlayers[i]) {
+                for (int a = 0; a < 4; a++) {
+                    if (GamePanel.locTiles[a] == terr) {
+                        GameState.players.get(i).locationTiles[a]--;
+                    }
+                }
             }
         }
     }

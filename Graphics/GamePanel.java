@@ -40,8 +40,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private static int curr_i = -1;
     private static int curr_j = -1;
     public static boolean[][] currentHighlights = new boolean[20][20];
-    public boolean nextTurnPossible = false;
-    public boolean  cancelMoveLocationTile = false;
+    public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false;
     private BufferedImage drawACard;
     public GamePanel() {
@@ -217,10 +216,10 @@ public class GamePanel extends JPanel implements MouseListener {
             for (int j = 0; j < 20; j++) {
                 int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
                 if (currentHighlights[i][j]) {
-                    Color shadeBackground = new Color(200, 200, 200, 100);
+                    Color shadeBackground = new Color(255, 255, 255, 120);
                     g.setColor(shadeBackground);
                     g.fillOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
-                    g.setColor(getColor());
+                    g.setColor(getColor(GameState.currentPlayer));
                     g.drawOval(x, y, (int) 48, 48);
                     g.setColor(Color.BLACK);
                 }
@@ -247,7 +246,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString("Current Action: ", KingdomFrame.WIDTH - 600, 950);
         if (players.get(GameState.currentPlayer).selectedAction == -1) {
             BufferedImage s = settlements[GameState.currentPlayer];
-            g.drawImage(s, KingdomFrame.WIDTH - 400, 930, s.getWidth() / 2, s.getHeight() / 2, null);
+            g.drawImage(s, KingdomFrame.WIDTH - 398, 925, s.getWidth() / 2, s.getHeight() / 2, null);
         }
         else {
             BufferedImage s = locTileImages[players.get(GameState.currentPlayer).selectedAction];
@@ -297,40 +296,65 @@ public class GamePanel extends JPanel implements MouseListener {
             g.drawRoundRect(KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale), 25, 25);
             g.setColor(Color.BLACK);
         }
-        g.drawString("Deck",  KingdomFrame.WIDTH*8/15, 812);
-        g.drawString("Discard",  KingdomFrame.WIDTH*8/15, 987);
+        g.setFont(new Font("Times New Roman", 1, 20));
+        g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 25, 805);
+        g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
     }
     private void drawAllPlayerUI(Graphics g) {
-        drawPlayerUI(g, players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(0),0,KingdomFrame.WIDTH/3*2,3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5 + 3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2 + 3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3 + 3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        for (int i = 0; i < 4; i++) {
+            if (GameState.currentPlayer != i) {
+                g.setColor(new Color(40, 40, 40, 200));
+                g.fillRoundRect(KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*i,KingdomFrame.WIDTH/3, KingdomFrame.HEIGHT/5,50,50);
+            }
+        }
     }
     private void drawPlayerUI(Graphics g , Player p, int playerNum,int x, int y, int width, int height){
         double settlementScale = 0.5;
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
-        Color playerRectColor = new Color(0, 0, 0, 127);
+        Color playerRectColor = new Color(0, 0, 0, 200);
         g.setColor(playerRectColor);
         g.fillRoundRect(x,y,width,height,50,50);
         Color outLineColor = new Color(211, 211, 211);
         g.setColor(outLineColor);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
-        g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
+        
         //SETTLEMENTS
-        g.drawImage(settlements[playerNum], x+width/3, y,(int)(settlements[playerNum].getWidth()*settlementScale),(int)(settlements[playerNum].getHeight()*settlementScale), null);
+        g.setColor(getColor(playerNum));
+        int SX = x+width/3; int SY = y + 6; int w = (int)(settlements[playerNum].getWidth()*settlementScale); int l = (int)(settlements[playerNum].getHeight()*settlementScale);
+        g.fillRect(SX - 7, SY - 2, w + 14, l + 9);
+        g.setColor(outLineColor);
+        g.fillRect(SX - 5, SY, w + 10,l + 5);
+        g.drawString(""+p.tilesLeft,SX + w + 10,SY+25);
+        g.drawImage(settlements[playerNum], SX, SY,w,l, null);
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
     }
     private void drawPlayerLocationTiles(Graphics g,Player p, int playerNum,int x, int y, int width, int height){
+        for (int i = 0; i < 2; i++) {
+            int SY = (y + 40) + (90 * i);
+            for (int j = 0; j < 2; j++) {
+                int SX = (x + 15) + (300 * j);
+                g.setColor(getColor(playerNum));
+                g.fillRect(SX - 2, SY - 2, 99, 84);
+                Color outLineColor = new Color(211, 211, 211);
+                g.setColor(outLineColor);
+                g.fillRect(SX, SY, 95, 80);
+            }
+        }
         g.drawImage(locTileImages[0],x+10,y+20,105,105, null);
         g.drawImage(locTileImages[1],x+width/2-10,y+20,105,105, null);
-        g.drawImage(locTileImages[2],x+10,y+height/2,105,105, null);
-        g.drawImage(locTileImages[3],x+width/2-10,y+height/2,105,105, null);
-        g.drawString(p.roundLocTiles[0] + "",x+5+locTileImages[0].getWidth()/2/2+35,y+20+locTileImages[0].getWidth()/2-20);
+        g.drawImage(locTileImages[2],x+10,y+height/2 + 10,105,105, null);
+        g.drawImage(locTileImages[3],x+width/2-10,y+height/2 + 10,105,105, null);
+        g.setColor(Color.RED);
+        g.drawString(p.roundLocTiles[0] + "", x+5+locTileImages[0].getWidth()/2/2+35, y+20+locTileImages[0].getWidth()/2-20);
         g.drawString(p.roundLocTiles[1] + "",x+locTileImages[0].getWidth()/2/2+width/2-15+35,y+20+locTileImages[0].getWidth()/2-20);
-        g.drawString(p.roundLocTiles[2] + "",x+5+locTileImages[0].getWidth()/2/2+35,y+20+locTileImages[0].getWidth()-20);
-        g.drawString(p.roundLocTiles[3] + "",x+locTileImages[0].getWidth()/2/2+width/2-15+35,y+20+locTileImages[0].getWidth()-20);
+        g.drawString(p.roundLocTiles[2] + "",x+5+locTileImages[0].getWidth()/2/2+35,y+20+locTileImages[0].getWidth()-30);
+        g.drawString(p.roundLocTiles[3] + "",x+locTileImages[0].getWidth()/2/2+width/2-15+35,y+20+locTileImages[0].getWidth()-30);
     }
     private void drawPlayerTerrainCards(Graphics g){
         for(int i = 0; i < players.size(); i++){
@@ -338,6 +362,10 @@ public class GamePanel extends JPanel implements MouseListener {
                 g.drawImage(cardBack, 1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(cardBack.getWidth()*1.23),(int)(cardBack.getHeight()*1.23),null);
             }
             else if (players.get(i).chosenCard < 0) {
+                if (drawCardWarning) {
+                    g.setColor(Color.RED);
+                    g.fillRect(1145, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 - 5, (int)(terrainCards[0].getWidth()*1.23) + 10, (int)(terrainCards[0].getHeight()*1.23) + 10);
+                }
                 g.drawImage(drawACard, 1150, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80, (int)(terrainCards[0].getWidth()*1.23), (int)(terrainCards[0].getHeight()*1.23), null);
             }
             else {
@@ -349,15 +377,20 @@ public class GamePanel extends JPanel implements MouseListener {
 
     private void drawObjectiveCards(Graphics g){
         g.setColor(new Color(0, 0, 0, 127));
-        g.fillRoundRect(KingdomFrame.WIDTH*8/15-7, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
+        g.fillRoundRect(KingdomFrame.WIDTH*8/15-12, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
         g.setColor(Color.WHITE);
-        g.drawRoundRect(KingdomFrame.WIDTH*8/15-7, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*1/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*7/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH*8/15, KingdomFrame.HEIGHT*13/32, (int)(objectiveCards[0].getWidth()*.4), (int)(objectiveCards[0].getHeight()*.4), null);
+        g.drawRoundRect(KingdomFrame.WIDTH*8/15-12, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Times New Roman", 1, 15));
+        g.drawString("Click To Enlarge", 1020, 225);
+        int SX = KingdomFrame.WIDTH*8/15 - 5; int w = (int)(objectiveCards[0].getWidth()*.4); int l = (int)(objectiveCards[0].getHeight()*.4);
+        for (int i = 0; i < 3; i++) {
+            int SY = KingdomFrame.HEIGHT*(1 + (i * 6))/32;
+            g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(i)], SX, SY, w, l, null);
+        }
     }
     private void displayObjectiveCards(Graphics g){
-        Color shadeBackground = new Color(0, 0, 0, 127);
+        Color shadeBackground = new Color(0, 0, 0, 180);
         g.setColor(shadeBackground);
         g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
         g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH*1/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
@@ -374,7 +407,18 @@ public class GamePanel extends JPanel implements MouseListener {
         int y = e.getY();
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
-        
+        if (objectiveCardDisplay) {
+            for (long i = 0; i < 2100000000; i++) {
+
+            }
+            objectiveCardDisplay = false;
+        }
+        if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+            for (long i = 0; i < 2100000000; i++) {
+
+            }
+            objectiveCardDisplay = true;
+        }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
                 GameState.setState(State.DRAWCARD);
@@ -383,10 +427,13 @@ public class GamePanel extends JPanel implements MouseListener {
         else if (GameState.currentState == State.DRAWCARD) {
             //reference: X: KingdomFrame.WIDTH*8/15 Y: 650 WIDTH: (int)(cardBack.getWidth()*scale) HEIGHT: (int)(cardBack.getHeight()*scale)
             if ((x >= KingdomFrame.WIDTH*8/15) && (x <= KingdomFrame.WIDTH*8/15 + (int)(cardBack.getWidth())) && (y >= 650) && (y <= 650 + (int)(cardBack.getHeight()))) {
-                System.out.println("YOU CLICKED THE DECK");
                 GameState.update();
                 GameState.setState(State.PLAYSETTLEMENTS);
                 GameState.update();
+                drawCardWarning = false;
+            }
+            else {
+                drawCardWarning = true;
             }
         }
         else if (GameState.currentState == State.PLAYSETTLEMENTS) {
@@ -399,6 +446,7 @@ public class GamePanel extends JPanel implements MouseListener {
                             if (currentHighlights[i][j]) {
                                 players.get(GameState.currentPlayer).settlementLock = true;
                                 players.get(GameState.currentPlayer).settleActionsLeft--;
+                                players.get(GameState.currentPlayer).tilesLeft--;
                                 gm[i][j].player = GameState.currentPlayer;
 
                                 //check if it's adj to a loc tile
@@ -441,6 +489,7 @@ public class GamePanel extends JPanel implements MouseListener {
                                 players.get(GameState.currentPlayer).locActionsLeft--;
                                 gm[i][j].player = GameState.currentPlayer;
                                 players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
+                                players.get(GameState.currentPlayer).tilesLeft--;
 
                                 //check if it's adj to a loc tile
                                 for (int a = 0; a < 6; a++) {
@@ -488,7 +537,48 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         else if (GameState.currentState == State.MOVELOCATIONTILE) {
             checkIfClickedOnLocOrSettle(x, y);
-
+            //START PLAY LOCATION TILE
+            if (x >= 0 && x <= 1005 && y >= 0 && y <= 870 && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
+                out: for(int i = 0; i<gm.length; i++){
+                    for(int j = 0; j<gm[i].length; j++){
+                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24) {
+                            if (currentHighlights[i][j]) {
+                                players.get(GameState.currentPlayer).locActionsLeft--;
+                                gm[i][j].player = GameState.currentPlayer;
+                                players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
+                                GameState.tempChosenGameHex.player = -1;
+                                currentHighlights[i][j] = false;
+                                cancelMoveLocationTile = false;
+                                //if moved away from a loc tile
+                                for (int a = 0; a < 6; a++) {
+                                    if (GameState.tempChosenGameHex.neighbors[a] != null && GameState.tempChosenGameHex.neighbors[a].terr >= 7 &&  GameState.tempChosenGameHex.neighbors[a].terr != 14) {
+                                        GameState.tempChosenGameHex.neighbors[a].playerMoveFromLocTile();
+                                    }
+                                }
+                                //check if it's adj to a loc tile
+                                for (int a = 0; a < 6; a++) {
+                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                        for (int c = 0; c < locTiles.length; c++) {
+                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                gm[i][j].neighbors[a].updateLocTile();
+                                                gm[i][j].neighbors[a].locationTileLeft--;
+                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                            }
+                                        }
+                                    }
+                                }
+                                if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
+                                    currentHighlights = new boolean[20][20];
+                                    break out;
+                                }
+                                GameState.update();
+                                break out;
+                            }
+                        }
+                    }
+                }
+            }
+            //END PLAY LOCATION TILE
         }
         if (nextTurnPossible) {
             if (x >= 770 && x <= 770 + 200 && y >= 880 && y <= 930) {
@@ -574,11 +664,12 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             //END LOCATION TILE SELECTION
     }
-    public Color getColor() {
-        if (GameState.currentPlayer == 0) return Color.CYAN;
-        else if (GameState.currentPlayer == 1) return Color.GREEN;
-        else if (GameState.currentPlayer == 2) return Color.ORANGE;
-        else if (GameState.currentPlayer == 3) return Color.YELLOW;
+    public Color getColor(int p) {
+        int a = 255;
+        if (p == 0) return new Color(29,159,191,a);
+        else if (p == 1) return new Color(11,150,50,a);
+        else if (p == 2) return new Color(252,171,20,a);
+        else if (p == 3) return new Color(191,179,13,a);
         return Color.BLACK;
     }
 }

@@ -137,7 +137,7 @@ public class PlayAddLocationTile {
                     for (int a = 0; a < board[i][j].neighbors.length; a++) {
                         if (board[i][j].neighbors[a] == null) continue;
                         Pair p = board[i][j].neighbors[a].pos;
-                        if ((p.first == 0 || p.first == 19 || p.second == 0 || p.second == 19) && board[i][j].neighbors[a].player == -1 && board[i][j].terr != 2 && board[i][j].terr != 5) {
+                        if ((p.first == 0 || p.first == 19 || p.second == 0 || p.second == 19) && board[i][j].neighbors[a].player == -1 && board[i][j].neighbors[a].terr != 2 && board[i][j].neighbors[a].terr != 5) {
                             c++;
                             highlighted[p.first][p.second] = true;
                         }
