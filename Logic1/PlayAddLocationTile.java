@@ -3,10 +3,10 @@ import java.util.*;
 
 import Graphics.GamePanel;
 
-public class PlayLocationTile {
+public class PlayAddLocationTile {
     int curr = GameState.currentPlayer;
     int locTile = GamePanel.locTiles[GameState.players.get(curr).selectedAction];
-    public PlayLocationTile() {
+    public PlayAddLocationTile() {
         //oracle
         if (locTile == 7) {
             highlightOracle();
@@ -28,18 +28,7 @@ public class PlayLocationTile {
             highlightTavern();
         }
         //----------------------
-        //barn
-        if (locTile == 11) {
-            
-        }
-        //harbor
-        if (locTile == 12) {
-            
-        }
-        //paddock
-        if (locTile == 13) {
-            
-        }
+        
     }
     public void highlightOracle() {
         boolean[][] highlighted = new boolean[20][20];

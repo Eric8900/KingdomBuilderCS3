@@ -6,11 +6,11 @@ public class GameState {
 	public static State currentState;
 	public static Deck deck;
 	public static int currentPlayer;
-
+	public static GameHex tempChosenGameHex = null;
 	public static ArrayList<Integer> objCards;
 	public static Sector[] sectors = new Sector[4];
 	public enum State {
-		DRAWCARD, PLAYSETTLEMENTS, PLAYLOCATIONTILE, NEXTTURN, MAINMENU
+		DRAWCARD, PLAYSETTLEMENTS, PLAYADDLOCATIONTILE, PLAYMOVELOCATIONTILE, MOVELOCATIONTILE, NEXTTURN, MAINMENU
 	}
 	public GameState() {
 		players = new ArrayList<Player>();
@@ -33,8 +33,14 @@ public class GameState {
 		case PLAYSETTLEMENTS:
 			new PlaySettlements();
 			break;
-		case PLAYLOCATIONTILE:
-			new PlayLocationTile();
+		case PLAYADDLOCATIONTILE:
+			new PlayAddLocationTile();
+			break;
+		case PLAYMOVELOCATIONTILE:
+			new PlayMoveLocationTile();
+			break;
+		case MOVELOCATIONTILE:
+			new MoveLocationTile(tempChosenGameHex);
 			break;
 		case NEXTTURN:
 			new NextTurn();

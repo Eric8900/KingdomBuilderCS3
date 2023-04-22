@@ -65,12 +65,12 @@ public class GameBoard {
                 }
             }
     }
-    public ArrayList<Pair> getPlacedForPlayer(int p, int terr) {
+    public static ArrayList<Pair> getPlacedForPlayer(int p, int terr) {
         ArrayList<Pair> placed = new ArrayList<>();
         int c = 0;
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
-                if (GameMatrix[i][j].player == p && GameMatrix[i][j].terr == terr) {
+                if (GameMatrix[i][j].player == p && (GameMatrix[i][j].terr == terr || terr == -1)) {
                     c++;
                     placed.add(new Pair(i, j));
                 }
