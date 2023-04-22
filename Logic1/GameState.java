@@ -2,7 +2,6 @@ package Logic1;
 import java.util.*;
 public class GameState {
 	public static ArrayList<Player> players;
-	public static int playerTurn;
 	public static GameBoard board;
 	public static State currentState;
 	public static Deck deck;
@@ -11,11 +10,10 @@ public class GameState {
 	public static ArrayList<Integer> objCards;
 	public static Sector[] sectors = new Sector[4];
 	public enum State {
-		DRAWCARD, CHOOSEACTION, PLAYSETTLEMENTS, PLAYLOCATIONTILE, NEXTTURN, MAINMENU
+		DRAWCARD, PLAYSETTLEMENTS, PLAYLOCATIONTILE, NEXTTURN, MAINMENU
 	}
 	public GameState() {
 		players = new ArrayList<Player>();
-		playerTurn = 0;
 		deck = new Deck();
 		currentState = State.MAINMENU;
 		objCards = new ArrayList<>();
@@ -31,9 +29,6 @@ public class GameState {
 		switch(currentState){
 		case DRAWCARD:
 			new DrawCard();
-			break;
-		case CHOOSEACTION: 
-			new ChooseAction();
 			break;
 		case PLAYSETTLEMENTS:
 			new PlaySettlements();

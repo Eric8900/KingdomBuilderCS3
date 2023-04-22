@@ -16,11 +16,11 @@ public class Deck {
         discard = new ArrayList<>();
         objectiveCards = new ArrayList<>();
         chosenObjectiveCards = new ArrayList<>();
-        for(int i = 0; i<5; i++){
-            for(int j = 0; j<5; j++){
-                deck.add(i);
-            }
-        }
+        for (int i = 0; i < 5; i++) deck.add(0);
+        for (int i = 0; i < 5; i++) deck.add(1);
+        for (int i = 0; i < 5; i++) deck.add(3);
+        for (int i = 0; i < 5; i++) deck.add(4);
+        for (int i = 0; i < 5; i++) deck.add(6);
         shuffleDeck();
         for(int x = 0; x<10; x++){
             objectiveCards.add(x);

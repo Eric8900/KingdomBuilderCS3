@@ -1,0 +1,5 @@
+if (c == 3) {
+                        if (head.botRight != null && head.botRight.terr != 2 && head.botRight.terr != 5 && head.botRight.terr <= 6 && head.botRight.player == -1) {
+                            highlighted[head.botRight.pos.first][head.botRight.pos.second] = true;
+                        }
+                    }

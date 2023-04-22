@@ -28,21 +28,28 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startX = 0;
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
-    private BufferedImage[] locTiles = new BufferedImage[4];
+    private BufferedImage[] locTileImages = new BufferedImage[4];
+    public static int[] locTiles = new int[4]; 
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
-    private BufferedImage[] terrainCards = new BufferedImage[5];
+    private BufferedImage[] terrainCards = new BufferedImage[7];
     private BufferedImage cardBack;
     private BufferedImage[] backgrounds = new BufferedImage[2];
+    public ArrayList<Player> players;
     private String cordXY = "YOOO";
     private static int curr_i = -1;
     private static int curr_j = -1;
+    public static boolean[][] currentHighlights = new boolean[20][20];
+    public boolean nextTurnPossible = false;
     private boolean objectiveCardDisplay = false;
+    private BufferedImage drawACard;
     public GamePanel() {
         try {
             new GameState();
+            players = GameState.players;
             BufferedImage[] BOARDS = new BufferedImage[16];
             boolean[] used = new boolean[8];
+            drawACard = ImageIO.read(GamePanel.class.getResource("/Images/DrawACard.png"));
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
             BOARDS[2] = ImageIO.read(GamePanel.class.getResource("/Images/Board3.png"));
@@ -63,11 +70,11 @@ public class GamePanel extends JPanel implements MouseListener {
             settlements[1] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-green.png"));
             settlements[2] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-orange.png"));
             settlements[3] = ImageIO.read(GamePanel.class.getResource("/Images/settlement-yellow.png"));
-            terrainCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Canyon.png"));
-            terrainCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Desert.png"));
-            terrainCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Flower.png"));
-            terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
-            terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
+            terrainCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Canyon.png"));
+            terrainCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Desert.png"));
+            terrainCards[3] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Flower.png"));
+            terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
+            terrainCards[6] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
             backgrounds[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-MainMenuBackground.png"));
             backgrounds[1] = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/MinersObjective.png"));
@@ -91,11 +98,11 @@ public class GamePanel extends JPanel implements MouseListener {
                 used[rand] = true;
                 int rev = (int) (Math.random() * 2);
                 if (rev == 1) {
-                    boards[i] = BOARDS[rand + 7];
+                    boards[i] = BOARDS[rand + 8];
                     rand++;
                 }
                 else {
-                    boards[i] = BOARDS[rand + 1];
+                    boards[i] = BOARDS[rand];
                     rand++;
                 }
                 Scanner sc = new Scanner(new File("Boards/Board" + rand + ".txt"));
@@ -117,8 +124,8 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
             }
             TreeSet<Integer> LH = new TreeSet<>();
-            for (int i = 0; i < 19; i++) {
-                for (int j = 0; j < 19; j++) {
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 20; j++) {
                     int b = 0;
                     int I = i;
                     int J = j;
@@ -138,11 +145,12 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             int bruh = 0;
             for (int i : LH) {
-                locTiles[bruh] = ImageIO.read(GamePanel.class.getResource("/Images/LH" + i + ".png"));
+                locTiles[bruh] = i;
+                locTileImages[bruh] = ImageIO.read(GamePanel.class.getResource("/Images/LH" + i + ".png"));
                 bruh++;
             }
-            for (int i = 0; i < 19; i++) {
-                for (int j = 0; j < 19; j++) {
+            for (int i = 0; i < 20; i++) {
+                for (int j = 0; j < 20; j++) {
                     System.out.print(initBoard[i][j] + " ");
                 }
                 System.out.println();
@@ -172,7 +180,7 @@ public class GamePanel extends JPanel implements MouseListener {
         if(GameState.getState() == State.MAINMENU){
             paintMainMenu(g);
         }
-        if(GameState.getState() == State.CHOOSEACTION || GameState.getState() == State.PLAYSETTLEMENTS || GameState.getState() == State.PLAYLOCATIONTILE || GameState.getState() == State.DRAWCARD || GameState.getState() == State.NEXTTURN){
+        if(GameState.getState() == State.PLAYSETTLEMENTS || GameState.getState() == State.PLAYLOCATIONTILE || GameState.getState() == State.DRAWCARD || GameState.getState() == State.NEXTTURN){
             paintMainGameScene(g);
         }
         
@@ -188,7 +196,9 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     private void paintMainGameScene(Graphics g){
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
-        g.drawString(cordXY, 1300, 50);
+        g.setFont(new Font("Times New Roman", 1, 50));
+        g.setColor(Color.WHITE);
+        g.drawString(cordXY, 50, 1000);
         double mult = 1.2;
         int width = (int)(620/mult);
         int height = (int)(528/mult);
@@ -205,17 +215,43 @@ public class GamePanel extends JPanel implements MouseListener {
             int y = (startY + 4) + (int) (42.5 * i);
             for (int j = 0; j < 20; j++) {
                 int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
-                if (GameState.board.GameMatrix[i][j].highlighted) {
-                    g.setColor(Color.RED);
-                    g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                if (currentHighlights[i][j]) {
+                    Color shadeBackground = new Color(200, 200, 200, 100);
+                    g.setColor(shadeBackground);
+                    g.fillOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                    g.setColor(getColor(GameBoard.GameMatrix[i][j]));
+                    g.drawOval(x, y, (int) 48, 48);
                     g.setColor(Color.BLACK);
                 }
-                if (GameState.board.GameMatrix[i][j].isLocationTile) {
-    
-                    g.drawString(" " + GameState.board.GameMatrix[i][j].locationTileLeft, x + 24, y + 38);
+                if (GameBoard.GameMatrix[i][j].isLocationTile) {
+                    g.setFont(new Font("Times New Roman", 1, 30));
+                    g.setColor(Color.MAGENTA);
+                    g.drawString(" " + GameState.board.GameMatrix[i][j].locationTileLeft, x + 10, y + 20);
+                    g.setColor(Color.WHITE);
+                }
+                if (GameBoard.GameMatrix[i][j].player >= 0) {
+                    g.drawImage(settlements[GameBoard.GameMatrix[i][j].player], x + 8, y + 5, settlements[0].getWidth() / 2, settlements[0].getHeight() / 2, null);
                 }
             }
         }
+        if (GameState.currentState == GameState.State.PLAYLOCATIONTILE || GameState.currentState == GameState.State.PLAYSETTLEMENTS) {
+            g.setColor(Color.WHITE);
+            g.drawString("Current Action: ", KingdomFrame.WIDTH - 600, 950);
+            if (players.get(GameState.currentPlayer).selectedAction == -1) {
+                BufferedImage s = settlements[GameState.currentPlayer];
+                g.drawImage(s, KingdomFrame.WIDTH - 400, 930, s.getWidth() / 2, s.getHeight() / 2, null);
+            }
+            else {
+                BufferedImage s = locTileImages[players.get(GameState.currentPlayer).selectedAction];
+                g.drawImage(s, KingdomFrame.WIDTH - 400, 890, s.getWidth() / 2, s.getHeight() / 2, null);
+            }
+            g.drawString("Actions Left: " + (players.get(GameState.currentPlayer).settleActionsLeft + players.get(GameState.currentPlayer).locActionsLeft) , KingdomFrame.WIDTH - 300, 950);
+            if (nextTurnPossible) {
+                g.fillRect(770, 880, 200, 50);
+            }
+        }
+        
+
         System.out.println("You clicked this hexagon: "+ curr_i +
                 " " + curr_j);
         drawAllPlayerUI(g);
@@ -244,10 +280,10 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Color.WHITE);
     }
     private void drawAllPlayerUI(Graphics g) {
-        drawPlayerUI(g, GameState.players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, GameState.players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, GameState.players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
-        drawPlayerUI(g, GameState.players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(0),0,KingdomFrame.WIDTH/3*2,0,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(1),1,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(2),2,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*2,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
+        drawPlayerUI(g, players.get(3),3,KingdomFrame.WIDTH/3*2,KingdomFrame.HEIGHT/5*3,KingdomFrame.WIDTH/3,KingdomFrame.HEIGHT/5);
     }
     private void drawPlayerUI(Graphics g , Player p, int playerNum,int x, int y, int width, int height){
         double settlementScale = 0.5;
@@ -260,29 +296,31 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+10,y+25);
         g.drawString(""+p.tilesLeft,x+width/3+(int)(settlements[playerNum].getWidth()*settlementScale),y+25);
+        //SETTLEMENTS
         g.drawImage(settlements[playerNum], x+width/3, y,(int)(settlements[playerNum].getWidth()*settlementScale),(int)(settlements[playerNum].getHeight()*settlementScale), null);
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
     }
     private void drawPlayerLocationTiles(Graphics g,Player p, int playerNum,int x, int y, int width, int height){
-        g.drawImage(locTiles[0],x+10,y+20,locTiles[0].getWidth()/2,locTiles[0].getWidth()/2, null);
-        g.drawImage(locTiles[1],x+width/2-10,y+20,locTiles[0].getWidth()/2,locTiles[0].getWidth()/2, null);
-        g.drawImage(locTiles[2],x+10,y+height/2,locTiles[0].getWidth()/2,locTiles[0].getWidth()/2, null);
-        g.drawImage(locTiles[3],x+width/2-10,y+height/2,locTiles[0].getWidth()/2,locTiles[0].getWidth()/2, null);
-        g.drawString(p.locationTiles.get(0).toString(),x+5+locTiles[0].getWidth()/2/2,y+20+locTiles[0].getWidth()/2);
-        g.drawString(p.locationTiles.get(1).toString(),x+locTiles[0].getWidth()/2/2+width/2-15,y+20+locTiles[0].getWidth()/2);
-        g.drawString(p.locationTiles.get(2).toString(),x+5+locTiles[0].getWidth()/2/2,y+20+locTiles[0].getWidth());
-        g.drawString(p.locationTiles.get(3).toString(),x+locTiles[0].getWidth()/2/2+width/2-15,y+20+locTiles[0].getWidth());
+        g.drawImage(locTileImages[0],x+10,y+20,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
+        g.drawImage(locTileImages[1],x+width/2-10,y+20,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
+        g.drawImage(locTileImages[2],x+10,y+height/2,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
+        g.drawImage(locTileImages[3],x+width/2-10,y+height/2,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
+        g.drawString(p.roundLocTiles[0] + "",x+5+locTileImages[0].getWidth()/2/2,y+20+locTileImages[0].getWidth()/2);
+        g.drawString(p.roundLocTiles[1] + "",x+locTileImages[0].getWidth()/2/2+width/2-15,y+20+locTileImages[0].getWidth()/2);
+        g.drawString(p.roundLocTiles[2] + "",x+5+locTileImages[0].getWidth()/2/2,y+20+locTileImages[0].getWidth());
+        g.drawString(p.roundLocTiles[3] + "",x+locTileImages[0].getWidth()/2/2+width/2-15,y+20+locTileImages[0].getWidth());
     }
     private void drawPlayerTerrainCards(Graphics g){
-        for(int i = 0; i < GameState.players.size(); i++){
+        for(int i = 0; i < players.size(); i++){
             if (GameState.currentPlayer != i) {
                 g.drawImage(cardBack, 1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(cardBack.getWidth()*1.23),(int)(cardBack.getHeight()*1.23),null);
             }
-            else if (GameState.players.get(i).chosenCard < 0) {
-                g.fillRect(1150, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80, (int)(terrainCards[0].getWidth()*1.23), (int)(terrainCards[0].getHeight()*1.23));
+            else if (players.get(i).chosenCard < 0) {
+                g.drawImage(drawACard, 1150, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80, (int)(terrainCards[0].getWidth()*1.23), (int)(terrainCards[0].getHeight()*1.23), null);
             }
             else {
-                g.drawImage(terrainCards[GameState.players.get(i).chosenCard],1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[GameState.players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[GameState.players.get(i).chosenCard].getHeight()*1.23),null);
+                System.out.println(players.get(i).chosenCard);
+                g.drawImage(terrainCards[players.get(i).chosenCard],1150,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[players.get(i).chosenCard].getHeight()*1.23),null);
             }
         }
     }
@@ -314,6 +352,7 @@ public class GamePanel extends JPanel implements MouseListener {
         int y = e.getY();
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
+        
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
                 GameState.setState(State.DRAWCARD);
@@ -324,36 +363,168 @@ public class GamePanel extends JPanel implements MouseListener {
             if ((x >= KingdomFrame.WIDTH*8/15) && (x <= KingdomFrame.WIDTH*8/15 + (int)(cardBack.getWidth())) && (y >= 650) && (y <= 650 + (int)(cardBack.getHeight()))) {
                 System.out.println("YOU CLICKED THE DECK");
                 GameState.update();
-                GameState.setState(State.CHOOSEACTION);
+                GameState.setState(State.PLAYSETTLEMENTS);
+                GameState.update();
             }
         }
-        else if (GameState.currentState == State.CHOOSEACTION) {
-            
-        }
         else if (GameState.currentState == State.PLAYSETTLEMENTS) {
-            if(!objectiveCardDisplay){
-                for(int i = 0; i<gm.length; i++){
+            //START LOCATION TILE SELECTION
+            int xRange = KingdomFrame.WIDTH/3*2;
+            int yRange = KingdomFrame.HEIGHT/5 * (GameState.currentPlayer);
+            int width = KingdomFrame.WIDTH/3; int height = KingdomFrame.HEIGHT/5;
+            int w = locTileImages[0].getWidth()/2; int h = locTileImages[0].getWidth()/2;
+            //top left 0
+            if (x >= xRange + 10 && x <= xRange + 10 + w && y >= yRange + 20 && y <= yRange + 20 + h && !players.get(GameState.currentPlayer).settlementLock) {
+                players.get(GameState.currentPlayer).selectedAction = 0;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //top right 1
+            if (x >= (xRange + width/2-10) && x <= (xRange + width/2-10) + w && y >= yRange + 20 && y <= yRange + 20 + h && !players.get(GameState.currentPlayer).settlementLock) {
+                players.get(GameState.currentPlayer).selectedAction = 1;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //bot left 2
+            if (x >= xRange + 10 && x <= xRange + 10 + w && y >= (yRange+height/2) && y <= (yRange+height/2) + h && !players.get(GameState.currentPlayer).settlementLock) {
+                players.get(GameState.currentPlayer).selectedAction = 2;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //bot right 3
+            if (x >= (xRange + width/2-10) && x <= (xRange + width/2-10) + w && y >= (yRange+height/2) && y <= (yRange+height/2) + h && !players.get(GameState.currentPlayer).settlementLock) {
+                players.get(GameState.currentPlayer).selectedAction = 3;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //END LOCATION TILE SELECTION
+            //START PLACEMENT ON BOARD
+            if (x >= 0 && x <= 1005 && y >= 0 && y <= 870 && players.get(GameState.currentPlayer).settleActionsLeft >= 1) {
+                out: for(int i = 0; i<gm.length; i++){
                     for(int j = 0; j<gm[i].length; j++){
-                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24){
+                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24) {
+                            if (currentHighlights[i][j]) {
+                                players.get(GameState.currentPlayer).settlementLock = true;
+                                players.get(GameState.currentPlayer).settleActionsLeft--;
+                                gm[i][j].player = GameState.currentPlayer;
 
-                            gm[i][j].highlighted = true;
-                            curr_i = i;
-                            curr_j = j;
+                                //check if it's adj to a loc tile
+                                for (int a = 0; a < 6; a++) {
+                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                        for (int c = 0; c < locTiles.length; c++) {
+                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                gm[i][j].neighbors[a].updateLocTile();
+                                                gm[i][j].neighbors[a].locationTileLeft--;
+                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                            }
+                                        }
+                                    }
+                                }
+                                GameState.update();
+                                break out;
+                            }
                         }
                     }
                 }
-                if(x>KingdomFrame.WIDTH*8/15 && x<KingdomFrame.WIDTH*8/15+(int)(objectiveCards[0].getWidth()*.4) && y>KingdomFrame.HEIGHT*1/32 && y<KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)){
-                    objectiveCardDisplay = true;
-                }
-            }else{
-                objectiveCardDisplay = false;
             }
+            if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
+                players.get(GameState.currentPlayer).settlementLock = false;
+                nextTurnPossible = true;
+            }
+            //END PLACEMENT ON BOARD
         }
         else if (GameState.currentState == State.PLAYLOCATIONTILE) {
+            int xRange = KingdomFrame.WIDTH/3*2;
+            int yRange = KingdomFrame.HEIGHT/5 * (GameState.currentPlayer);
+            int width = KingdomFrame.WIDTH/3; int height = KingdomFrame.HEIGHT/5;
+            int w = locTileImages[0].getWidth()/2; int h = locTileImages[0].getWidth()/2;
+            // START SETTLEMENT TILE SELECTION
+            if (x >= (xRange + width / 3) && x <= (xRange + width / 3) + (int)(settlements[GameState.currentPlayer].getWidth()*0.5) &&
+                y >= yRange && y <= yRange + (int)(settlements[GameState.currentPlayer].getHeight()*0.5)) {
+                    players.get(GameState.currentPlayer).selectedAction = -1;
+                    GameState.currentState = GameState.State.PLAYSETTLEMENTS;
+                    GameState.update();
+            }
+            // END SETTLEMENT TILE SELECTION
+            //START LOCATION TILE SELECTION
+            if (x >= xRange + 10 && x <= xRange + 10 + w && y >= yRange + 20 && y <= yRange + 20 + h && !players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[0] > 0) {
+                players.get(GameState.currentPlayer).selectedAction = 0;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //top right 1
+            if (x >= (xRange + width/2-10) && x <= (xRange + width/2-10) + w && y >= yRange + 20 && y <= yRange + 20 + h && !players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[1] > 0) {
+                players.get(GameState.currentPlayer).selectedAction = 1;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //bot left 2
+            if (x >= xRange + 10 && x <= xRange + 10 + w && y >= (yRange+height/2) && y <= (yRange+height/2) + h && !players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[2] > 0) {
+                players.get(GameState.currentPlayer).selectedAction = 2;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //bot right 3
+            if (x >= (xRange + width/2-10) && x <= (xRange + width/2-10) + w && y >= (yRange+height/2) && y <= (yRange+height/2) + h && !players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[3] > 0) {
+                players.get(GameState.currentPlayer).selectedAction = 3;
+                GameState.setState(GameState.State.PLAYLOCATIONTILE);
+                GameState.update();
+            }
+            //END LOCATION TILE SELECTION
+            //START PLAY LOCATION TILE
+            if (x >= 0 && x <= 1005 && y >= 0 && y <= 870 && players.get(GameState.currentPlayer).locActionsLeft >= 1) {
+                out: for(int i = 0; i<gm.length; i++){
+                    for(int j = 0; j<gm[i].length; j++){
+                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= 24 * 24) {
+                            if (currentHighlights[i][j]) {
+                                players.get(GameState.currentPlayer).locActionsLeft--;
+                                gm[i][j].player = GameState.currentPlayer;
+                                players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
+                                if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
+                                    boolean ok = false;
+                                    for (int a = 0; a < 4; a++) {
+                                        if (players.get(GameState.currentPlayer).roundLocTiles[i] > 0) {
+                                            players.get(GameState.currentPlayer).selectedAction = i;
+                                            ok = true;
+                                        }
+                                    }
+                                    
+                                    if (!ok) {
+                                        players.get(GameState.currentPlayer).selectedAction = -1;
+                                        GameState.setState(GameState.State.PLAYSETTLEMENTS);
+                                    }
+                                }
 
+                                //check if it's adj to a loc tile
+                                for (int a = 0; a < 6; a++) {
+                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                        for (int c = 0; c < locTiles.length; c++) {
+                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                gm[i][j].neighbors[a].updateLocTile();
+                                                gm[i][j].neighbors[a].locationTileLeft--;
+                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                            }
+                                        }
+                                    }
+                                }
+                                GameState.update();
+                                break out;
+                            }
+                        }
+                    }
+                }
+            }
+            //END PLAY LOCATION TILE
         }
         else if (GameState.currentState == State.NEXTTURN) {
 
+        }
+        if (nextTurnPossible) {
+            if (x >= 770 && x <= 770 + 200 && y >= 880 && y <= 930) {
+                GameState.setState(GameState.State.NEXTTURN);
+                GameState.update();
+                nextTurnPossible = false;
+            }
         }
         repaint();
     }
@@ -372,6 +543,15 @@ public class GamePanel extends JPanel implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
         // TODO Auto-generated method stub
+    }
+    public Color getColor(GameHex a) {
+        if (a.terr == 3) return Color.RED;
+        else if (a.terr == 5) return Color.BLUE;
+        else if (a.terr == 0) return new Color(145, 103, 0);
+        else if (a.terr == 1) return new Color(237, 172, 14);
+        else if (a.terr == 4) return new Color(7, 69, 0);
+        else if (a.terr == 6) return new Color(88, 255, 78);
+        return Color.BLACK;
     }
 }
 

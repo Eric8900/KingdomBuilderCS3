@@ -11,25 +11,17 @@ public class GameBoard {
         GameMatrix = new GameHex[init.length][init[0].length];
         for (int i = 0; i < init.length; i++) {
             for (int j = 0; j < init[i].length; j++) {
-                GameMatrix[i][j] = new GameHex(centers[i][j].first, centers[i][j].second, init[i][j], null, null, null, null, null, null, false);
+                GameMatrix[i][j] = new GameHex(centers[i][j].first, centers[i][j].second, init[i][j], null, null, null, null, null, null, i, j);
             }
         }
         //6 pointers
         for(int i = 0; i<GameMatrix.length;i++){
             for(int j = 0; j<GameMatrix[i].length; j++){
                 addNeighbors(GameMatrix[i][j], i, j);
+                GameMatrix[i][j].updateNeighbors();
             }
         }
     }
-
-    /*monkey idea for init:
-     * init a 2d array of every game hex with an i and j
-     * each hex will have an i and j
-     * every time we add a neighbor, we brute force through the 2d array and find the i and j
-     *
-     *
-     * OR JUST USE THEIR INDEX IN THE ARRAY? POSSIBLY?
-     */
     public void addNeighbors(GameHex node, int i, int j) {
         /*
         even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
@@ -73,27 +65,24 @@ public class GameBoard {
                 }
             }
     }
-
-    /*public void setCoords(int startX, int startY){
-        int space_x = 49;//horiztonal gap between the centers of two adj hexagons (approx by trial and error)
-        int space_y = 43;//vertical gape between the centers of two adj hexagons (one on top and one below)
-        int first_x = 324;//trial and error
-        int first_y = 100;
-        //first_x and first_y represent the x y coordinates of the first hexagon
-        GameMatrix[0][0].x = first_x;
-        GameMatrix[0][0].y = first_y;
-        for(int i = 0; i<GameMatrix.length; i++){
-            //if(i == GameMatrix.length - 4) space_y--;
-            for(int j = 0; j<GameMatrix[i].length; j++){
-               GameMatrix[i][j].x = first_x + j * space_x;
-               GameMatrix[i][j].y = first_y + i * space_y;
-                if(i >= GameMatrix.length - 4) GameMatrix[i][j].y--;
-               if(i % 2 == 1){
-                   GameMatrix[i][j].x += space_x/2;
-               }
+    public ArrayList<Pair> getPlacedForPlayer(int p, int terr) {
+        ArrayList<Pair> placed = new ArrayList<>();
+        int c = 0;
+        for (int i = 0; i < 20; i++) {
+            for (int j = 0; j < 20; j++) {
+                if (GameMatrix[i][j].player == p && GameMatrix[i][j].terr == terr) {
+                    c++;
+                    placed.add(new Pair(i, j));
+                }
             }
         }
-    }*/
+        if (c == 0) {
+            return null;
+        }
+        else {
+            return placed;
+        }
+    }
 
     public boolean inBounds(int i, int j) {
         return i >= 0 && i < GameMatrix.length && j >= 0 && j < GameMatrix[i].length;
