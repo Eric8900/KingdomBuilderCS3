@@ -323,14 +323,14 @@ public class GamePanel extends JPanel implements MouseListener {
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
     }
     private void drawPlayerLocationTiles(Graphics g,Player p, int playerNum,int x, int y, int width, int height){
-        g.drawImage(locTileImages[0],x+10,y+20,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
-        g.drawImage(locTileImages[1],x+width/2-10,y+20,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
-        g.drawImage(locTileImages[2],x+10,y+height/2,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
-        g.drawImage(locTileImages[3],x+width/2-10,y+height/2,locTileImages[0].getWidth()/2,locTileImages[0].getWidth()/2, null);
-        g.drawString(p.roundLocTiles[0] + "",x+5+locTileImages[0].getWidth()/2/2,y+20+locTileImages[0].getWidth()/2);
-        g.drawString(p.roundLocTiles[1] + "",x+locTileImages[0].getWidth()/2/2+width/2-15,y+20+locTileImages[0].getWidth()/2);
-        g.drawString(p.roundLocTiles[2] + "",x+5+locTileImages[0].getWidth()/2/2,y+20+locTileImages[0].getWidth());
-        g.drawString(p.roundLocTiles[3] + "",x+locTileImages[0].getWidth()/2/2+width/2-15,y+20+locTileImages[0].getWidth());
+        g.drawImage(locTileImages[0],x+10,y+20,105,105, null);
+        g.drawImage(locTileImages[1],x+width/2-10,y+20,105,105, null);
+        g.drawImage(locTileImages[2],x+10,y+height/2,105,105, null);
+        g.drawImage(locTileImages[3],x+width/2-10,y+height/2,105,105, null);
+        g.drawString(p.roundLocTiles[0] + "",x+5+locTileImages[0].getWidth()/2/2+35,y+20+locTileImages[0].getWidth()/2-20);
+        g.drawString(p.roundLocTiles[1] + "",x+locTileImages[0].getWidth()/2/2+width/2-15+35,y+20+locTileImages[0].getWidth()/2-20);
+        g.drawString(p.roundLocTiles[2] + "",x+5+locTileImages[0].getWidth()/2/2+35,y+20+locTileImages[0].getWidth()-20);
+        g.drawString(p.roundLocTiles[3] + "",x+locTileImages[0].getWidth()/2/2+width/2-15+35,y+20+locTileImages[0].getWidth()-20);
     }
     private void drawPlayerTerrainCards(Graphics g){
         for(int i = 0; i < players.size(); i++){
