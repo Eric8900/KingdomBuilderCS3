@@ -181,13 +181,51 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
-        if(GameState.getState() == State.MAINMENU){
-            paintMainMenu(g);
+//        if(GameState.getState() == State.MAINMENU){
+//            paintMainMenu(g);
+//        }
+//        else {
+//            paintMainGameScene(g);
+//        }
+        paintEndGame(g);
+    }
+    public void paintEndGame(Graphics g){
+        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
+        for(int i = 0; i<4; i++) {
+            g.drawLine(KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14, KingdomFrame.WIDTH * 13 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14);
+            g.drawLine(KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 1 / 14, KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 11 / 14);
         }
-        else {
-            paintMainGameScene(g);
+        g.setColor(Constants.Colors.cyan);
+        g.setFont(new Font("Times New Roman", 1, 50));
+        g.drawString("Players", KingdomFrame.WIDTH*5/28, KingdomFrame.HEIGHT*9/56);
+        g.drawString("Castle", KingdomFrame.WIDTH*11/28, KingdomFrame.HEIGHT*9/56);
+        for(int i = 0; i<3; i++){
+            g.drawString("Discoverers", KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
         }
-        
+        for(int i = 0; i<4; i++){
+            switch (i){
+                case 0:
+                    g.setColor(Constants.Colors.gold);
+                    break;
+                case 1:
+                    g.setColor(Constants.Colors.silver);
+                    break;
+                case 2:
+                    g.setColor(Constants.Colors.bronze);
+                    break;
+                default:
+                    g.setColor(Constants.Colors.cyan);
+            }
+            g.drawString(i+1 + ". Player#", KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("0", KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("0", KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("0", KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("0", KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+        }
     }
     private void paintMainMenu(Graphics g){
         g.drawImage(backgrounds[0], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -327,7 +365,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.fillRoundRect(x,y,width,height,50,50);
         Color outLineColor = new Color(211, 211, 211);
         g.setColor(outLineColor);
-        g.drawString("Player " + (playerNum+1),x+10,y+25);
+        g.drawString("Player " + (playerNum+1),x+15,y+30);
         
         //SETTLEMENTS
         g.setColor(getColor(playerNum));
@@ -383,11 +421,10 @@ public class GamePanel extends JPanel implements MouseListener {
     }
 
     private void drawObjectiveCards(Graphics g){
-        g.setColor(new Color(0, 0, 0, 127));
+        g.setColor(Constants.Colors.green);
         g.fillRoundRect(KingdomFrame.WIDTH*8/15-12, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
-        g.setColor(Color.WHITE);
+        g.setColor(Constants.Colors.blue);
         g.drawRoundRect(KingdomFrame.WIDTH*8/15-12, KingdomFrame.HEIGHT*1/32-7, (int)(objectiveCards[0].getWidth()*.4)+14, KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14, 25, 50);
-        g.setColor(Color.WHITE);
         g.setFont(new Font("Times New Roman", 1, 15));
         int SX = KingdomFrame.WIDTH*8/15 - 5; int w = (int)(objectiveCards[0].getWidth()*.4); int l = (int)(objectiveCards[0].getHeight()*.4);
         g.drawString("Click To Enlarge", SX + 4, KingdomFrame.HEIGHT*(1 + (1 * 6))/32 - 20);
@@ -421,7 +458,7 @@ public class GamePanel extends JPanel implements MouseListener {
         if (objectiveCardDisplay) {
             objectiveCardDisplay = false;
         }
-        if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+        else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
             objectiveCardDisplay = true;
         }
         if(GameState.currentState == State.MAINMENU){
