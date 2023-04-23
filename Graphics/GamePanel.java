@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Window;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -200,8 +201,8 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Color.WHITE);
         g.drawString(cordXY, 50, 1000);
         double mult = 1.2;
-        int width = (int)(620/mult);
-        int height = (int)(528/mult);
+        int width = (int)(KingdomFrame.WIDTH/3.125/mult);
+        int height = (int)(KingdomFrame.HEIGHT/2/mult);
         int hOffset = ((width - ((int)(32 / mult))));
         int vOffset = ((height - ((int)(18 / mult))));
         g.drawImage(boards[0], startX, startY, width, height, null);
@@ -212,23 +213,29 @@ public class GamePanel extends JPanel implements MouseListener {
         //58(x) 52.8(y)
         Pair[][] centers = new Pair[20][20];
         for (int i = 0; i < 20; i++) {
-            int y = (startY + 4) + (int) (42.5 * i);
             for (int j = 0; j < 20; j++) {
-                int x = i % 2 == 0 ? (startX + 1) + (49 * j) : (startX + 26) + (49 * j);
+                currentHighlights[i][j] = true;
+            }
+        }
+        int circleHeight = (int) ((double) height * (48.0 / 440.0)); int circleWidth = (int) ((double)width * (48.0 / 516.666667));
+        for (int i = 0; i < 20; i++) {
+            int y = (int) (startY + ((double) height * 0.00909091)) + (int) (((double)height * (42.50559555 / 440.0)) * i);
+            for (int j = 0; j < 20; j++) {
+                int x = i % 2 == 0 ? (int) (((double) width * (1.5 / 516.6666666667))) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j) : (int) ((width * 0.05032258)) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j);
                 if (currentHighlights[i][j]) {
                     Color shadeBackground = new Color(255, 255, 255, 120);
                     g.setColor(shadeBackground);
-                    g.fillOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                    g.fillOval(x, y, (int) circleWidth, circleHeight); //47 and 48 is hardcoded...
                     g.setColor(getColor(GameState.currentPlayer));
-                    g.drawOval(x, y, (int) 48, 48);
+                    g.drawOval(x, y, (int) circleWidth, circleHeight);
                     g.setColor(Color.BLACK);
                 }
                 if (GameState.tempChosenGameHex != null && GameState.tempChosenGameHex.pos.first == i && GameState.tempChosenGameHex.pos.second == j) {
                     Color shadeBackground = new Color(200, 200, 200, 100);
                     g.setColor(shadeBackground);
-                    g.fillOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
+                    g.fillOval(x, y, (int) circleWidth, circleHeight); //47 and 48 is hardcoded...
                     g.setColor(Color.RED);
-                    g.drawOval(x, y, (int) 48, 48);
+                    g.drawOval(x, y, (int) circleWidth, circleHeight);
                     g.setColor(Color.BLACK);
                 }
                 if (GameBoard.GameMatrix[i][j].isLocationTile) {
@@ -408,15 +415,9 @@ public class GamePanel extends JPanel implements MouseListener {
         cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
         if (objectiveCardDisplay) {
-            for (long i = 0; i < 2100000000; i++) {
-
-            }
             objectiveCardDisplay = false;
         }
         if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
-            for (long i = 0; i < 2100000000; i++) {
-
-            }
             objectiveCardDisplay = true;
         }
         if(GameState.currentState == State.MAINMENU){
