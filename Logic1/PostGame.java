@@ -8,7 +8,7 @@ public class PostGame {
     public boolean[] vis;
     public ArrayList<Sector> sectors;
 
-    public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to theplayer from greatest to least in terms of score
+    public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
 
     public PostGame(GameHex[][] hexes, boolean[] vis) {
         this.hexes = hexes;

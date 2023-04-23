@@ -19,6 +19,7 @@ public class GameBoard {
             for(int j = 0; j<GameMatrix[i].length; j++){
                 addNeighbors(GameMatrix[i][j], i, j);
                 GameMatrix[i][j].updateNeighbors();
+                GameMatrix[i][j].id = 20 * i + j;
             }
         }
     }
