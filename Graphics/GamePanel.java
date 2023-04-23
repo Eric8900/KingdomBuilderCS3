@@ -181,20 +181,13 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
-        if(GameState.getState() == State.MAINMENU){
-            paintMainMenu(g);
-            //FOR TESTING PURPOSES
-            g.setFont(new Font("Times New Roman", 1, 15));
-            drawForceEndButton(g);
-        }
-        else if(GameState.getState() == State.ENDGAME){
-            paintEndGame(g);
-        }
-        else {
-            paintMainGameScene(g);
-            //FOR TESTING PURPOSES
-            drawForceEndButton(g);
-        }
+//        if(GameState.getState() == State.MAINMENU){
+//            paintMainMenu(g);
+//        }
+//        else {
+//            paintMainGameScene(g);
+//        }
+        paintEndGame(g);
     }
     public void paintEndGame(Graphics g){
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -211,8 +204,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString("Players", KingdomFrame.WIDTH*5/28, KingdomFrame.HEIGHT*9/56);
         g.drawString("Castle", KingdomFrame.WIDTH*11/28, KingdomFrame.HEIGHT*9/56);
         for(int i = 0; i<3; i++){
-            //Writes out objective cards
-            g.drawString("objCard" + (i+1), KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
+            g.drawString("Discoverers", KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
         }
         for(int i = 0; i<4; i++){
             switch (i){
@@ -228,15 +220,10 @@ public class GamePanel extends JPanel implements MouseListener {
                 default:
                     g.setColor(Constants.Colors.cyan);
             }
-            //Writes out players by rank order
             g.drawString(i+1 + ". Player#", KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            //Writes out players castle points by rank order
             g.drawString("0", KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            //Writes out players objective card 1 points by rank order
             g.drawString("0", KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            //Writes out players objective card 2 points by rank order
             g.drawString("0", KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            //Writes out players objective card 3 points by rank order
             g.drawString("0", KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
         }
     }
@@ -338,13 +325,6 @@ public class GamePanel extends JPanel implements MouseListener {
         if(objectiveCardDisplay){
             displayObjectiveCards(g);
         }
-    }
-    //FOR TESTING PURPOSES
-    private void drawForceEndButton(Graphics g){
-        g.setColor(Color.RED);
-        g.fillRect(KingdomFrame.WIDTH*20/100, KingdomFrame.HEIGHT*90/100, KingdomFrame.WIDTH*5/100, KingdomFrame.HEIGHT*5/100);
-        g.setColor(Color.BLUE);
-        g.drawString("FORCEEND", KingdomFrame.WIDTH*20/100, KingdomFrame.HEIGHT*93/100);
     }
     private void drawDeckDiscard(Graphics g){
         g.setColor(Color.BLACK);
@@ -475,9 +455,11 @@ public class GamePanel extends JPanel implements MouseListener {
         int height = (int)(KingdomFrame.HEIGHT/2/1.2);
         int circleHeight = (int) ((double) height * (48.0 / 440.0)); int circleWidth = (int) ((double)width * (48.0 / 516.666667));
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
-        //FORCE END BUTTON FOR TESTING PURPOSES
-        if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
-            GameState.setState(State.ENDGAME);
+        if (objectiveCardDisplay) {
+            objectiveCardDisplay = false;
+        }
+        else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+            objectiveCardDisplay = true;
         }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
@@ -497,12 +479,6 @@ public class GamePanel extends JPanel implements MouseListener {
             }
         }
         else if (GameState.currentState == State.PLAYSETTLEMENTS) {
-            if (objectiveCardDisplay) {
-                objectiveCardDisplay = false;
-            }
-            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
-                objectiveCardDisplay = true;
-            }
             checkIfClickedOnLocOrSettle(x, y);
             //START PLACEMENT ON BOARD
             if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).settleActionsLeft >= 1) {
@@ -646,9 +622,6 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             //END PLAY LOCATION TILE
         }
-        else if(GameState.currentState == State.ENDGAME){
-
-        }
         if (nextTurnPossible) {
             int SX = (int) (KingdomFrame.WIDTH / 38.4); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);
             if (x >= SX && x <= SX + 200 && y >= SY && y <= SY + 50) {
@@ -666,7 +639,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 cancelMoveLocationTile = false;
             }
         }
-
         repaint();
     }
     @Override

@@ -45,6 +45,9 @@ public class GameState {
 		case NEXTTURN:
 			new NextTurn();
 			break;
+		case ENDGAME:
+			new PostGame(null, null);
+			break;
 		default:
 		}
 	}
