@@ -235,10 +235,10 @@ public class GamePanel extends JPanel implements MouseListener {
                     g.setColor(Constants.Colors.cyan);
             }
             g.drawString((i + 1) + "Player " + (postGame.playerLeaders.get(i).num + 1), KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("" + postGame.playerLeaders.get(i).getScore[GameState.objCards.get(0)] , KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("" + postGame.playerLeaders.get(i).getScore[GameState.objCards.get(1)], KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("" + postGame.playerLeaders.get(i).getScore[GameState.objCards.get(2)], KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("" + postGame.playerLeaders.get(i).getScore[10], KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
         }
     }
     private void paintMainMenu(Graphics g){
@@ -660,7 +660,7 @@ public class GamePanel extends JPanel implements MouseListener {
             //END PLAY LOCATION TILE
         }
         else if(GameState.currentState == State.ENDGAME){
-            postGame = new PostGame(GameState.board.GameMatrix, new boolean[400]);
+
         }
         if (nextTurnPossible) {
             int SX = (int) (KingdomFrame.WIDTH / 38.4); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);

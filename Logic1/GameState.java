@@ -47,7 +47,7 @@ public class GameState {
 			new NextTurn();
 			break;
 		case ENDGAME:
-			new PostGame(null, null);
+			new PostGame(board.GameMatrix, new boolean[400]);
 			break;
 		default:
 		}

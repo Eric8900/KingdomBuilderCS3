@@ -30,7 +30,7 @@ public class PostGame {
             }
         }
         scorePlayers();
-        for(Player p: GameState.players){
+        for (Player p : GameState.players) {
             playerLeaders.add(p);
         }
         Collections.sort(playerLeaders);
@@ -106,10 +106,11 @@ public class PostGame {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
                 int size = 0;
-                if (!vis[hexes[i][j].id])
+                if (!vis[hexes[i][j].id]) {
                     dfs(hexes[i][j], size, 0);
-                GameState.players.get(player).getScore[6] += size;
-                GameState.players.get(player).score += size;
+                    GameState.players.get(player).getScore[6]++;
+                    GameState.players.get(player).score++;
+                }
             }
         }
     }
@@ -128,8 +129,8 @@ public class PostGame {
             }
         }
         for (int i = 0; i < GameState.players.size(); i++) {
-            GameState.players.get(i).getScore[4] += playerMax[i]/2;
-            GameState.players.get(i).score += playerMax[i]/2;
+            GameState.players.get(i).getScore[4] += playerMax[i] / 2;
+            GameState.players.get(i).score += playerMax[i] / 2;
         }
     }
 
@@ -165,26 +166,26 @@ public class PostGame {
 
     public void scoreKnights() {
         int[][] rowCount = new int[GameState.players.size()][hexes.length];
-        for(int i = 0; i<hexes.length; i++){
-            for(int j = 0; j<hexes[i].length; j++){
-                if(hexes[i][j].player == -1) continue;
+        for (int i = 0; i < hexes.length; i++) {
+            for (int j = 0; j < hexes[i].length; j++) {
+                if (hexes[i][j].player == -1) continue;
                 rowCount[hexes[i][j].player][i]++;
             }
         }
-            for(int player = 0; player<GameState.players.size(); player++){
-                int[] rows = rowCount[player];
-                int max = -1;
-                for(int count: rows){
-                    max = Math.max(max, count);
-                }
-                GameState.players.get(player).score += 2 * max;
-                GameState.players.get(player).getScore[8] += 2 * max;
+        for (int player = 0; player < GameState.players.size(); player++) {
+            int[] rows = rowCount[player];
+            int max = -1;
+            for (int count : rows) {
+                max = Math.max(max, count);
+            }
+            GameState.players.get(player).score += 2 * max;
+            GameState.players.get(player).getScore[8] += 2 * max;
         }
     }
 
     public void scoreLords() {
         for (int i = 0; i < sectors.size(); i++) {
-            for(int player = 0; player<GameState.players.size(); player++){
+            for (int player = 0; player < GameState.players.size(); player++) {
                 sectors.get(i).updateSettleCount(GameState.players.get(player));
             }
             Pair[] sc = sectors.get(i).settleCounts;
@@ -193,7 +194,7 @@ public class PostGame {
             int secondMax = -1;
             boolean checkFor2ndMax = false;
             for (int j = 0; j < sectors.size(); j++) {
-                if(checkFor2ndMax && sc[i].second != secondMax) break;
+                if (checkFor2ndMax && sc[i].second != secondMax) break;
                 if (sc[i].second == maxCount) {
                     GameState.players.get(sc[i].first).score += 12;
                     GameState.players.get(sc[i].first).getScore[2] += 12;
@@ -219,15 +220,15 @@ public class PostGame {
         }
     }
 
-    public void castleScoring(){
-        for(int i = 0; i<hexes.length; i++){
+    public void castleScoring() {
+        for (int i = 0; i < hexes.length; i++) {
             boolean[] seen = new boolean[GameState.players.size()];
-            for(int j = 0; j<hexes[i].length; j++){
-                if(hexes[i][j].terr == 14){
+            for (int j = 0; j < hexes[i].length; j++) {
+                if (hexes[i][j].terr == 14) {
                     GameHex[] neigh = hexes[i][j].neighbors;
-                    for(GameHex n: neigh){
-                        if(n.player == -1) continue;
-                        if(!seen[n.player]){
+                    for (GameHex n : neigh) {
+                        if (n.player == -1) continue;
+                        if (!seen[n.player]) {
                             seen[n.player] = true;
                             GameState.players.get(n.player).score += 3;
                             GameState.players.get(n.player).getScore[10] += 3;
@@ -264,7 +265,9 @@ public class PostGame {
         size++;
         for (GameHex v : c.neighbors) {
             if (!vis[v.id] && c.player == v.player) {
-                dfs(v, size,locationTiles);
+                dfs(v, size, locationTiles);
+            } else if (!vis[v.id] && locationTiles > 1 && v.player == -1) {
+                dfs(v, size, locationTiles);
             }
         }
     }
