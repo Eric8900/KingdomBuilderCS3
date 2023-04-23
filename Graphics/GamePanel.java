@@ -181,13 +181,15 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
-//        if(GameState.getState() == State.MAINMENU){
-//            paintMainMenu(g);
-//        }
-//        else {
-//            paintMainGameScene(g);
-//        }
+       if(GameState.getState() == State.MAINMENU){
+           paintMainMenu(g);
+       }
+       else if (GameState.currentState == State.ENDGAME) {
         paintEndGame(g);
+       }
+       else {
+           paintMainGameScene(g);
+       }
     }
     public void paintEndGame(Graphics g){
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -276,7 +278,8 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
                 if (GameBoard.GameMatrix[i][j].isLocationTile) {
                     g.setFont(new Font("Times New Roman", 1, 30));
-                    g.setColor(Color.MAGENTA);
+                    g.setColor(Color.GREEN);
+                    if (GameBoard.GameMatrix[i][j].locationTileLeft < 1) g.setColor(Color.RED);
                     g.drawString(" " + GameState.board.GameMatrix[i][j].locationTileLeft, x + 10, y + 20);
                     g.setColor(Color.WHITE);
                 }
@@ -437,10 +440,12 @@ public class GamePanel extends JPanel implements MouseListener {
         Color shadeBackground = new Color(0, 0, 0, 180);
         g.setColor(shadeBackground);
         g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH*1/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH*2/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
-        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH*3/4-(int)(objectiveCards[0].getWidth()/2), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(0)], (int) (KingdomFrame.WIDTH*1/4)-(int)(objectiveCards[0].getWidth()/1.5), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(1)], (int) (KingdomFrame.WIDTH*2/4)-(int)(objectiveCards[0].getWidth()/1.5), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
+        g.drawImage(objectiveCards[GameState.deck.getChosenObjectiveCards().get(2)], (int) (KingdomFrame.WIDTH*3/4)-(int)(objectiveCards[0].getWidth()/1.5), KingdomFrame.HEIGHT/2-(int)(objectiveCards[0].getHeight()*1.5/2), (int)(objectiveCards[0].getWidth()*1.5), (int)(objectiveCards[0].getHeight()*1.5), null);
         g.setColor(Color.WHITE);
+        g.setFont(new Font("Times New Roman", 1, 50));
+        g.drawString("Click Anywhere to Exit", (int)(KingdomFrame.WIDTH / 2.75), 150);
     }
 
 
