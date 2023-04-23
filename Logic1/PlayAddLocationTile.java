@@ -34,9 +34,8 @@ public class PlayAddLocationTile {
         boolean[][] highlighted = new boolean[20][20];
         ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, GameState.players.get(curr).chosenCard);
         GameHex[][] board = GameState.board.GameMatrix;
-        boolean ok = false;
+        int c = 0;
         if (placed != null) {
-            int c = 0;
             for (int i = 0; i < placed.size(); i++) {
                 GameHex a = GameState.board.GameMatrix[placed.get(i).first][placed.get(i).second];
                 for (int j = 0; j < a.neighbors.length; j++) {
@@ -46,12 +45,8 @@ public class PlayAddLocationTile {
                     }
                 }
             }
-            if (c == 0) ok = true;
         }
-        else {
-            ok = true;
-        }
-        if (ok) {
+        if (c < 1) {
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
                     if (board[i][j].terr == GameState.players.get(curr).chosenCard && board[i][j].player == -1) {
@@ -66,9 +61,9 @@ public class PlayAddLocationTile {
         boolean[][] highlighted = new boolean[20][20];
         ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, 6);
         GameHex[][] board = GameState.board.GameMatrix;
-        boolean ok = false;
+        int c = 0;
         if (placed != null) {
-            int c = 0;
+            
             for (int i = 0; i < placed.size(); i++) {
                 GameHex a = GameState.board.GameMatrix[placed.get(i).first][placed.get(i).second];
                 for (int j = 0; j < a.neighbors.length; j++) {
@@ -78,12 +73,8 @@ public class PlayAddLocationTile {
                     }
                 }
             }
-            if (c == 0) ok = true;
         }
-        else {
-            ok = true;
-        }
-        if (ok) {
+        if (c < 1) {
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
                     if (board[i][j].terr == 6 && board[i][j].player == -1) {
@@ -98,9 +89,8 @@ public class PlayAddLocationTile {
         boolean[][] highlighted = new boolean[20][20];
         ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, 0);
         GameHex[][] board = GameState.board.GameMatrix;
-        boolean ok = false;
+        int c = 0;
         if (placed != null) {
-            int c = 0;
             for (int i = 0; i < placed.size(); i++) {
                 GameHex a = GameState.board.GameMatrix[placed.get(i).first][placed.get(i).second];
                 for (int j = 0; j < a.neighbors.length; j++) {
@@ -110,12 +100,8 @@ public class PlayAddLocationTile {
                     }
                 }
             }
-            if (c == 0) ok = true;
         }
-        else {
-            ok = true;
-        }
-        if (ok) {
+        if (c < 1) {
             for (int i = 0; i < 20; i++) {
                 for (int j = 0; j < 20; j++) {
                     if (board[i][j].terr == 0 && board[i][j].player == -1) {
