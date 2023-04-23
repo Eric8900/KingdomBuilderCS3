@@ -17,6 +17,7 @@ public class GameState {
 		deck = new Deck();
 		currentState = State.MAINMENU;
 		objCards = new ArrayList<>();
+		objCards = deck.getChosenObjectiveCards();
 		currentPlayer = 0;
 		for (int i = 0; i < 4; i++) {
 			players.add(new Player(i));
