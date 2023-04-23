@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Window;
+import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,9 +38,6 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage cardBack;
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
-    private String cordXY = "YOOO";
-    private static int curr_i = -1;
-    private static int curr_j = -1;
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false;
@@ -78,7 +76,7 @@ public class GamePanel extends JPanel implements MouseListener {
             terrainCards[4] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Forest.png"));
             terrainCards[6] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
             backgrounds[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-MainMenuBackground.png"));
-            backgrounds[1] = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
+            backgrounds[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-BG.jpg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/MinersObjective.png"));
             objectiveCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/DiscoverersObjective.PNG"));
             objectiveCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/LordsObjective.PNG"));
@@ -253,10 +251,15 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString("PLAY", KingdomFrame.WIDTH/2-40, KingdomFrame.HEIGHT/3*2+60);
     }
     private void paintMainGameScene(Graphics g){
+        float borderWidth = 2.0f; // Set the desired border width
+        ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setFont(new Font("Times New Roman", 1, 50));
-        g.setColor(Color.WHITE);
-        g.drawString(cordXY, 50, 1000);
+        g.setColor(Constants.Colors.green);
+        int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
+        g.fillRoundRect(0, 0, boardEndX + 5, boardEndY + 5, 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(0, 0, boardEndX + 5, boardEndY + 5, 50, 50);
         double mult = 1.2;
         int width = (int)(KingdomFrame.WIDTH/3.125/mult);
         int height = (int)(KingdomFrame.HEIGHT/2/mult);
@@ -302,7 +305,10 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
             }
         }
-        g.setColor(Color.WHITE);
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 6) - 40, KingdomFrame.HEIGHT - (KingdomFrame.HEIGHT / 8) - 50, (KingdomFrame.WIDTH / 6), (KingdomFrame.HEIGHT / 8), 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 6) - 40, KingdomFrame.HEIGHT - (KingdomFrame.HEIGHT / 8) - 50, (KingdomFrame.WIDTH / 6), (KingdomFrame.HEIGHT / 8), 50, 50);
         g.drawString("Current Action: ", KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 6), KingdomFrame.HEIGHT - (KingdomFrame.HEIGHT / 8));
         if (players.get(GameState.currentPlayer).selectedAction == -1) {
             BufferedImage s = settlements[GameState.currentPlayer];
@@ -310,31 +316,27 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         else {
             BufferedImage s = locTileImages[players.get(GameState.currentPlayer).selectedAction];
-            g.drawImage(s, KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 18) - 10, KingdomFrame.HEIGHT - (KingdomFrame.HEIGHT / 5), s.getWidth() / 2, s.getHeight() / 2, null);
+            g.drawImage(s, KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 18) - 10, KingdomFrame.HEIGHT - (int)(KingdomFrame.HEIGHT / 6.1), s.getWidth() / 3, s.getHeight() / 3, null);
         }
         g.drawString("Actions Left: " + (players.get(GameState.currentPlayer).settleActionsLeft + players.get(GameState.currentPlayer).locActionsLeft) , KingdomFrame.WIDTH - (KingdomFrame.WIDTH / 6), KingdomFrame.HEIGHT - (KingdomFrame.HEIGHT / 12));
         if (nextTurnPossible) {
             int SX = (int) (KingdomFrame.WIDTH / 38.4); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);
-            g.setColor(Color.RED);
-            g.drawRect(SX - 1, SY - 1, 201, 51);
-            g.setColor(Color.WHITE);
-            g.fillRect(SX, SY, 200, 50);
-            g.setColor(Color.RED);
+            g.setColor(Constants.Colors.blue);
+            g.drawRoundRect(SX - 1, SY - 1, 201, 51, 50, 50);
+            g.setColor(Constants.Colors.green);
+            g.fillRoundRect(SX, SY, 200, 50, 50, 50);
+            g.setColor(Constants.Colors.blue);
             g.drawString("Finish Turn", SX + 20, SY + 35);
         }
         if (cancelMoveLocationTile) {
             int SX = (int) (KingdomFrame.WIDTH / 6); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);
-            g.setColor(Color.RED);
-            g.drawRect(SX - 1, SY - 1, 201, 51);
-            g.setColor(Color.WHITE);
-            g.fillRect(SX, SY, 200, 50);
-            g.setColor(Color.RED);
+            g.setColor(Constants.Colors.blue);
+            g.drawRoundRect(SX - 1, SY - 1, 201, 51, 50, 50);
+            g.setColor(Constants.Colors.green);
+            g.fillRoundRect(SX, SY, 200, 50, 50, 50);
+            g.setColor(Constants.Colors.blue);
             g.drawString("Cancel Hex", SX + 20, SY + 35);
         }
-        
-
-        System.out.println("You clicked this hexagon: "+ curr_i +
-                " " + curr_j);
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
@@ -346,6 +348,10 @@ public class GamePanel extends JPanel implements MouseListener {
     private void drawDeckDiscard(Graphics g){
         g.setColor(Color.BLACK);
         double scale = 1.0f;
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(KingdomFrame.WIDTH*8/15 - 7, 643, (int)(cardBack.getWidth()*scale) + 14, (int)((cardBack.getHeight()*scale) * 2.1) + 14, 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(KingdomFrame.WIDTH*8/15 - 7, 643, (int)(cardBack.getWidth()*scale) + 14, (int)((cardBack.getHeight()*scale) * 2.1) + 14, 50, 50);
         g.drawImage(cardBack,KingdomFrame.WIDTH*8/15,650, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
         if(GameState.deck.getDiscard().size()>0){
             g.drawImage(terrainCards[GameState.deck.getDiscard().get(GameState.deck.getDiscard().size()-1)],KingdomFrame.WIDTH*8/15,825, (int)(cardBack.getWidth()*scale), (int)(cardBack.getHeight()*scale),null);
@@ -357,7 +363,8 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Color.BLACK);
         }
         g.setFont(new Font("Times New Roman", 1, 20));
-        g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 25, 805);
+        g.setColor(Constants.Colors.cyan);
+        g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 30, 805);
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
     }
@@ -369,7 +376,7 @@ public class GamePanel extends JPanel implements MouseListener {
         for (int i = 0; i < 4; i++) {
             if (GameState.currentPlayer != i) {
                 g.setColor(new Color(40, 40, 40, 200));
-                g.fillRoundRect(SX, SY + (KingdomFrame.HEIGHT / 5 * i + i),KingdomFrame.WIDTH - SX - 5, KingdomFrame.HEIGHT/5,50,50);
+                g.fillRoundRect(SX, SY + (KingdomFrame.HEIGHT / 5 * i),KingdomFrame.WIDTH - SX - 5, KingdomFrame.HEIGHT/5,50,50);
             }
         }
     }
@@ -377,19 +384,19 @@ public class GamePanel extends JPanel implements MouseListener {
         double settlementScale = 0.5;
         g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
         //g.fillRoundRect(x - 2,y - 2,width + 4,height + 4,50,50);
-        Color playerRectColor = new Color(0, 0, 0, 200);
-        g.setColor(playerRectColor);
+        g.setColor(getColor(playerNum));
         g.fillRoundRect(x,y,width,height,50,50);
-        Color outLineColor = new Color(211, 211, 211);
-        g.setColor(outLineColor);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+15,y+30);
         
         //SETTLEMENTS
-        g.setColor(getColor(playerNum));
         int SX = x+width/3; int SY = y + 6; int w = (int)(settlements[playerNum].getWidth()*settlementScale); int l = (int)(settlements[playerNum].getHeight()*settlementScale);
-        g.fillRect(SX - 7, SY - 2, w + 14, l + 9);
-        g.setColor(outLineColor);
-        g.fillRect(SX - 5, SY, w + 10,l + 5);
+        g.setColor(Constants.Colors.blue);
+        g.fillRoundRect(SX - 7, SY - 2, w + 14, l + 9,25,25);
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(SX - 5, SY, w + 10,l + 5,25,25);
+        g.setColor(Constants.Colors.blue);
         g.drawString(""+p.tilesLeft,SX + w + 10,SY+25);
         g.drawImage(settlements[playerNum], SX, SY,w,l, null);
         drawPlayerLocationTiles(g,p,playerNum,x,y,width,height);
@@ -401,27 +408,36 @@ public class GamePanel extends JPanel implements MouseListener {
             int Y = SY + (i * (height/2 - 20));
             for (int j = 0; j < 2; j++) {
                 int X = SX + (j * (int) (width/2 - 20));
-                g.setColor(getColor(playerNum));
-                g.fillRect(X - 2, Y - 2, 99, 76);
-                Color outLineColor = new Color(211, 211, 211);
-                g.setColor(outLineColor);
-                g.fillRect(X, Y, 95, 72);
+                g.setColor(Constants.Colors.blue);
+                g.drawRoundRect(X - 2, Y - 2, 99, 76,50,50);
+                g.setColor(Constants.Colors.green);
+                g.fillRoundRect(X, Y, 95, 72,50,50);
                 g.drawImage(locTileImages[a], X, Y, 70, 70, null);
                 a++;
             }
         }
-        g.setColor(Color.RED);
-        g.drawString(p.roundLocTiles[0] + "", x+locTileImages[0].getWidth()/2/2+35,          y+15+locTileImages[0].getWidth()/2-20);
-        g.drawString(p.roundLocTiles[1] + "", x+locTileImages[0].getWidth()/2/2+width/2-20+35, y+15+locTileImages[0].getWidth()/2-20);
-        g.drawString(p.roundLocTiles[2] + "", x+locTileImages[0].getWidth()/2/2+35,          y+15+locTileImages[0].getWidth()-30);
-        g.drawString(p.roundLocTiles[3] + "", x+locTileImages[0].getWidth()/2/2+width/2-20+35, y+15+locTileImages[0].getWidth()-30);
+        a = 0;
+        for (int i = 0; i < 2; i++) {
+            int SY2 = y+15+locTileImages[0].getWidth()/2-20 + ((locTileImages[0].getWidth()/2 - 10) * i);
+            for (int j = 0; j < 2; j++) {
+                int SX2 = x+locTileImages[0].getWidth()/2/2+35 + ((width/2-20) * j);
+                if (p.roundLocTiles[a] < 1) g.setColor(Color.RED);
+                else g.setColor(Color.GREEN);
+                g.drawString(p.roundLocTiles[a] + "", SX2, SY2);
+                a++;
+            }
+        }
     }
     private void drawPlayerTerrainCards(Graphics g){
         int obEndX = KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+1; // (objective card endX)
         int SX = obEndX + ((int) ((double) KingdomFrame.WIDTH/2.7*2) - obEndX) / 2 - ((int) (cardBack.getWidth()*1.23) / 2);
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(SX - 15, KingdomFrame.HEIGHT/80 - 10, (int)(cardBack.getWidth()*1.4) + 10, KingdomFrame.HEIGHT/5*3+KingdomFrame.HEIGHT/80 - 5 + (int)(terrainCards[0].getHeight()*1.3) + 5, 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(SX - 15, KingdomFrame.HEIGHT/80 - 10, (int)(cardBack.getWidth()*1.4) + 10, KingdomFrame.HEIGHT/5*3+KingdomFrame.HEIGHT/80 - 5 + (int)(terrainCards[0].getHeight()*1.4) + 5, 50, 50);
         for(int i = 0; i < players.size(); i++){
             if (GameState.currentPlayer != i) {
-                g.drawImage(cardBack, SX,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(cardBack.getWidth()*1.23),(int)(cardBack.getHeight()*1.23),null);
+                g.drawImage(cardBack, SX,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(cardBack.getWidth()*1.25),(int)(cardBack.getHeight()*1.25),null);
             }
             else if (players.get(i).chosenCard < 0) {
                 if (drawCardWarning) {
@@ -468,7 +484,6 @@ public class GamePanel extends JPanel implements MouseListener {
         // TODO Auto-generated method stub
         int x = e.getX();
         int y = e.getY();
-        cordXY = x + " " + y;
         GameHex[][] gm = GameState.board.GameMatrix;
         int width = (int)(KingdomFrame.WIDTH/3.125/1.2);
         int height = (int)(KingdomFrame.HEIGHT/2/1.2);

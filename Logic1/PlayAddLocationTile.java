@@ -129,15 +129,17 @@ public class PlayAddLocationTile {
     public void highlightTower() {
         boolean[][] highlighted = new boolean[20][20];
         GameHex[][] board = GameState.board.GameMatrix;
-        //edge is i == 0 || i == 19 || j == 0 || j == 19 
+        //edge is i == 0 || i == 19 || j == 0 || j == 19
+        ArrayList<Pair> placed = GameBoard.getPlacedForPlayer(curr, -1);
         int c = 0;
-        for (int i = 0; i < 20; i++) {
-            for (int j = 0; j < 20; j++) {
-                if (i <= 1 || i >= 18 || j <= 1 || j >= 18 && !board[i][j].isLocationTile && board[i][j].player == curr) {
-                    for (int a = 0; a < board[i][j].neighbors.length; a++) {
-                        if (board[i][j].neighbors[a] == null) continue;
-                        Pair p = board[i][j].neighbors[a].pos;
-                        if ((p.first == 0 || p.first == 19 || p.second == 0 || p.second == 19) && board[i][j].neighbors[a].player == -1 && board[i][j].neighbors[a].terr != 2 && board[i][j].neighbors[a].terr != 5) {
+        if (placed != null) {
+            for (int i = 0; i < placed.size(); i++) {
+                Pair j = placed.get(i);
+                if (j.first <= 1 || j.first >= 18 || j.second <= 1 || j.second >= 18) {
+                    for (int a = 0; a < board[j.first][j.second].neighbors.length; a++) {
+                        if (board[j.first][j.second].neighbors[a] == null) continue;
+                        Pair p = board[j.first][j.second].neighbors[a].pos;
+                        if ((p.first == 0 || p.first == 19 || p.second == 0 || p.second == 19) && board[j.first][j.second].neighbors[a].player == -1 && board[j.first][j.second].neighbors[a].terr != 2 && board[j.first][j.second].neighbors[a].terr != 5) {
                             c++;
                             highlighted[p.first][p.second] = true;
                         }
