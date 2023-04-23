@@ -20,7 +20,6 @@ public class Player implements Comparable<Player> {
         locationTiles = new int[4];
         chosenCard = -1;
         score = 0;
-    
     }
     public int getNumLocationTiles() {
         int c =0;

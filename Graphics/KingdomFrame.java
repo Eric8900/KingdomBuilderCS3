@@ -17,7 +17,7 @@ import javax.swing.*;
 public class KingdomFrame extends JFrame {
     public static final int WIDTH =  Toolkit.getDefaultToolkit().getScreenSize().width;
     public static final int HEIGHT =  Toolkit.getDefaultToolkit().getScreenSize().height;
-    private boolean isFullScreen = true;
+    private boolean isFullScreen = false;
 
     public KingdomFrame(String name) {
         super(name);
