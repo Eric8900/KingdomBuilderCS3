@@ -1,8 +1,11 @@
 package Logic1;
 
 import java.awt.*;
+import Graphics.*;
 
 public class Constants {
+    public static int PLAYERWIDTH = KingdomFrame.WIDTH - ((int) ((double) KingdomFrame.WIDTH/2.7*2)) - 5;
+    public static int PLAYERHEIGHT = KingdomFrame.HEIGHT/5;
     public static final class Colors{
         public final static Color blue = new Color(55, 80, 140);
         public final static Color cyan = new Color(16, 98, 115);
