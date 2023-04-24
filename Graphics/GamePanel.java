@@ -659,9 +659,6 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             //END PLAY LOCATION TILE
         }
-        else if(GameState.currentState == State.ENDGAME){
-            postGame = new PostGame(GameState.board.GameMatrix, new boolean[400]);
-        }
         if (nextTurnPossible) {
             int SX = (int) (KingdomFrame.WIDTH / 38.4); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);
             if (x >= SX && x <= SX + 200 && y >= SY && y <= SY + 50) {
