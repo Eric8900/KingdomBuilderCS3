@@ -47,6 +47,7 @@ public class GameState {
 			new NextTurn();
 			break;
 		case ENDGAME:
+			Collections.sort(players);
 			new PostGame(new boolean[400]);
 			break;
 		default:
