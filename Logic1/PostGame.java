@@ -4,14 +4,13 @@ import java.io.*;
 import java.util.*;
 
 public class PostGame {
-    public GameHex[][] hexes;
+    public GameHex[][] hexes = GameState.board.GameMatrix;
     public boolean[] vis;
     public ArrayList<Sector> sectors;
 
     public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
 
-    public PostGame(GameHex[][] hexes, boolean[] vis) {
-        this.hexes = hexes;
+    public PostGame(boolean[] vis) {
         this.vis = vis;
         sectors = new ArrayList<>();
         for (int i = 0; i < GameState.players.size(); i++) {
