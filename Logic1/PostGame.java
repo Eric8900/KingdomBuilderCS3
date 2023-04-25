@@ -6,6 +6,7 @@ import java.util.*;
 public class PostGame {
     public GameHex[][] hexes = GameState.board.GameMatrix;
     public boolean[] vis;
+    public int size;
     public ArrayList<Sector> sectors;
 
     public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
@@ -99,16 +100,17 @@ public class PostGame {
     }
 
     public void scoreHermits() {
+        System.out.println("MAKE IY red");
         Arrays.fill(vis, false);
         for (int i = 0; i < hexes.length; i++) {
             for (int j = 0; j < hexes[i].length; j++) {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
-                int size = 0;
-                if (!vis[hexes[i][j].id])
-                    dfs(hexes[i][j], size, 0);
-                GameState.players.get(player).getScore[6] += size;
-                GameState.players.get(player).score += size;
+                if (!vis[hexes[i][j].id]) {
+                    GameState.players.get(player).getScore[6]++;
+                    GameState.players.get(player).score++;
+                    dfs(hexes[i][j], 0);
+                }
             }
         }
     }
@@ -120,9 +122,9 @@ public class PostGame {
             for (int j = 0; j < hexes[i].length; j++) {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
-                int size = 0;
+                size = 0;
                 if (!vis[hexes[i][j].id])
-                    dfs(hexes[i][j], size, 0);
+                    dfs(hexes[i][j], 0);
                 playerMax[player] = Math.max(playerMax[player], size);
             }
         }
@@ -140,7 +142,7 @@ public class PostGame {
                 if (player == -1) continue;
                 if (hexes[i][j].terr > 6 && !vis[hexes[i][j].id]) {
                     int locationTiles = 0;
-                    dfs(hexes[i][j], 0, locationTiles);
+                    dfs(hexes[i][j], locationTiles);
                     GameState.players.get(player).score += (4 * locationTiles);
                     GameState.players.get(player).getScore[9] += (4 * locationTiles);
                 }
@@ -238,8 +240,10 @@ public class PostGame {
     }
 
     public boolean nextToType(GameHex h, int t) {
+        if(h == null) return false;
         GameHex[] neigh = h.neighbors;
         for (GameHex gameHex : neigh) {
+            if(gameHex == null) continue;
             if (gameHex.terr == t) {
                 return true;
             }
@@ -248,8 +252,10 @@ public class PostGame {
     }
 
     public boolean nextToLocation(GameHex h) {
+        if(h == null) return false;
         GameHex[] neigh = h.neighbors;
         for (GameHex gameHex : neigh) {
+            if(gameHex == null) continue;
             if (gameHex.terr > 6) {
                 return true;
             }
@@ -257,13 +263,16 @@ public class PostGame {
         return false;
     }
 
-    public void dfs(GameHex c, int size, int locationTiles) {
+    public void dfs(GameHex c,int locationTiles) {
         if (c.terr > 6) locationTiles++;
         vis[c.id] = true;
         size++;
         for (GameHex v : c.neighbors) {
+            if(v == null) continue;
             if (!vis[v.id] && c.player == v.player) {
-                dfs(v, size,locationTiles);
+                dfs(v, locationTiles);
+            }else if(locationTiles > 1 && !vis[v.id] && v.player == -1){
+                dfs(v, locationTiles);
             }
         }
     }

@@ -44,6 +44,7 @@ public class GameHex {
         else {
             isLocationTile = false;
         }
+        id = 20 * i + j;
     }
     public void updateNeighbors() {
         neighbors[0] = left;

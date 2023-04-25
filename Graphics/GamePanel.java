@@ -31,7 +31,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locTileImages = new BufferedImage[4];
-    public static int[] locTiles = new int[4]; 
+    public static int[] locTiles = new int[4];
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[7];
@@ -39,8 +39,6 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
-
-
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false;
@@ -131,7 +129,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     //reversed one for the upside down cofig
                     for (int j = 9; j >= 0; j--) {
                         for (int r = 9; r >= 0; r--) {
-                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];      
+                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];
                         }
                     }
                 }
@@ -405,7 +403,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+15,y+30);
-        
+
         //SETTLEMENTS
         int SX = x+width/3; int SY = y + 6; int w = (int)(settlements[playerNum].getWidth()*settlementScale); int l = (int)(settlements[playerNum].getHeight()*settlementScale);
         g.setColor(Constants.Colors.blue);
@@ -727,7 +725,7 @@ public class GamePanel extends JPanel implements MouseListener {
             int Y = SY + (i * (height/2 - 20));
             for (int j = 0; j < 2; j++) {
                 int X = SX + (j * (int) (width/2 - 20));
-                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 && 
+                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 &&
                 x >= X - 2 && x <= X - 2 + 99 && y >= Y - 2 && y <= Y - 2 + 76) {
                     players.get(GameState.currentPlayer).selectedAction = a;
                     if (locTiles[players.get(GameState.currentPlayer).selectedAction] >= 11 && locTiles[players.get(GameState.currentPlayer).selectedAction] <= 13) {

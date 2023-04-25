@@ -29,6 +29,9 @@ public class Deck {
         for (int i = 0; i < 3; i++) {
             chosenObjectiveCards.add(objectiveCards.get(i));
         }
+        //testing
+        chosenObjectiveCards.remove(0);
+        chosenObjectiveCards.add(9);
     }
 
     //Shuffles the deck
