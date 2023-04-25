@@ -31,13 +31,14 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locTileImages = new BufferedImage[4];
-    public static int[] locTiles = new int[4]; 
+    public static int[] locTiles = new int[4];
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[7];
     private BufferedImage cardBack;
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
+    public HashMap<Integer, String> getObjStr = new HashMap<>();
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false;
@@ -49,6 +50,16 @@ public class GamePanel extends JPanel implements MouseListener {
             players = GameState.players;
             BufferedImage[] BOARDS = new BufferedImage[16];
             boolean[] used = new boolean[8];
+            getObjStr.put(0,"Miners");
+            getObjStr.put(1,"Discoverers");
+            getObjStr.put(2,"Lords");
+            getObjStr.put(3,"Fishermen");
+            getObjStr.put(4,"Citizens");
+            getObjStr.put(5,"Workers");
+            getObjStr.put(6,"Hermits");
+            getObjStr.put(7,"Farmers");
+            getObjStr.put(8,"Knights");
+            getObjStr.put(9, "Merchants");
             drawACard = ImageIO.read(GamePanel.class.getResource("/Images/DrawACard.png"));
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
@@ -118,7 +129,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     //reversed one for the upside down cofig
                     for (int j = 9; j >= 0; j--) {
                         for (int r = 9; r >= 0; r--) {
-                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];      
+                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];
                         }
                     }
                 }
@@ -209,16 +220,19 @@ public class GamePanel extends JPanel implements MouseListener {
         g.fillRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
+        Collections.sort(players);
         for(int i = 0; i<4; i++) {
             g.drawLine(KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14, KingdomFrame.WIDTH * 13 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14);
             g.drawLine(KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 1 / 14, KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 11 / 14);
         }
         g.setColor(Constants.Colors.cyan);
+        g.drawRoundRect(KingdomFrame.WIDTH/2, KingdomFrame.HEIGHT*6/7, 200, 100, 20, 20);
+        g.drawString("Back to Board", KingdomFrame.WIDTH/2, KingdomFrame.HEIGHT*6/7);
         g.setFont(new Font("Times New Roman", 1, 50));
         g.drawString("Players", KingdomFrame.WIDTH*5/28, KingdomFrame.HEIGHT*9/56);
         g.drawString("Castle", KingdomFrame.WIDTH*11/28, KingdomFrame.HEIGHT*9/56);
         for(int i = 0; i<3; i++){
-            g.drawString("Discoverers", KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
+            g.drawString(getObjStr.get(GameState.deck.getChosenObjectiveCards().get(i)), KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
         }
         for(int i = 0; i<4; i++){
             switch (i){
@@ -234,11 +248,11 @@ public class GamePanel extends JPanel implements MouseListener {
                 default:
                     g.setColor(Constants.Colors.cyan);
             }
-            g.drawString((i + 1) + "Player " + (postGame.playerLeaders.get(i).num + 1), KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("0", KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString((i + 1) + ". Player " + (GameState.players.get(i).num + 1), KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString("" + GameState.players.get(i).getScore[10], KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
+            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
         }
     }
     private void paintMainMenu(Graphics g){
@@ -389,7 +403,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+15,y+30);
-        
+
         //SETTLEMENTS
         int SX = x+width/3; int SY = y + 6; int w = (int)(settlements[playerNum].getWidth()*settlementScale); int l = (int)(settlements[playerNum].getHeight()*settlementScale);
         g.setColor(Constants.Colors.blue);
@@ -491,6 +505,7 @@ public class GamePanel extends JPanel implements MouseListener {
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
         if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
             GameState.setState(State.ENDGAME);
+            GameState.update();
         }
         if (objectiveCardDisplay) {
             objectiveCardDisplay = false;
@@ -659,6 +674,11 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             //END PLAY LOCATION TILE
         }
+        else if(GameState.getState() == State.ENDGAME){
+            if(x>KingdomFrame.WIDTH/2 && x<KingdomFrame.WIDTH/2+200 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
+                GameState.setState(State.PLAYSETTLEMENTS);
+            }
+        }
         if (nextTurnPossible) {
             int SX = (int) (KingdomFrame.WIDTH / 38.4); int SY = KingdomFrame.HEIGHT - (int) (KingdomFrame.HEIGHT / 6.6842);
             if (x >= SX && x <= SX + 200 && y >= SY && y <= SY + 50) {
@@ -705,7 +725,7 @@ public class GamePanel extends JPanel implements MouseListener {
             int Y = SY + (i * (height/2 - 20));
             for (int j = 0; j < 2; j++) {
                 int X = SX + (j * (int) (width/2 - 20));
-                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 && 
+                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 &&
                 x >= X - 2 && x <= X - 2 + 99 && y >= Y - 2 && y <= Y - 2 + 76) {
                     players.get(GameState.currentPlayer).selectedAction = a;
                     if (locTiles[players.get(GameState.currentPlayer).selectedAction] >= 11 && locTiles[players.get(GameState.currentPlayer).selectedAction] <= 13) {

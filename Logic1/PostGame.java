@@ -6,6 +6,7 @@ import java.util.*;
 public class PostGame {
     public GameHex[][] hexes = GameState.board.GameMatrix;
     public boolean[] vis;
+    public int size;
     public ArrayList<Sector> sectors;
 
     public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
@@ -29,7 +30,7 @@ public class PostGame {
             }
         }
         scorePlayers();
-        for (Player p : GameState.players) {
+        for(Player p: GameState.players){
             playerLeaders.add(p);
         }
         Collections.sort(playerLeaders);
@@ -99,16 +100,16 @@ public class PostGame {
     }
 
     public void scoreHermits() {
+        System.out.println("MAKE IY red");
         Arrays.fill(vis, false);
         for (int i = 0; i < hexes.length; i++) {
             for (int j = 0; j < hexes[i].length; j++) {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
-                int size = 0;
                 if (!vis[hexes[i][j].id]) {
-                    dfs(hexes[i][j], size, 0);
                     GameState.players.get(player).getScore[6]++;
                     GameState.players.get(player).score++;
+                    dfs(hexes[i][j], 0);
                 }
             }
         }
@@ -121,15 +122,15 @@ public class PostGame {
             for (int j = 0; j < hexes[i].length; j++) {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
-                int size = 0;
+                size = 0;
                 if (!vis[hexes[i][j].id])
-                    dfs(hexes[i][j], size, 0);
+                    dfs(hexes[i][j], 0);
                 playerMax[player] = Math.max(playerMax[player], size);
             }
         }
         for (int i = 0; i < GameState.players.size(); i++) {
-            GameState.players.get(i).getScore[4] += playerMax[i] / 2;
-            GameState.players.get(i).score += playerMax[i] / 2;
+            GameState.players.get(i).getScore[4] += playerMax[i]/2;
+            GameState.players.get(i).score += playerMax[i]/2;
         }
     }
 
@@ -141,7 +142,7 @@ public class PostGame {
                 if (player == -1) continue;
                 if (hexes[i][j].terr > 6 && !vis[hexes[i][j].id]) {
                     int locationTiles = 0;
-                    dfs(hexes[i][j], 0, locationTiles);
+                    dfs(hexes[i][j], locationTiles);
                     GameState.players.get(player).score += (4 * locationTiles);
                     GameState.players.get(player).getScore[9] += (4 * locationTiles);
                 }
@@ -165,26 +166,26 @@ public class PostGame {
 
     public void scoreKnights() {
         int[][] rowCount = new int[GameState.players.size()][hexes.length];
-        for (int i = 0; i < hexes.length; i++) {
-            for (int j = 0; j < hexes[i].length; j++) {
-                if (hexes[i][j].player == -1) continue;
+        for(int i = 0; i<hexes.length; i++){
+            for(int j = 0; j<hexes[i].length; j++){
+                if(hexes[i][j].player == -1) continue;
                 rowCount[hexes[i][j].player][i]++;
             }
         }
-        for (int player = 0; player < GameState.players.size(); player++) {
-            int[] rows = rowCount[player];
-            int max = -1;
-            for (int count : rows) {
-                max = Math.max(max, count);
-            }
-            GameState.players.get(player).score += 2 * max;
-            GameState.players.get(player).getScore[8] += 2 * max;
+            for(int player = 0; player<GameState.players.size(); player++){
+                int[] rows = rowCount[player];
+                int max = -1;
+                for(int count: rows){
+                    max = Math.max(max, count);
+                }
+                GameState.players.get(player).score += 2 * max;
+                GameState.players.get(player).getScore[8] += 2 * max;
         }
     }
 
     public void scoreLords() {
         for (int i = 0; i < sectors.size(); i++) {
-            for (int player = 0; player < GameState.players.size(); player++) {
+            for(int player = 0; player<GameState.players.size(); player++){
                 sectors.get(i).updateSettleCount(GameState.players.get(player));
             }
             Pair[] sc = sectors.get(i).settleCounts;
@@ -193,7 +194,7 @@ public class PostGame {
             int secondMax = -1;
             boolean checkFor2ndMax = false;
             for (int j = 0; j < sectors.size(); j++) {
-                if (checkFor2ndMax && sc[i].second != secondMax) break;
+                if(checkFor2ndMax && sc[i].second != secondMax) break;
                 if (sc[i].second == maxCount) {
                     GameState.players.get(sc[i].first).score += 12;
                     GameState.players.get(sc[i].first).getScore[2] += 12;
@@ -219,15 +220,15 @@ public class PostGame {
         }
     }
 
-    public void castleScoring() {
-        for (int i = 0; i < hexes.length; i++) {
+    public void castleScoring(){
+        for(int i = 0; i<hexes.length; i++){
             boolean[] seen = new boolean[GameState.players.size()];
-            for (int j = 0; j < hexes[i].length; j++) {
-                if (hexes[i][j].terr == 14) {
+            for(int j = 0; j<hexes[i].length; j++){
+                if(hexes[i][j].terr == 14){
                     GameHex[] neigh = hexes[i][j].neighbors;
-                    for (GameHex n : neigh) {
-                        if (n.player == -1) continue;
-                        if (!seen[n.player]) {
+                    for(GameHex n: neigh){
+                        if(n.player == -1) continue;
+                        if(!seen[n.player]){
                             seen[n.player] = true;
                             GameState.players.get(n.player).score += 3;
                             GameState.players.get(n.player).getScore[10] += 3;
@@ -239,8 +240,10 @@ public class PostGame {
     }
 
     public boolean nextToType(GameHex h, int t) {
+        if(h == null) return false;
         GameHex[] neigh = h.neighbors;
         for (GameHex gameHex : neigh) {
+            if(gameHex == null) continue;
             if (gameHex.terr == t) {
                 return true;
             }
@@ -249,8 +252,10 @@ public class PostGame {
     }
 
     public boolean nextToLocation(GameHex h) {
+        if(h == null) return false;
         GameHex[] neigh = h.neighbors;
         for (GameHex gameHex : neigh) {
+            if(gameHex == null) continue;
             if (gameHex.terr > 6) {
                 return true;
             }
@@ -258,15 +263,16 @@ public class PostGame {
         return false;
     }
 
-    public void dfs(GameHex c, int size, int locationTiles) {
+    public void dfs(GameHex c,int locationTiles) {
         if (c.terr > 6) locationTiles++;
         vis[c.id] = true;
         size++;
         for (GameHex v : c.neighbors) {
+            if(v == null) continue;
             if (!vis[v.id] && c.player == v.player) {
-                dfs(v, size, locationTiles);
-            } else if (!vis[v.id] && locationTiles > 1 && v.player == -1) {
-                dfs(v, size, locationTiles);
+                dfs(v, locationTiles);
+            }else if(locationTiles > 1 && !vis[v.id] && v.player == -1){
+                dfs(v, locationTiles);
             }
         }
     }
