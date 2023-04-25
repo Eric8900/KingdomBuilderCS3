@@ -222,6 +222,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.fillRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
+        Collections.sort(players);
         for(int i = 0; i<4; i++) {
             g.drawLine(KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14, KingdomFrame.WIDTH * 13 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14);
             g.drawLine(KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 1 / 14, KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 11 / 14);
