@@ -7,9 +7,9 @@ public class PostGame {
     public GameHex[][] hexes = GameState.board.GameMatrix;
     public boolean[] vis;
     public int size;
+    public int locationTiles;
     public ArrayList<Sector> sectors;
 
-    public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
 
     public PostGame(boolean[] vis) {
         this.vis = vis;
@@ -30,10 +30,6 @@ public class PostGame {
             }
         }
         scorePlayers();
-        for(Player p: GameState.players){
-            playerLeaders.add(p);
-        }
-        Collections.sort(playerLeaders);
     }
 
     public void scorePlayers() {
@@ -109,7 +105,7 @@ public class PostGame {
                 if (!vis[hexes[i][j].id]) {
                     GameState.players.get(player).getScore[6]++;
                     GameState.players.get(player).score++;
-                    dfs(hexes[i][j], 0);
+                    dfs(hexes[i][j]);
                 }
             }
         }
@@ -124,7 +120,7 @@ public class PostGame {
                 if (player == -1) continue;
                 size = 0;
                 if (!vis[hexes[i][j].id])
-                    dfs(hexes[i][j], 0);
+                    dfs(hexes[i][j]);
                 playerMax[player] = Math.max(playerMax[player], size);
             }
         }
@@ -141,8 +137,7 @@ public class PostGame {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
                 if (hexes[i][j].terr > 6 && !vis[hexes[i][j].id]) {
-                    int locationTiles = 0;
-                    dfs(hexes[i][j], locationTiles);
+                    dfs(hexes[i][j]);
                     GameState.players.get(player).score += (4 * locationTiles);
                     GameState.players.get(player).getScore[9] += (4 * locationTiles);
                 }
@@ -172,14 +167,14 @@ public class PostGame {
                 rowCount[hexes[i][j].player][i]++;
             }
         }
-            for(int player = 0; player<GameState.players.size(); player++){
-                int[] rows = rowCount[player];
-                int max = -1;
-                for(int count: rows){
-                    max = Math.max(max, count);
-                }
-                GameState.players.get(player).score += 2 * max;
-                GameState.players.get(player).getScore[8] += 2 * max;
+        for(int player = 0; player<GameState.players.size(); player++){
+            int[] rows = rowCount[player];
+            int max = -1;
+            for(int count: rows){
+                max = Math.max(max, count);
+            }
+            GameState.players.get(player).score += 2 * max;
+            GameState.players.get(player).getScore[8] += 2 * max;
         }
     }
 
@@ -193,6 +188,7 @@ public class PostGame {
             int maxCount = sc[0].second;
             int secondMax = -1;
             boolean checkFor2ndMax = false;
+            if(maxCount == 0) return;//edge cases
             for (int j = 0; j < sectors.size(); j++) {
                 if(checkFor2ndMax && sc[i].second != secondMax) break;
                 if (sc[i].second == maxCount) {
@@ -201,6 +197,7 @@ public class PostGame {
                 } else {
                     checkFor2ndMax = true;
                     secondMax = sc[i].second;
+                    if(secondMax == 0) break;//edge cases
                     GameState.players.get(sc[i].first).score += 6;
                     GameState.players.get(sc[i].first).getScore[2] += 6;
                 }
@@ -263,16 +260,16 @@ public class PostGame {
         return false;
     }
 
-    public void dfs(GameHex c,int locationTiles) {
+    public void dfs(GameHex c) {
         if (c.terr > 6) locationTiles++;
         vis[c.id] = true;
         size++;
         for (GameHex v : c.neighbors) {
             if(v == null) continue;
             if (!vis[v.id] && c.player == v.player) {
-                dfs(v, locationTiles);
+                dfs(v);
             }else if(locationTiles > 1 && !vis[v.id] && v.player == -1){
-                dfs(v, locationTiles);
+                dfs(v);
             }
         }
     }
