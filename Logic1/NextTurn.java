@@ -1,10 +1,13 @@
 package Logic1;
 import java.util.*;
 import Graphics.*;
+import Logic1.GameState.State;
 
 public class NextTurn {
     Player curr = GameState.players.get(GameState.currentPlayer);
+    int cur;
     public NextTurn() {
+        cur = GameState.currentPlayer;
         curr.locActionsLeft = 0;
         curr.settleActionsLeft = 0;
         GameState.deck.discardTop();
@@ -17,6 +20,13 @@ public class NextTurn {
         for (int i = 0; i < 4; i++) {
             GameState.players.get(i).updateRoundLocTiles();
         }
-        
+        if (cur == 3) {
+            for (int i = 0; i < 4; i++) {
+                if (GameState.players.get(i).tilesLeft < 1) {
+                    GameState.setState(State.ENDGAME);
+                    GameState.update();
+                }
+            }
+        }
     }
 }

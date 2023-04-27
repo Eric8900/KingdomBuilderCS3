@@ -35,7 +35,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[7];
-    private BufferedImage cardBack;
+    private BufferedImage cardBack, startToken, infoScreen;
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
@@ -43,7 +43,7 @@ public class GamePanel extends JPanel implements MouseListener {
 
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
-    private boolean objectiveCardDisplay = false;
+    private boolean objectiveCardDisplay = false, infoScreenDisplay = false;
     private BufferedImage drawACard;
     public static PostGame postGame;
     public GamePanel() {
@@ -62,7 +62,9 @@ public class GamePanel extends JPanel implements MouseListener {
             getObjStr.put(7,"Farmers");
             getObjStr.put(8,"Knights");
             getObjStr.put(9, "Merchants");
+            startToken = ImageIO.read(GamePanel.class.getResource("/Images/startToken.png"));
             drawACard = ImageIO.read(GamePanel.class.getResource("/Images/DrawACard.png"));
+            infoScreen = ImageIO.read(GamePanel.class.getResource("/Images/infoScreen.png"));
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
             BOARDS[2] = ImageIO.read(GamePanel.class.getResource("/Images/Board3.png"));
@@ -353,12 +355,26 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Constants.Colors.blue);
             g.drawString("Cancel Hex", SX + 20, SY + 35);
         }
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
+        g.drawString("?", 48, KingdomFrame.HEIGHT - 30);
+
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
         drawObjectiveCards(g);
-        if(objectiveCardDisplay){
+        if(objectiveCardDisplay) {
             displayObjectiveCards(g);
+        }
+        if (infoScreenDisplay) {
+            g.setColor(new Color(0, 0, 0, 200));
+            g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
+            g.drawImage(infoScreen, 100, 100, KingdomFrame.WIDTH - 200, KingdomFrame.HEIGHT - 200, null);
+            g.setColor(Constants.Colors.whiteFade);
+            g.setFont(new Font("Times New Roman", 1, 50));
+            g.drawString("Click Anywhere to Exit", KingdomFrame.WIDTH / 2 - 200, 75);
         }
     }
     private void drawDeckDiscard(Graphics g){
@@ -443,6 +459,9 @@ public class GamePanel extends JPanel implements MouseListener {
                 a++;
             }
         }
+        if (playerNum == 0) {
+            g.drawImage(startToken, SX + 120, SY + 38, 90, 105, null);
+        }
     }
     private void drawPlayerTerrainCards(Graphics g){
         int obEndX = KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+1; // (objective card endX)
@@ -514,6 +533,13 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
             objectiveCardDisplay = true;
+        }
+        if (infoScreenDisplay) {
+            infoScreenDisplay = false;
+        }
+        else if (x >= 30 && x <= 80 && y >= KingdomFrame.HEIGHT - 60 && y <= KingdomFrame.HEIGHT - 10) {
+            //g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
+            infoScreenDisplay = true;
         }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
