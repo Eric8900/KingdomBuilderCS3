@@ -40,6 +40,8 @@ public class GamePanel extends JPanel implements MouseListener {
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
 
+    //testing 
+    public boolean theEnd = false;
 
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
@@ -268,7 +270,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString("PLAY", KingdomFrame.WIDTH/2-40, KingdomFrame.HEIGHT/3*2+60);
     }
-    private void paintMainGameScene(Graphics g){
+    private void paintMainGameScene(Graphics g) {
         float borderWidth = 2.0f; // Set the desired border width
         ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -526,7 +528,10 @@ public class GamePanel extends JPanel implements MouseListener {
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
         if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
             GameState.setState(State.ENDGAME);
-            GameState.update();
+            if (theEnd != true) {
+                GameState.update();
+            }
+            theEnd = true;
         }
         if (objectiveCardDisplay) {
             objectiveCardDisplay = false;

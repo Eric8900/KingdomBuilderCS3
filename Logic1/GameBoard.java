@@ -78,7 +78,7 @@ public class GameBoard {
                 }
             }
         }
-        System.out.println("PLACED SIZE " + placed.size());
+        //System.out.println("PLACED SIZE " + placed.size());
         if (c == 0) {
             return null;
         }
