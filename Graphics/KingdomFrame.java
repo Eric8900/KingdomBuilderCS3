@@ -52,9 +52,9 @@ public class KingdomFrame extends JFrame {
     private void toggleFullScreen(GraphicsDevice device) {
         if (isFullScreen) {
             device.setFullScreenWindow(null);
-            setExtendedState(JFrame.NORMAL);
+            //setExtendedState(JFrame.NORMAL);
         } else {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            //setExtendedState(JFrame.MAXIMIZED_BOTH);
             device.setFullScreenWindow(this);
         }
         isFullScreen = !isFullScreen;
