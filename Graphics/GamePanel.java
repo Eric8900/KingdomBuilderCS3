@@ -356,10 +356,10 @@ public class GamePanel extends JPanel implements MouseListener {
             g.drawString("Cancel Hex", SX + 20, SY + 35);
         }
         g.setColor(Constants.Colors.green);
-        g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
+        g.fillRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
         g.setColor(Constants.Colors.blue);
-        g.drawRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
-        g.drawString("?", 48, KingdomFrame.HEIGHT - 30);
+        g.drawRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
+        g.drawString("?", 48, KingdomFrame.HEIGHT - 60);
 
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
@@ -537,7 +537,7 @@ public class GamePanel extends JPanel implements MouseListener {
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
         }
-        else if (x >= 30 && x <= 80 && y >= KingdomFrame.HEIGHT - 60 && y <= KingdomFrame.HEIGHT - 10) {
+        else if (x >= 30 && x <= 80 && y >= KingdomFrame.HEIGHT - 90 && y <= KingdomFrame.HEIGHT - 40) {
             //g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
             infoScreenDisplay = true;
         }
