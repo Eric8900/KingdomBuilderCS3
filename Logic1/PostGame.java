@@ -9,9 +9,11 @@ public class PostGame {
     public int size;
     public int locationTiles;
     public boolean scoringMerchant = false;
+    public int playerForMerchant = -1;
     public ArrayList<Sector> sectors;
 
     public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
+    ArrayList <Integer> locTilesIndicies = new ArrayList<>();
 
     public PostGame(boolean[] vis) {
         this.vis = vis;
@@ -147,14 +149,20 @@ public class PostGame {
                 if (player == -1) continue;
                 if (!vis[hexes[i][j].id]) {
                     locationTiles = 0;
+                    playerForMerchant = player;
                     dfs(hexes[i][j]);
                     System.out.println("Bruh amount of loc tiles " + locationTiles);
-                    if(locationTiles < 2) continue;//not sufficient
+                    if(locationTiles < 2){locTilesIndicies.clear(); continue;};//not sufficient
+                    System.out.print("These are the location tile indicies that you visited in this component ");
+                    for(int k : locTilesIndicies) System.out.print(k + " ");
+                    System.out.println();
                     GameState.players.get(player).score += (4 * locationTiles);
                     GameState.players.get(player).getScore[9] += (4 * locationTiles);
+                    locTilesIndicies.clear();
                 }
             }
         }
+        playerForMerchant = -1;
         scoringMerchant = false;
     }
 
@@ -272,14 +280,25 @@ public class PostGame {
     }
 
     public void dfs(GameHex c) {
+        if(vis[c.id]) return;
         if (c.terr > 6) locationTiles++;
         vis[c.id] = true;
         size++;
         for (GameHex v : c.neighbors) {
             if(v == null) continue;
-            if (!vis[v.id] && c.player == v.player) {
+            if(c.player == -1 && !vis[v.id] && v.player == playerForMerchant && v.player != -1){
+                //if c is a location tile, the only possible way it would be if player is negative 1, then we only dfs
+                //if the next hex has the same player as the player in the merchant component
+                //we know that we will only call dfs on a locaton tile on merchants, this will never be in hermits or citzens
+                //thus playerMerchant cannot be negative 1 here, but i'll still enforce it just for reassurance
+                dfs(v);
+            }
+            else if (!vis[v.id] && c.player == v.player && c.player != -1) {
+                //if c is not a location tile simply check if same player
+                //this is c is not a location tile
                 dfs(v);
             }else if(scoringMerchant && !vis[v.id] && (v.terr > 6)){
+                //now here we can dfs onto a location tile if we are scoring merchants
                 //for merchants the only time we accept it not being the same player is if that's a location tile
                 dfs(v);
             }
