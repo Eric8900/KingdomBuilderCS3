@@ -489,7 +489,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 g.drawImage(drawACard, SX, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80, (int)(terrainCards[0].getWidth()*1.23), (int)(terrainCards[0].getHeight()*1.23), null);
             }
             else {
-                System.out.println(players.get(i).chosenCard);
                 g.drawImage(terrainCards[players.get(i).chosenCard],SX,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[players.get(i).chosenCard].getHeight()*1.23),null);
             }
         }
