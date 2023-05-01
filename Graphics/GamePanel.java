@@ -166,12 +166,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 locTileImages[bruh] = ImageIO.read(GamePanel.class.getResource("/Images/LH" + i + ".png"));
                 bruh++;
             }
-            for (int i = 0; i < 20; i++) {
-                for (int j = 0; j < 20; j++) {
-                    System.out.print(initBoard[i][j] + " ");
-                }
-                System.out.println();
-            }
             //58(x) 52.8(y)
             double mult = 1.2;
             int width = (int)(KingdomFrame.WIDTH/3.125/mult);
@@ -184,9 +178,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     int x = i % 2 == 0 ? (int) (((double) width * (1.5 / 516.6666666667))) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j) : (int) ((width * 0.05032258)) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j);
                     //g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
                     centers[i][j] = new Pair((x + (circleWidth / 2)), (y + (circleHeight / 2)));
-                    System.out.println(centers[i][j].first + " " + centers[i][j].second + "//");
                 }
-                System.out.println();
             }
             GameState.board = new GameBoard(initBoard, centers);
         }
