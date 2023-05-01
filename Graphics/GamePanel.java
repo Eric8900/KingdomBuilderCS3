@@ -537,12 +537,6 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             theEnd = true;
         }
-        if (objectiveCardDisplay) {
-            objectiveCardDisplay = false;
-        }
-        else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
-            objectiveCardDisplay = true;
-        }
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
         }
@@ -556,160 +550,201 @@ public class GamePanel extends JPanel implements MouseListener {
             }
         }
         else if (GameState.currentState == State.DRAWCARD) {
-            //reference: X: KingdomFrame.WIDTH*8/15 Y: 650 WIDTH: (int)(cardBack.getWidth()*scale) HEIGHT: (int)(cardBack.getHeight()*scale)
-            if ((x >= KingdomFrame.WIDTH*8/15) && (x <= KingdomFrame.WIDTH*8/15 + (int)(cardBack.getWidth())) && (y >= 650) && (y <= 650 + (int)(cardBack.getHeight()))) {
-                GameState.update();
-                GameState.setState(State.PLAYSETTLEMENTS);
-                GameState.update();
-                drawCardWarning = false;
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
             }
-            else {
-                drawCardWarning = true;
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                //reference: X: KingdomFrame.WIDTH*8/15 Y: 650 WIDTH: (int)(cardBack.getWidth()*scale) HEIGHT: (int)(cardBack.getHeight()*scale)
+                if ((x >= KingdomFrame.WIDTH*8/15) && (x <= KingdomFrame.WIDTH*8/15 + (int)(cardBack.getWidth())) && (y >= 650) && (y <= 650 + (int)(cardBack.getHeight()))) {
+                    GameState.update();
+                    GameState.setState(State.PLAYSETTLEMENTS);
+                    GameState.update();
+                    drawCardWarning = false;
+                }
+                else {
+                    drawCardWarning = true;
+                }
             }
         }
         else if (GameState.currentState == State.PLAYSETTLEMENTS) {
-            checkIfClickedOnLocOrSettle(x, y);
-            //START PLACEMENT ON BOARD
-            if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).settleActionsLeft >= 1) {
-                out: for(int i = 0; i<gm.length; i++){
-                    for(int j = 0; j<gm[i].length; j++){
-                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
-                            if (currentHighlights[i][j]) {
-                                players.get(GameState.currentPlayer).settlementLock = true;
-                                players.get(GameState.currentPlayer).settleActionsLeft--;
-                                players.get(GameState.currentPlayer).tilesLeft--;
-                                gm[i][j].player = GameState.currentPlayer;
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
+            }
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                checkIfClickedOnLocOrSettle(x, y);
+                //START PLACEMENT ON BOARD
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).settleActionsLeft >= 1) {
+                    out: for(int i = 0; i<gm.length; i++){
+                        for(int j = 0; j<gm[i].length; j++){
+                            if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
+                                if (currentHighlights[i][j]) {
+                                    players.get(GameState.currentPlayer).settlementLock = true;
+                                    players.get(GameState.currentPlayer).settleActionsLeft--;
+                                    players.get(GameState.currentPlayer).tilesLeft--;
+                                    gm[i][j].player = GameState.currentPlayer;
 
-                                //check if it's adj to a loc tile
-                                for (int a = 0; a < 6; a++) {
-                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
-                                        for (int c = 0; c < locTiles.length; c++) {
-                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
-                                                gm[i][j].neighbors[a].updateLocTile();
-                                                gm[i][j].neighbors[a].locationTileLeft--;
-                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                    //check if it's adj to a loc tile
+                                    for (int a = 0; a < 6; a++) {
+                                        if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                            for (int c = 0; c < locTiles.length; c++) {
+                                                if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                    gm[i][j].neighbors[a].updateLocTile();
+                                                    gm[i][j].neighbors[a].locationTileLeft--;
+                                                    players.get(GameState.currentPlayer).locationTiles[c]++;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
-                                    currentHighlights = new boolean[20][20];
+                                    if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
+                                        currentHighlights = new boolean[20][20];
+                                        break out;
+                                    }
+                                    GameState.update();
                                     break out;
                                 }
-                                GameState.update();
-                                break out;
                             }
                         }
                     }
                 }
+                if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
+                    players.get(GameState.currentPlayer).settlementLock = false;
+                    nextTurnPossible = true;
+                }
+                //END PLACEMENT ON BOARD
             }
-            if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
-                players.get(GameState.currentPlayer).settlementLock = false;
-                nextTurnPossible = true;
-            }
-            //END PLACEMENT ON BOARD
         }
         else if (GameState.currentState == State.PLAYADDLOCATIONTILE) {
-            checkIfClickedOnLocOrSettle(x, y);
-            //START PLAY LOCATION TILE
-            if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
-                out: for(int i = 0; i<gm.length; i++){
-                    for(int j = 0; j<gm[i].length; j++){
-                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
-                            if (currentHighlights[i][j]) {
-                                players.get(GameState.currentPlayer).locActionsLeft--;
-                                gm[i][j].player = GameState.currentPlayer;
-                                players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
-                                players.get(GameState.currentPlayer).tilesLeft--;
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
+            }
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                checkIfClickedOnLocOrSettle(x, y);
+                //START PLAY LOCATION TILE
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
+                    out: for(int i = 0; i<gm.length; i++){
+                        for(int j = 0; j<gm[i].length; j++){
+                            if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
+                                if (currentHighlights[i][j]) {
+                                    players.get(GameState.currentPlayer).locActionsLeft--;
+                                    gm[i][j].player = GameState.currentPlayer;
+                                    players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
+                                    players.get(GameState.currentPlayer).tilesLeft--;
 
-                                //check if it's adj to a loc tile
-                                for (int a = 0; a < 6; a++) {
-                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
-                                        for (int c = 0; c < locTiles.length; c++) {
-                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
-                                                gm[i][j].neighbors[a].updateLocTile();
-                                                gm[i][j].neighbors[a].locationTileLeft--;
-                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                    //check if it's adj to a loc tile
+                                    for (int a = 0; a < 6; a++) {
+                                        if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                            for (int c = 0; c < locTiles.length; c++) {
+                                                if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                    gm[i][j].neighbors[a].updateLocTile();
+                                                    gm[i][j].neighbors[a].locationTileLeft--;
+                                                    players.get(GameState.currentPlayer).locationTiles[c]++;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
-                                    currentHighlights = new boolean[20][20];
+                                    if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
+                                        currentHighlights = new boolean[20][20];
+                                        break out;
+                                    }
+                                    GameState.update();
                                     break out;
                                 }
-                                GameState.update();
-                                break out;
                             }
                         }
                     }
                 }
+                //END PLAY LOCATION TILE
             }
-            //END PLAY LOCATION TILE
+
         }
         else if (GameState.currentState == State.PLAYMOVELOCATIONTILE) {
-            checkIfClickedOnLocOrSettle(x, y);
-            //START PLAY LOCATION TILE
-            if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
-                out: for(int i = 0; i<gm.length; i++){
-                    for(int j = 0; j<gm[i].length; j++){
-                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
-                            if (currentHighlights[i][j]) {
-                                cancelMoveLocationTile = true;
-                                GameState.setState(State.MOVELOCATIONTILE);
-                                GameState.tempChosenGameHex = gm[i][j];
-                                GameState.update();
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
+            }
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                checkIfClickedOnLocOrSettle(x, y);
+                //START PLAY LOCATION TILE
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
+                    out: for(int i = 0; i<gm.length; i++){
+                        for(int j = 0; j<gm[i].length; j++){
+                            if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
+                                if (currentHighlights[i][j]) {
+                                    cancelMoveLocationTile = true;
+                                    GameState.setState(State.MOVELOCATIONTILE);
+                                    GameState.tempChosenGameHex = gm[i][j];
+                                    GameState.update();
+                                }
                             }
                         }
                     }
                 }
+                //END PLAY LOCATION TILE
             }
-            //END PLAY LOCATION TILE
         }
         else if (GameState.currentState == State.MOVELOCATIONTILE) {
-            checkIfClickedOnLocOrSettle(x, y);
-            //START PLAY LOCATION TILE
-            if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
-                out: for(int i = 0; i<gm.length; i++){
-                    for(int j = 0; j<gm[i].length; j++){
-                        if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
-                            if (currentHighlights[i][j]) {
-                                players.get(GameState.currentPlayer).locActionsLeft--;
-                                gm[i][j].player = GameState.currentPlayer;
-                                players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
-                                GameState.tempChosenGameHex.player = -1;
-                                currentHighlights[i][j] = false;
-                                cancelMoveLocationTile = false;
-                                //if moved away from a loc tile
-                                for (int a = 0; a < 6; a++) {
-                                    if (GameState.tempChosenGameHex.neighbors[a] != null && GameState.tempChosenGameHex.neighbors[a].terr >= 7 &&  GameState.tempChosenGameHex.neighbors[a].terr != 14) {
-                                        GameState.tempChosenGameHex.neighbors[a].playerMoveFromLocTile();
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
+            }
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                checkIfClickedOnLocOrSettle(x, y);
+                //START PLAY LOCATION TILE
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
+                    out: for(int i = 0; i<gm.length; i++){
+                        for(int j = 0; j<gm[i].length; j++){
+                            if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
+                                if (currentHighlights[i][j]) {
+                                    players.get(GameState.currentPlayer).locActionsLeft--;
+                                    gm[i][j].player = GameState.currentPlayer;
+                                    players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
+                                    GameState.tempChosenGameHex.player = -1;
+                                    currentHighlights[i][j] = false;
+                                    cancelMoveLocationTile = false;
+                                    //if moved away from a loc tile
+                                    for (int a = 0; a < 6; a++) {
+                                        if (GameState.tempChosenGameHex.neighbors[a] != null && GameState.tempChosenGameHex.neighbors[a].terr >= 7 &&  GameState.tempChosenGameHex.neighbors[a].terr != 14) {
+                                            GameState.tempChosenGameHex.neighbors[a].playerMoveFromLocTile();
+                                        }
                                     }
-                                }
-                                //check if it's adj to a loc tile
-                                for (int a = 0; a < 6; a++) {
-                                    if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
-                                        for (int c = 0; c < locTiles.length; c++) {
-                                            if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
-                                                gm[i][j].neighbors[a].updateLocTile();
-                                                gm[i][j].neighbors[a].locationTileLeft--;
-                                                players.get(GameState.currentPlayer).locationTiles[c]++;
+                                    //check if it's adj to a loc tile
+                                    for (int a = 0; a < 6; a++) {
+                                        if (gm[i][j].neighbors[a] != null && gm[i][j].neighbors[a].terr >= 7 && gm[i][j].neighbors[a].terr != 14) {
+                                            for (int c = 0; c < locTiles.length; c++) {
+                                                if (gm[i][j].neighbors[a].terr == locTiles[c] && !gm[i][j].neighbors[a].locationTilePlayers[GameState.currentPlayer] && gm[i][j].neighbors[a].locationTileLeft > 0) {
+                                                    gm[i][j].neighbors[a].updateLocTile();
+                                                    gm[i][j].neighbors[a].locationTileLeft--;
+                                                    players.get(GameState.currentPlayer).locationTiles[c]++;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
-                                    currentHighlights = new boolean[20][20];
+                                    if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
+                                        currentHighlights = new boolean[20][20];
+                                        break out;
+                                    }
+                                    GameState.update();
                                     break out;
                                 }
-                                GameState.update();
-                                break out;
                             }
                         }
                     }
                 }
+                //END PLAY LOCATION TILE
             }
-            //END PLAY LOCATION TILE
         }
         else if(GameState.getState() == State.ENDGAME){
             if(x>KingdomFrame.WIDTH*3/9 && x<KingdomFrame.WIDTH*4/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
