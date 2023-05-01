@@ -166,12 +166,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 locTileImages[bruh] = ImageIO.read(GamePanel.class.getResource("/Images/LH" + i + ".png"));
                 bruh++;
             }
-            for (int i = 0; i < 20; i++) {
-                for (int j = 0; j < 20; j++) {
-                    System.out.print(initBoard[i][j] + " ");
-                }
-                System.out.println();
-            }
             //58(x) 52.8(y)
             double mult = 1.2;
             int width = (int)(KingdomFrame.WIDTH/3.125/mult);
@@ -184,9 +178,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     int x = i % 2 == 0 ? (int) (((double) width * (1.5 / 516.6666666667))) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j) : (int) ((width * 0.05032258)) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j);
                     //g.drawOval(x, y, (int) 48, 48); //47 and 48 is hardcoded...
                     centers[i][j] = new Pair((x + (circleWidth / 2)), (y + (circleHeight / 2)));
-                    System.out.println(centers[i][j].first + " " + centers[i][j].second + "//");
                 }
-                System.out.println();
             }
             GameState.board = new GameBoard(initBoard, centers);
         }
@@ -231,34 +223,47 @@ public class GamePanel extends JPanel implements MouseListener {
             g.drawLine(KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14, KingdomFrame.WIDTH * 13 / 14, KingdomFrame.HEIGHT * (3 + 2 * i) / 14);
             g.drawLine(KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 1 / 14, KingdomFrame.WIDTH * (5+2*i) / 14, KingdomFrame.HEIGHT * 11 / 14);
         }
+        g.setColor(Constants.Colors.whiteFade);
+        g.fillRoundRect(KingdomFrame.WIDTH*3/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
+        g.fillRoundRect(KingdomFrame.WIDTH*5/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
         g.setColor(Constants.Colors.cyan);
-        g.drawRoundRect(KingdomFrame.WIDTH/2, KingdomFrame.HEIGHT*6/7, 200, 100, 20, 20);
-        g.drawString("Back to Board", KingdomFrame.WIDTH/2, KingdomFrame.HEIGHT*6/7);
+        g.drawRoundRect(KingdomFrame.WIDTH*3/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
+        g.drawRoundRect(KingdomFrame.WIDTH*5/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
+        g.setFont(new Font("Times New Roman", 1, 25));
+        g.drawString("Board", KingdomFrame.WIDTH/9*3+45, KingdomFrame.HEIGHT*13/14-5);
+        g.drawString("Main Menu", KingdomFrame.WIDTH/9*5+17, KingdomFrame.HEIGHT*13/14-5);
         g.setFont(new Font("Times New Roman", 1, 50));
-        g.drawString("Players", KingdomFrame.WIDTH*5/28, KingdomFrame.HEIGHT*9/56);
-        g.drawString("Castle", KingdomFrame.WIDTH*11/28, KingdomFrame.HEIGHT*9/56);
-        for(int i = 0; i<3; i++){
-            g.drawString(getObjStr.get(GameState.deck.getChosenObjectiveCards().get(i)), KingdomFrame.WIDTH*(7+2*i)/14, KingdomFrame.HEIGHT*9/56);
+        g.setColor(Color.BLACK);
+        for(int j = 0; j<2; j++){
+            g.drawString("Players", KingdomFrame.WIDTH*5/28-j, KingdomFrame.HEIGHT*9/56-j);
+            g.drawString("Castle", KingdomFrame.WIDTH*11/28-j, KingdomFrame.HEIGHT*9/56-j);
+            for(int i = 0; i<3; i++){
+                g.drawString(getObjStr.get(GameState.deck.getChosenObjectiveCards().get(i)), KingdomFrame.WIDTH*(7+2*i)/14-j, KingdomFrame.HEIGHT*9/56-j);
+            }
+            g.setColor(Constants.Colors.cyan);
         }
         for(int i = 0; i<4; i++){
-            switch (i){
-                case 0:
-                    g.setColor(Constants.Colors.gold);
-                    break;
-                case 1:
-                    g.setColor(Constants.Colors.silver);
-                    break;
-                case 2:
-                    g.setColor(Constants.Colors.bronze);
-                    break;
-                default:
-                    g.setColor(Constants.Colors.cyan);
+            g.setColor(Color.BLACK);
+            for(int j = 0; j<2;j++){
+                g.drawString((i + 1) + ". Player " + (GameState.players.get(i).num + 1), KingdomFrame.WIDTH * 1 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
+                g.drawString("" + GameState.players.get(i).getScore[10], KingdomFrame.WIDTH * 5 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
+                g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH * 7 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
+                g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH * 9 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
+                g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH * 11 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
+                switch (i){
+                    case 0:
+                        g.setColor(Constants.Colors.gold);
+                        break;
+                    case 1:
+                        g.setColor(Constants.Colors.silver);
+                        break;
+                    case 2:
+                        g.setColor(Constants.Colors.bronze);
+                        break;
+                    default:
+                        g.setColor(Constants.Colors.cyan);
+                }
             }
-            g.drawString((i + 1) + ". Player " + (GameState.players.get(i).num + 1), KingdomFrame.WIDTH * 1 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString("" + GameState.players.get(i).getScore[10], KingdomFrame.WIDTH * 5 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(0)], KingdomFrame.WIDTH * 7 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH * 9 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
-            g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH * 11 / 14, KingdomFrame.HEIGHT * (33+16*i) / 112);
         }
     }
     private void paintMainMenu(Graphics g){
@@ -708,8 +713,11 @@ public class GamePanel extends JPanel implements MouseListener {
             //END PLAY LOCATION TILE
         }
         else if(GameState.getState() == State.ENDGAME){
-            if(x>KingdomFrame.WIDTH/2 && x<KingdomFrame.WIDTH/2+200 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
+            if(x>KingdomFrame.WIDTH*3/9 && x<KingdomFrame.WIDTH*4/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
                 GameState.setState(State.PLAYSETTLEMENTS);
+            }
+            if(x>KingdomFrame.WIDTH*5/9 && x<KingdomFrame.WIDTH*6/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
+                GameState.setState(State.MAINMENU);
             }
         }
         if (nextTurnPossible) {
