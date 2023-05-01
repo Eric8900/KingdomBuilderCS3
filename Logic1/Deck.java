@@ -30,8 +30,12 @@ public class Deck {
             chosenObjectiveCards.add(objectiveCards.get(i));
         }
         //testing
-        //chosenObjectiveCards.remove(0);
-        //chosenObjectiveCards.add(9);
+        chosenObjectiveCards.remove(0);
+        chosenObjectiveCards.add(9);
+        chosenObjectiveCards.remove(1);
+        chosenObjectiveCards.add(2);
+        chosenObjectiveCards.remove(0);
+        chosenObjectiveCards.add(7);
     }
 
     //Shuffles the deck
@@ -50,9 +54,6 @@ public class Deck {
 
     //Accessor methods
     public int getTop() {
-        if(deck.size()==0){
-            refillDeck();
-        }
         return deck.get(0);
     }
 

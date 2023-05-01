@@ -30,6 +30,6 @@ public class Sector {
         sectorBounds[1] = new Pair(endRow, endCol);
     }
     public void updateSettleCount(Player p){
-        settleCounts[p.num] = new Pair(p.num, p.sectorCount[p.num]);
+        settleCounts[p.num] = new Pair(p.num, p.sectorCount[id]);
     }
 }

@@ -8,8 +8,10 @@ public class PostGame {
     public boolean[] vis;
     public int size;
     public int locationTiles;
+    public boolean scoringMerchant = false;
     public ArrayList<Sector> sectors;
 
+    public ArrayList<Player> playerLeaders = new ArrayList<>();//orders to the player from greatest to least in terms of score
 
     public PostGame(boolean[] vis) {
         this.vis = vis;
@@ -29,7 +31,13 @@ public class PostGame {
                 }
             }
         }
+        for(int i = 0; i<4; i++){
+            for(int j = 0; j<4; j++){
+                sectors.get(i).updateSettleCount(GameState.players.get(j));
+            }
+        }
         scorePlayers();
+        Collections.sort(playerLeaders);
     }
 
     public void scorePlayers() {
@@ -131,18 +139,23 @@ public class PostGame {
     }
 
     public void scoreMerchants() {
+        scoringMerchant = true;
         Arrays.fill(vis, false);
         for (int i = 0; i < hexes.length; i++) {
             for (int j = 0; j < hexes[i].length; j++) {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
-                if (hexes[i][j].terr > 6 && !vis[hexes[i][j].id]) {
+                if (!vis[hexes[i][j].id]) {
+                    locationTiles = 0;
                     dfs(hexes[i][j]);
+                    System.out.println("Bruh amount of loc tiles " + locationTiles);
+                    if(locationTiles < 2) continue;//not sufficient
                     GameState.players.get(player).score += (4 * locationTiles);
                     GameState.players.get(player).getScore[9] += (4 * locationTiles);
                 }
             }
         }
+        scoringMerchant = false;
     }
 
     public void scoreWorkers() {
@@ -167,39 +180,37 @@ public class PostGame {
                 rowCount[hexes[i][j].player][i]++;
             }
         }
-        for(int player = 0; player<GameState.players.size(); player++){
-            int[] rows = rowCount[player];
-            int max = -1;
-            for(int count: rows){
-                max = Math.max(max, count);
-            }
-            GameState.players.get(player).score += 2 * max;
-            GameState.players.get(player).getScore[8] += 2 * max;
+            for(int player = 0; player<GameState.players.size(); player++){
+                int[] rows = rowCount[player];
+                int max = -1;
+                for(int count: rows){
+                    max = Math.max(max, count);
+                }
+                GameState.players.get(player).score += 2 * max;
+                GameState.players.get(player).getScore[8] += 2 * max;
         }
     }
 
     public void scoreLords() {
         for (int i = 0; i < sectors.size(); i++) {
-            for(int player = 0; player<GameState.players.size(); player++){
-                sectors.get(i).updateSettleCount(GameState.players.get(player));
-            }
             Pair[] sc = sectors.get(i).settleCounts;
             Arrays.sort(sc);
             int maxCount = sc[0].second;
+            System.out.println("This is the max amount in sector " + i + " "+ maxCount);
             int secondMax = -1;
             boolean checkFor2ndMax = false;
-            if(maxCount == 0) return;//edge cases
-            for (int j = 0; j < sectors.size(); j++) {
-                if(checkFor2ndMax && sc[i].second != secondMax) break;
-                if (sc[i].second == maxCount) {
-                    GameState.players.get(sc[i].first).score += 12;
-                    GameState.players.get(sc[i].first).getScore[2] += 12;
+            for (int j = 0; j < sc.length; j++) {
+                if(checkFor2ndMax && sc[j].second != secondMax) break;
+                if(maxCount == 0) break;
+                if (sc[j].second == maxCount) {
+                    GameState.players.get(sc[j].first).score += 12;
+                    GameState.players.get(sc[j].first).getScore[2] += 12;
                 } else {
                     checkFor2ndMax = true;
-                    secondMax = sc[i].second;
-                    if(secondMax == 0) break;//edge cases
-                    GameState.players.get(sc[i].first).score += 6;
-                    GameState.players.get(sc[i].first).getScore[2] += 6;
+                    secondMax = sc[j].second;
+                    if(secondMax == 0) break;
+                    GameState.players.get(sc[j].first).score += 6;
+                    GameState.players.get(sc[j].first).getScore[2] += 6;
                 }
             }
         }
@@ -268,7 +279,8 @@ public class PostGame {
             if(v == null) continue;
             if (!vis[v.id] && c.player == v.player) {
                 dfs(v);
-            }else if(locationTiles > 1 && !vis[v.id] && v.player == -1){
+            }else if(scoringMerchant && !vis[v.id] && (v.terr > 6)){
+                //for merchants the only time we accept it not being the same player is if that's a location tile
                 dfs(v);
             }
         }

@@ -48,6 +48,7 @@ public class GameState {
 			break;
 		case ENDGAME:
 			new PostGame(new boolean[400]);
+			Collections.sort(players);
 			break;
 		default:
 		}

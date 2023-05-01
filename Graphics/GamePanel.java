@@ -759,7 +759,7 @@ public class GamePanel extends JPanel implements MouseListener {
             for (int j = 0; j < 2; j++) {
                 int X = SX + (j * (int) (width/2 - 20));
                 if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 && 
-                x >= X - 2 && x <= X - 2 + 99 && y >= Y - 2 && y <= Y - 2 + 76) {
+                        x >= X - 2 && x <= X - 2 + 99 && y >= Y - 2 && y <= Y - 2 + 76) {
                     players.get(GameState.currentPlayer).selectedAction = a;
                     if (locTiles[players.get(GameState.currentPlayer).selectedAction] >= 11 && locTiles[players.get(GameState.currentPlayer).selectedAction] <= 13) {
                         GameState.setState(State.PLAYMOVELOCATIONTILE);
@@ -773,10 +773,10 @@ public class GamePanel extends JPanel implements MouseListener {
         int w = KingdomFrame.WIDTH - SX - 5; int l = KingdomFrame.HEIGHT/5;
         // START SETTLEMENT TILE SELECTION
         if (x >= (xRange + w / 3 - 7) && x <= (xRange + w / 3 - 7) + (int)(settlements[GameState.currentPlayer].getWidth()*0.5) + 14 &&
-            y >= yRange - 1 && y <= yRange - 1 + (int)(settlements[GameState.currentPlayer].getHeight()*0.5) + 9) {
-                players.get(GameState.currentPlayer).selectedAction = -1;
-                GameState.currentState = GameState.State.PLAYSETTLEMENTS;
-                GameState.update();
+                y >= yRange - 1 && y <= yRange - 1 + (int)(settlements[GameState.currentPlayer].getHeight()*0.5) + 9) {
+            players.get(GameState.currentPlayer).selectedAction = -1;
+            GameState.currentState = GameState.State.PLAYSETTLEMENTS;
+            GameState.update();
         }
         // END SETTLEMENT TILE SELECTION
     }
@@ -789,4 +789,3 @@ public class GamePanel extends JPanel implements MouseListener {
         return Color.BLACK;
     }
 }
-

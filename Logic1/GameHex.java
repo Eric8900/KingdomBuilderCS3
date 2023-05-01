@@ -3,7 +3,7 @@ package Logic1;
 import Graphics.GamePanel;
 
 public class GameHex {
-	public int x;
+    public int x;
     public int y;
     public Pair pos;
     public int terr;
@@ -16,7 +16,7 @@ public class GameHex {
     public int player = -1;
     public boolean isLocationTile;
     public int locationTileLeft;
-    public boolean[] locationTilePlayers = new boolean[4]; 
+    public boolean[] locationTilePlayers = new boolean[4];
     public GameHex[] neighbors = new GameHex[6];
     public int id;
     public GameHex(int x, int y, int t, GameHex l, GameHex r, GameHex tl, GameHex tr, GameHex bl, GameHex br, int i, int j) {

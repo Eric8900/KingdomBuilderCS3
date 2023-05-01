@@ -15,15 +15,15 @@ paddock = 13
 city = 14
 oasis = 15
 
-Miners = 0
-Discoverers = 1
+Miners = 0 (works so far)
+Discoverers = 1 (works so far)
 Lords = 2
-Fishermen = 3
-Citizens = 4
-Workers = 5
-Hermits = 6
+Fishermen = 3 (works so far)
+Citizens = 4 (works so far)
+Workers = 5 (works so far)
+Hermits = 6 (works so far)
 Farmers = 7
-Knights = 8
+Knights = 8 (works so far)
 Merchants = 9
 
 even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
