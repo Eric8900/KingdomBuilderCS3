@@ -40,9 +40,6 @@ public class GamePanel extends JPanel implements MouseListener {
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
 
-    //testing 
-    public boolean theEnd = false;
-
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false, infoScreenDisplay = false;
@@ -532,10 +529,6 @@ public class GamePanel extends JPanel implements MouseListener {
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
         if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
             GameState.setState(State.ENDGAME);
-            if (theEnd != true) {
-                GameState.update();
-            }
-            theEnd = true;
         }
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
