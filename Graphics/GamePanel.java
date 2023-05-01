@@ -238,8 +238,8 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(KingdomFrame.WIDTH*3/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
         g.drawRoundRect(KingdomFrame.WIDTH*5/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
         g.setFont(new Font("Times New Roman", 1, 25));
-        g.drawString("Back to Board", KingdomFrame.WIDTH/9*3, KingdomFrame.HEIGHT*13/14);
-        g.drawString("Back to Main Menu", KingdomFrame.WIDTH/9*5, KingdomFrame.HEIGHT*13/14);
+        g.drawString("Board", KingdomFrame.WIDTH/9*3+45, KingdomFrame.HEIGHT*13/14-5);
+        g.drawString("Main Menu", KingdomFrame.WIDTH/9*5+17, KingdomFrame.HEIGHT*13/14-5);
         g.setFont(new Font("Times New Roman", 1, 50));
         g.setColor(Color.BLACK);
         for(int j = 0; j<2; j++){
