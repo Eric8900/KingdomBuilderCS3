@@ -28,7 +28,7 @@ public class MoveLocationTile {
         ArrayList<Pair> placed = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             for (int j = 0; j < 20; j++) {
-                if (GameBoard.GameMatrix[i][j].player == curr && GameBoard.GameMatrix[i][j].terr == GameState.players.get(curr).chosenCard && !onCurr(i, j)) {
+                if (GameBoard.GameMatrix[i][j].player == curr && !onCurr(i, j)) {
                     placed.add(new Pair(i, j));
                 }
             }

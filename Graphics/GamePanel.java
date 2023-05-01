@@ -31,17 +31,21 @@ public class GamePanel extends JPanel implements MouseListener {
     private int startY = 0;
     private BufferedImage[] boards = new BufferedImage[4];
     private BufferedImage[] locTileImages = new BufferedImage[4];
-    public static int[] locTiles = new int[4];
+    public static int[] locTiles = new int[4]; 
     private BufferedImage[] settlements = new BufferedImage[4];
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[7];
-    private BufferedImage cardBack;
+    private BufferedImage cardBack, startToken, infoScreen;
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
+
+    //testing 
+    public boolean theEnd = false;
+
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
-    private boolean objectiveCardDisplay = false;
+    private boolean objectiveCardDisplay = false, infoScreenDisplay = false;
     private BufferedImage drawACard;
     public static PostGame postGame;
     public GamePanel() {
@@ -60,7 +64,9 @@ public class GamePanel extends JPanel implements MouseListener {
             getObjStr.put(7,"Farmers");
             getObjStr.put(8,"Knights");
             getObjStr.put(9, "Merchants");
+            startToken = ImageIO.read(GamePanel.class.getResource("/Images/startToken.png"));
             drawACard = ImageIO.read(GamePanel.class.getResource("/Images/DrawACard.png"));
+            infoScreen = ImageIO.read(GamePanel.class.getResource("/Images/infoScreen.png"));
             BOARDS[0] = ImageIO.read(GamePanel.class.getResource("/Images/Board1.png"));
             BOARDS[1] = ImageIO.read(GamePanel.class.getResource("/Images/Board2.png"));
             BOARDS[2] = ImageIO.read(GamePanel.class.getResource("/Images/Board3.png"));
@@ -129,7 +135,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     //reversed one for the upside down cofig
                     for (int j = 9; j >= 0; j--) {
                         for (int r = 9; r >= 0; r--) {
-                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];
+                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];      
                         }
                     }
                 }
@@ -264,7 +270,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString("PLAY", KingdomFrame.WIDTH/2-40, KingdomFrame.HEIGHT/3*2+60);
     }
-    private void paintMainGameScene(Graphics g){
+    private void paintMainGameScene(Graphics g) {
         float borderWidth = 2.0f; // Set the desired border width
         ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
@@ -351,12 +357,26 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Constants.Colors.blue);
             g.drawString("Cancel Hex", SX + 20, SY + 35);
         }
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
+        g.drawString("?", 48, KingdomFrame.HEIGHT - 60);
+
         drawAllPlayerUI(g);
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
         drawObjectiveCards(g);
-        if(objectiveCardDisplay){
+        if(objectiveCardDisplay) {
             displayObjectiveCards(g);
+        }
+        if (infoScreenDisplay) {
+            g.setColor(new Color(0, 0, 0, 200));
+            g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
+            g.drawImage(infoScreen, 100, 100, KingdomFrame.WIDTH - 200, KingdomFrame.HEIGHT - 200, null);
+            g.setColor(Constants.Colors.whiteFade);
+            g.setFont(new Font("Times New Roman", 1, 50));
+            g.drawString("Click Anywhere to Exit", KingdomFrame.WIDTH / 2 - 200, 75);
         }
     }
     private void drawDeckDiscard(Graphics g){
@@ -403,7 +423,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(x,y,width,height,50,50);
         g.drawString("Player " + (playerNum+1),x+15,y+30);
-
+        
         //SETTLEMENTS
         int SX = x+width/3; int SY = y + 6; int w = (int)(settlements[playerNum].getWidth()*settlementScale); int l = (int)(settlements[playerNum].getHeight()*settlementScale);
         g.setColor(Constants.Colors.blue);
@@ -440,6 +460,9 @@ public class GamePanel extends JPanel implements MouseListener {
                 g.drawString(p.roundLocTiles[a] + "", SX2, SY2);
                 a++;
             }
+        }
+        if (playerNum == 0) {
+            g.drawImage(startToken, SX + 120, SY + 38, 90, 105, null);
         }
     }
     private void drawPlayerTerrainCards(Graphics g){
@@ -505,13 +528,23 @@ public class GamePanel extends JPanel implements MouseListener {
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
         if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
             GameState.setState(State.ENDGAME);
-            GameState.update();
+            if (theEnd != true) {
+                GameState.update();
+            }
+            theEnd = true;
         }
         if (objectiveCardDisplay) {
             objectiveCardDisplay = false;
         }
         else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
             objectiveCardDisplay = true;
+        }
+        if (infoScreenDisplay) {
+            infoScreenDisplay = false;
+        }
+        else if (x >= 30 && x <= 80 && y >= KingdomFrame.HEIGHT - 90 && y <= KingdomFrame.HEIGHT - 40) {
+            //g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
+            infoScreenDisplay = true;
         }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
@@ -725,7 +758,7 @@ public class GamePanel extends JPanel implements MouseListener {
             int Y = SY + (i * (height/2 - 20));
             for (int j = 0; j < 2; j++) {
                 int X = SX + (j * (int) (width/2 - 20));
-                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 &&
+                if (!players.get(GameState.currentPlayer).settlementLock && players.get(GameState.currentPlayer).roundLocTiles[a] > 0 && 
                 x >= X - 2 && x <= X - 2 + 99 && y >= Y - 2 && y <= Y - 2 + 76) {
                     players.get(GameState.currentPlayer).selectedAction = a;
                     if (locTiles[players.get(GameState.currentPlayer).selectedAction] >= 11 && locTiles[players.get(GameState.currentPlayer).selectedAction] <= 13) {

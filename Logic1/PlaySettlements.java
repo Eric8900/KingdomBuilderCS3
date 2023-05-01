@@ -1,13 +1,13 @@
 package Logic1;
 import java.util.*;
-
+    
 import Graphics.GamePanel;
 
 public class PlaySettlements {
     int curr = GameState.currentPlayer;
     public PlaySettlements() {
         boolean[][] highlighted = new boolean[20][20];
-        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, GameState.players.get(curr).chosenCard);
+        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, -1);
         GameHex[][] board = GameState.board.GameMatrix;
         int c = 0;
         if (placed != null) {

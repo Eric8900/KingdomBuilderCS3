@@ -32,7 +32,7 @@ public class PlayAddLocationTile {
     }
     public void highlightOracle() {
         boolean[][] highlighted = new boolean[20][20];
-        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, GameState.players.get(curr).chosenCard);
+        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, -1);
         GameHex[][] board = GameState.board.GameMatrix;
         int c = 0;
         if (placed != null) {
@@ -59,7 +59,7 @@ public class PlayAddLocationTile {
     }
     public void highlightFarm() {
         boolean[][] highlighted = new boolean[20][20];
-        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, 6);
+        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, -1);
         GameHex[][] board = GameState.board.GameMatrix;
         int c = 0;
         if (placed != null) {
@@ -87,7 +87,7 @@ public class PlayAddLocationTile {
     }
     public void highlightOasis() {
         boolean[][] highlighted = new boolean[20][20];
-        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, 0);
+        ArrayList<Pair> placed = GameState.board.getPlacedForPlayer(curr, -1);
         GameHex[][] board = GameState.board.GameMatrix;
         int c = 0;
         if (placed != null) {
