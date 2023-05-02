@@ -195,6 +195,10 @@ public class GamePanel extends JPanel implements MouseListener {
         else if(GameState.getState() == State.ENDGAME){
             paintEndGame(g);
         }
+        else if(GameState.getState() == State.BOARD){
+            paintShowBoard(g);
+            drawAllPlayerUI(g, false);
+        }
         else {
             paintMainGameScene(g);
             //FOR TESTING PURPOSES
@@ -365,7 +369,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
         g.drawString("?", 48, KingdomFrame.HEIGHT - 60);
 
-        drawAllPlayerUI(g);
+        drawAllPlayerUI(g, true);
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
         drawObjectiveCards(g);
@@ -404,13 +408,13 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
     }
-    private void drawAllPlayerUI(Graphics g) {
+    private void drawAllPlayerUI(Graphics g, boolean shadeOutPlayers) {
         int SX = (int) ((double) KingdomFrame.WIDTH/2.7*2); int SY = 3;
         for (int i = 0; i < 4; i++) {
             drawPlayerUI(g, players.get(i), i, SX,SY + KingdomFrame.HEIGHT/5*i,KingdomFrame.WIDTH - SX - 5, KingdomFrame.HEIGHT/5);
         }
         for (int i = 0; i < 4; i++) {
-            if (GameState.currentPlayer != i) {
+            if (GameState.currentPlayer != i && shadeOutPlayers) {
                 g.setColor(new Color(40, 40, 40, 200));
                 g.fillRoundRect(SX, SY + (KingdomFrame.HEIGHT / 5 * i),KingdomFrame.WIDTH - SX - 5, KingdomFrame.HEIGHT/5,50,50);
             }
@@ -515,7 +519,61 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setFont(new Font("Times New Roman", 1, 50));
         g.drawString("Click Anywhere to Exit", (int)(KingdomFrame.WIDTH / 2.75), 150);
     }
-
+    private void paintShowBoard(Graphics g){
+        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.setColor(Constants.Colors.whiteFade);
+        g.fillRoundRect(KingdomFrame.WIDTH*5/11, KingdomFrame.HEIGHT*9/11+15, KingdomFrame.WIDTH/11, KingdomFrame.HEIGHT/11, 20, 20);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(KingdomFrame.WIDTH*5/11, KingdomFrame.HEIGHT*9/11+15, KingdomFrame.WIDTH/11, KingdomFrame.HEIGHT/11, 20, 20);
+        g.setColor(Constants.Colors.cyan);
+        g.setFont(new Font("Times New Roman", 1, 25));
+        g.drawString("Leaderboard", KingdomFrame.WIDTH*5/11+20, KingdomFrame.HEIGHT*9/11+70);
+        double mult = 1.2;
+        int width = (int)(KingdomFrame.WIDTH/3.125/mult);
+        int height = (int)(KingdomFrame.HEIGHT/2/mult);
+        int hOffset = ((width - ((int)(32 / mult))));
+        int vOffset = ((height - ((int)(18 / mult))));
+        g.drawImage(boards[0], startX, startY, width, height, null);
+        g.drawImage(boards[1], startX + hOffset, startY, width, height, null);
+        g.drawImage(boards[2], startX, startY + vOffset, width, height, null);
+        g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
+        g.setColor(new Color(50, 50, 50));
+        //58(x) 52.8(y)
+        Pair[][] centers = new Pair[20][20];
+        int circleHeight = (int) ((double) height * (48.0 / 440.0)); int circleWidth = (int) ((double)width * (48.0 / 516.666667));
+        for (int i = 0; i < 20; i++) {
+            int y = (int) (startY + ((double) height * 0.00909091)) + (int) (((double)height * (42.50559555 / 440.0)) * i);
+            for (int j = 0; j < 20; j++) {
+                int x = i % 2 == 0 ? (int) (((double) width * (1.5 / 516.6666666667))) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j) : (int) ((width * 0.05032258)) + (int) (((double) width * (49.055555 / 516.66666667)) * (double) j);
+//                if (currentHighlights[i][j]) {
+//                    Color shadeBackground = new Color(255, 255, 255, 120);
+//                    g.setColor(shadeBackground);
+//                    g.fillOval(x, y, (int) circleWidth, circleHeight); //47 and 48 is hardcoded...
+//                    g.setColor(getColor(GameState.currentPlayer));
+//                    g.drawOval(x, y, (int) circleWidth, circleHeight);
+//                    g.setColor(Color.BLACK);
+//                }
+//                if (GameState.tempChosenGameHex != null && GameState.tempChosenGameHex.pos.first == i && GameState.tempChosenGameHex.pos.second == j) {
+//                    Color shadeBackground = new Color(200, 200, 200, 100);
+//                    g.setColor(shadeBackground);
+//                    g.fillOval(x, y, (int) circleWidth, circleHeight); //47 and 48 is hardcoded...
+//                    g.setColor(Color.RED);
+//                    g.drawOval(x, y, (int) circleWidth, circleHeight);
+//                    g.setColor(Color.BLACK);
+//                }
+                if (GameBoard.GameMatrix[i][j].isLocationTile) {
+                    g.setFont(new Font("Times New Roman", 1, 30));
+                    g.setColor(Color.GREEN);
+                    if (GameBoard.GameMatrix[i][j].locationTileLeft < 1) g.setColor(Color.RED);
+                    g.drawString(" " + GameState.board.GameMatrix[i][j].locationTileLeft, x + 10, y + 20);
+                    g.setColor(Color.WHITE);
+                }
+                if (GameBoard.GameMatrix[i][j].player >= 0) {
+                    g.drawImage(settlements[GameBoard.GameMatrix[i][j].player], x + 8, y + 5, settlements[0].getWidth() / 2, settlements[0].getHeight() / 2, null);
+                }
+            }
+        }
+    }
 
     @Override
     public void mouseClicked(MouseEvent e) {
@@ -741,10 +799,15 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         else if(GameState.getState() == State.ENDGAME){
             if(x>KingdomFrame.WIDTH*3/9 && x<KingdomFrame.WIDTH*4/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
-                GameState.setState(State.PLAYSETTLEMENTS);
+                GameState.setState(State.BOARD);
             }
             if(x>KingdomFrame.WIDTH*5/9 && x<KingdomFrame.WIDTH*6/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
                 GameState.setState(State.MAINMENU);
+            }
+        }
+        else if(GameState.getState() == State.BOARD){
+            if(x>KingdomFrame.WIDTH*5/11 && x<KingdomFrame.WIDTH*6/11 && y>KingdomFrame.HEIGHT*9/11+15 && y<KingdomFrame.HEIGHT*10/11+15){
+                GameState.setState(State.ENDGAME);
             }
         }
         if (nextTurnPossible) {
