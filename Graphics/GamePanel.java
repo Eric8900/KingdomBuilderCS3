@@ -628,7 +628,7 @@ public class GamePanel extends JPanel implements MouseListener {
             if (objectiveCardDisplay) {
                 objectiveCardDisplay = false;
             }
-            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
                 objectiveCardDisplay = true;
             }
             else{
@@ -642,6 +642,9 @@ public class GamePanel extends JPanel implements MouseListener {
                                     players.get(GameState.currentPlayer).settlementLock = true;
                                     players.get(GameState.currentPlayer).settleActionsLeft--;
                                     players.get(GameState.currentPlayer).tilesLeft--;
+                                    if (players.get(GameState.currentPlayer).tilesLeft < 1) {
+                                        players.get(GameState.currentPlayer).settleActionsLeft = 0;
+                                    }
                                     gm[i][j].player = GameState.currentPlayer;
 
                                     //check if it's adj to a loc tile
@@ -678,7 +681,7 @@ public class GamePanel extends JPanel implements MouseListener {
             if (objectiveCardDisplay) {
                 objectiveCardDisplay = false;
             }
-            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
                 objectiveCardDisplay = true;
             }
             else{

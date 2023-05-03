@@ -151,7 +151,6 @@ public class PostGame {
                     locationTiles = 0;
                     playerForMerchant = player;
                     dfs(hexes[i][j]);
-                    unvisitLocTiles();
                     System.out.println("Bruh amount of loc tiles " + locationTiles);
                     if(locationTiles < 2){locTilesIndicies.clear(); continue;};//not sufficient
                     System.out.print("These are the location tile indicies that you visited in this component ");
@@ -164,6 +163,7 @@ public class PostGame {
             }
         }
         playerForMerchant = -1;
+        unvisitLocTiles();
         scoringMerchant = false;
     }
 
