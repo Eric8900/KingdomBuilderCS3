@@ -628,13 +628,13 @@ public class GamePanel extends JPanel implements MouseListener {
             if (objectiveCardDisplay) {
                 objectiveCardDisplay = false;
             }
-            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
                 objectiveCardDisplay = true;
             }
             else{
                 checkIfClickedOnLocOrSettle(x, y);
                 //START PLACEMENT ON BOARD
-                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).settleActionsLeft >= 1) {
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).settleActionsLeft >= 1 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
                     out: for(int i = 0; i<gm.length; i++){
                         for(int j = 0; j<gm[i].length; j++){
                             if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
@@ -681,13 +681,13 @@ public class GamePanel extends JPanel implements MouseListener {
             if (objectiveCardDisplay) {
                 objectiveCardDisplay = false;
             }
-            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
                 objectiveCardDisplay = true;
             }
             else{
                 checkIfClickedOnLocOrSettle(x, y);
                 //START PLAY LOCATION TILE
-                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
+                if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0 && GameState.players.get(GameState.currentPlayer).tilesLeft > 0) {
                     out: for(int i = 0; i<gm.length; i++){
                         for(int j = 0; j<gm[i].length; j++){
                             if((gm[i][j].x - x) * (gm[i][j].x - x) + (gm[i][j].y - y) *(gm[i][j].y - y) <= (circleWidth / 2) * (circleHeight / 2)) {
@@ -696,6 +696,10 @@ public class GamePanel extends JPanel implements MouseListener {
                                     gm[i][j].player = GameState.currentPlayer;
                                     players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction]--;
                                     players.get(GameState.currentPlayer).tilesLeft--;
+                                    if (players.get(GameState.currentPlayer).tilesLeft < 1) {
+                                        players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] = 0;
+                                        nextTurnPossible = true;
+                                    }
 
                                     //check if it's adj to a loc tile
                                     for (int a = 0; a < 6; a++) {
