@@ -273,9 +273,9 @@ public class GamePanel extends JPanel implements MouseListener {
     }
     private void paintMainMenu(Graphics g){
         g.drawImage(backgrounds[0], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
-        g.setColor(new Color(211, 211, 211, 175));
+        g.setColor(new Color(207, 206, 242, 175));
         g.fillRoundRect(KingdomFrame.WIDTH/2-100, KingdomFrame.HEIGHT/3*2, 200, 100, 20,20);
-        g.setColor(Color.BLACK);
+        g.setColor(new Color(110, 108, 166));
         g.drawRoundRect(KingdomFrame.WIDTH/2-100, KingdomFrame.HEIGHT/3*2, 200, 100, 20,20);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
         g.drawString("PLAY", KingdomFrame.WIDTH/2-40, KingdomFrame.HEIGHT/3*2+60);
