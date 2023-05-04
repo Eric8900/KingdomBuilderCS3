@@ -25,6 +25,7 @@ public class NextTurn {
                 if (GameState.players.get(i).tilesLeft < 1) {
                     GameState.setState(State.ENDGAME);
                     GameState.update();
+                    break;
                 }
             }
         }

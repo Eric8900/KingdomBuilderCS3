@@ -22,7 +22,7 @@ public class Player implements Comparable<Player> {
         score = 0;
     }
     public int getNumLocationTiles() {
-        int c =0;
+        int c = 0;
         for (int i = 0; i < 4; i++) {
             c += locationTiles[i];
         }
