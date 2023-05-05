@@ -6,16 +6,20 @@ public class GameState {
 	public static State currentState;
 	public static Deck deck;
 	public static int currentPlayer;
-	public static GameHex tempChosenGameHex = null;
+	public static GameHex tempChosenGameHex;
 	public static ArrayList<Integer> objCards;
-	public static Sector[] sectors = new Sector[4];
+	public static Sector[] sectors;
 	public enum State {
 		DRAWCARD, PLAYSETTLEMENTS, PLAYADDLOCATIONTILE, PLAYMOVELOCATIONTILE, MOVELOCATIONTILE, NEXTTURN, MAINMENU, ENDGAME, BOARD
 	}
 	public GameState() {
+		currentState = State.MAINMENU;
+	}
+	public static void reset(){
+		sectors = new Sector[4];
+		tempChosenGameHex = null;
 		players = new ArrayList<Player>();
 		deck = new Deck();
-		currentState = State.MAINMENU;
 		objCards = new ArrayList<>();
 		objCards = deck.getChosenObjectiveCards();
 		currentPlayer = 0;

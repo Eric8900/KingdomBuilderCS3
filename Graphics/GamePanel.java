@@ -25,7 +25,6 @@ import javax.swing.text.AttributeSet.ColorAttribute;
 import Logic1.*;
 import Logic1.GameState.State;
 public class GamePanel extends JPanel implements MouseListener {
-    private static final String ArrayLis = null;
     private int[][] initBoard = new int[20][20];
     private int startX = 0;
     private int startY = 0;
@@ -39,18 +38,14 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] backgrounds = new BufferedImage[2];
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
-
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
     private boolean objectiveCardDisplay = false, infoScreenDisplay = false;
     private BufferedImage drawACard;
-    public static PostGame postGame;
+    private BufferedImage[] BOARDS = new BufferedImage[16];
     public GamePanel() {
         try {
             new GameState();
-            players = GameState.players;
-            BufferedImage[] BOARDS = new BufferedImage[16];
-            boolean[] used = new boolean[8];
             getObjStr.put(0,"Miners");
             getObjStr.put(1,"Discoverers");
             getObjStr.put(2,"Lords");
@@ -102,7 +97,17 @@ public class GamePanel extends JPanel implements MouseListener {
             objectiveCards[8] = ImageIO.read(GamePanel.class.getResource("/Images/KnightsObjective.PNG"));
             objectiveCards[9] = ImageIO.read(GamePanel.class.getResource("/Images/MerchantsObjective.png"));
             cardBack= ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Back.png"));
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        addMouseListener(this);
+    }
+    public void reset(){
+        players = GameState.players;
+        try{
             //BOARD RANDOMIZATION INITIALIZATION
+            boolean[] used = new boolean[8];
             int[][][] boardConfig = new int[4][10][10];
             for (int i = 0; i < 4; i++) {
                 int rand = (int) (Math.random() * 8);
@@ -132,7 +137,7 @@ public class GamePanel extends JPanel implements MouseListener {
                     //reversed one for the upside down cofig
                     for (int j = 9; j >= 0; j--) {
                         for (int r = 9; r >= 0; r--) {
-                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];      
+                            boardConfig[i][9 - j][9 - r] = tempBoard[j][r];
                         }
                     }
                 }
@@ -179,10 +184,9 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             GameState.board = new GameBoard(initBoard, centers);
         }
-        catch(Exception e) {
+        catch(Exception e){
             e.printStackTrace();
         }
-        addMouseListener(this);
     }
     public void paint(Graphics g) {
         super.paintComponent(g);
@@ -198,6 +202,10 @@ public class GamePanel extends JPanel implements MouseListener {
         else if(GameState.getState() == State.BOARD){
             paintShowBoard(g);
             drawAllPlayerUI(g, false);
+            drawObjectiveCards(g);
+            if(objectiveCardDisplay) {
+                displayObjectiveCards(g);
+            }
         }
         else {
             paintMainGameScene(g);
@@ -407,7 +415,7 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Color.BLACK);
         }
         g.setFont(new Font("Times New Roman", 1, 20));
-        g.setColor(Constants.Colors.cyan);
+        g.setColor(new Color(64, 32, 31));
         g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 30, 805);
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
@@ -602,6 +610,8 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
+                GameState.reset();
+                reset();
                 GameState.setState(State.DRAWCARD);
             }
         }
@@ -818,8 +828,16 @@ public class GamePanel extends JPanel implements MouseListener {
             }
         }
         else if(GameState.getState() == State.BOARD){
-            if(x>KingdomFrame.WIDTH*5/11 && x<KingdomFrame.WIDTH*6/11 && y>KingdomFrame.HEIGHT*9/11+15 && y<KingdomFrame.HEIGHT*10/11+15){
-                GameState.setState(State.ENDGAME);
+            if (objectiveCardDisplay) {
+                objectiveCardDisplay = false;
+            }
+            else if (x >= KingdomFrame.WIDTH*8/15-12 && x <= KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+14 && y >= KingdomFrame.HEIGHT*1/32-7 && y <= KingdomFrame.HEIGHT*1/32-7 + KingdomFrame.HEIGHT*13/32+(int)(objectiveCards[0].getHeight()*.4)-KingdomFrame.HEIGHT*1/32+14) {
+                objectiveCardDisplay = true;
+            }
+            else{
+                if(x>KingdomFrame.WIDTH*5/11 && x<KingdomFrame.WIDTH*6/11 && y>KingdomFrame.HEIGHT*9/11+15 && y<KingdomFrame.HEIGHT*10/11+15){
+                    GameState.setState(State.ENDGAME);
+                }
             }
         }
         if (nextTurnPossible) {
