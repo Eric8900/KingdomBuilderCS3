@@ -591,6 +591,7 @@ public class GamePanel extends JPanel implements MouseListener {
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
         if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
             GameState.setState(State.ENDGAME);
+            GameState.update();
         }
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
