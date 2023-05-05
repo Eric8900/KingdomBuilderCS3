@@ -184,7 +184,7 @@ public class PostGame {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
                 //otherwise we know a player has settlement on this hex
-                if (nextToType(hexes[i][j], 2) || nextToLocation(hexes[i][j])) {
+                if (nextToLocation(hexes[i][j])) {
                     GameState.players.get(player).score++;
                     GameState.players.get(player).getScore[5]++;
                 }

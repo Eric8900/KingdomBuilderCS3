@@ -16,7 +16,7 @@ public class Player implements Comparable<Player> {
     public int[] getScore = new int[11];//getScore[i] returns the amount of points the player got from score i, 10 gives u the amount u got from castle ehx adj
     public Player(int n){
         num = n;
-        tilesLeft = 20;
+        tilesLeft = 40;
         locationTiles = new int[4];
         chosenCard = -1;
         score = 0;

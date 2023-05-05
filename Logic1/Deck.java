@@ -30,12 +30,12 @@ public class Deck {
             chosenObjectiveCards.add(objectiveCards.get(i));
         }
         //testing
-        chosenObjectiveCards.remove(0);
+        /*chosenObjectiveCards.remove(0);
         chosenObjectiveCards.add(4);
         chosenObjectiveCards.remove(1);
         chosenObjectiveCards.add(9);
         chosenObjectiveCards.remove(0);
-        chosenObjectiveCards.add(6);
+        chosenObjectiveCards.add(6);*/
     }
 
     //Shuffles the deck
