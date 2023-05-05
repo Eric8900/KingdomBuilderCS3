@@ -265,16 +265,16 @@ public class GamePanel extends JPanel implements MouseListener {
                 g.drawString("" + GameState.players.get(i).score, KingdomFrame.WIDTH * 11 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
                 switch (i){
                     case 0:
-                        g.setColor(Constants.Colors.gold);
+                        g.setColor(getColor(0));
                         break;
                     case 1:
-                        g.setColor(Constants.Colors.silver);
+                        g.setColor(getColor(1));
                         break;
                     case 2:
-                        g.setColor(Constants.Colors.bronze);
+                        g.setColor(getColor(2));
                         break;
                     default:
-                        g.setColor(Constants.Colors.cyan);
+                        g.setColor(getColor(3));
                 }
             }
         }
