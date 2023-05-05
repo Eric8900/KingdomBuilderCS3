@@ -194,7 +194,7 @@ public class GamePanel extends JPanel implements MouseListener {
             paintMainMenu(g);
             //FOR TESTING PURPOSES
             g.setFont(new Font("Times New Roman", 1, 15));
-            drawForceEndButton(g);
+            //drawForceEndButton(g);
         }
         else if(GameState.getState() == State.ENDGAME){
             paintEndGame(g);
@@ -210,7 +210,7 @@ public class GamePanel extends JPanel implements MouseListener {
         else {
             paintMainGameScene(g);
             //FOR TESTING PURPOSES
-            drawForceEndButton(g);
+            //drawForceEndButton(g);
         }
     }
 
@@ -415,7 +415,7 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Color.BLACK);
         }
         g.setFont(new Font("Times New Roman", 1, 20));
-        g.setColor(new Color(64, 32, 31));
+        g.setColor(new Color(255, 255, 255));
         g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 30, 805);
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
@@ -597,10 +597,12 @@ public class GamePanel extends JPanel implements MouseListener {
         int height = (int)(KingdomFrame.HEIGHT/2/1.2);
         int circleHeight = (int) ((double) height * (48.0 / 440.0)); int circleWidth = (int) ((double)width * (48.0 / 516.666667));
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
-        if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
-            GameState.setState(State.ENDGAME);
-            GameState.update();
-        }
+        //FORCEEND
+        // if(x >= KingdomFrame.WIDTH*20/100 && x <= KingdomFrame.WIDTH*25/100 && y >= KingdomFrame.HEIGHT*90/100 && y <= KingdomFrame.HEIGHT*95/100 && !(GameState.currentState == State.ENDGAME)){
+        //     GameState.setState(State.ENDGAME);
+        //     GameState.update();
+        // }
+        //FORCEEND
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
         }
