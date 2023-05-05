@@ -15,16 +15,17 @@ paddock = 13
 city = 14
 oasis = 15
 
+castle (works with multiple testing)
 Miners = 0 (works so far)
 Discoverers = 1 (works so far)
-Lords = 2
+Lords = 2 (works with multiple testing)
 Fishermen = 3 (works so far)
-Citizens = 4 (works so far)
+Citizens = 4 (works with multiple testing)
 Workers = 5 (works so far)
-Hermits = 6 (works so far)
-Farmers = 7
+Hermits = 6 (works with multiple testing)
+Farmers = 7 (works with multiple testing)
 Knights = 8 (works so far)
-Merchants = 9
+Merchants = 9 (inconsistent)
 
 even = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j - 1), (i - 1, j - 1)
 odd = (i,j), (i - 1, j), (i + 1, j), (i, j + 1), (i, j - 1), (i + 1, j + 1), (i - 1, j + 1)

@@ -31,11 +31,11 @@ public class Deck {
         }
         //testing
         chosenObjectiveCards.remove(0);
-        chosenObjectiveCards.add(9);
+        chosenObjectiveCards.add(4);
         chosenObjectiveCards.remove(1);
-        chosenObjectiveCards.add(2);
+        chosenObjectiveCards.add(9);
         chosenObjectiveCards.remove(0);
-        chosenObjectiveCards.add(7);
+        chosenObjectiveCards.add(6);
     }
 
     //Shuffles the deck
