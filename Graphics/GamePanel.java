@@ -13,8 +13,11 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -124,13 +127,16 @@ public class GamePanel extends JPanel implements MouseListener {
                     boards[i] = BOARDS[rand];
                     rand++;
                 }
-                Scanner sc = new Scanner(new File("Boards/Board" + rand + ".txt"));
+                //Scanner sc = new Scanner(new File("/Boards/Board" + rand + ".txt"));
+                InputStream inputStream = getClass().getResourceAsStream("/Boards/Board" + rand + ".txt");
+                BufferedReader sc = new BufferedReader(new InputStreamReader(inputStream));
+
                 int[][] tempBoard = new int[10][10];
                 for (int j = 0; j < 10; j++) {
+                    String[] line = sc.readLine().split(" ");
                     for (int r = 0; r < 10; r++) {
-                        tempBoard[j][r] = sc.nextInt();
+                        tempBoard[j][r] = Integer.parseInt(line[r]);
                     }
-                    sc.nextLine();
                 }
                 if (rev == 0) boardConfig[i] = tempBoard;
                 else {
