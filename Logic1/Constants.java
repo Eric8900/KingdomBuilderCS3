@@ -15,5 +15,7 @@ public class Constants {
         public final static Color gold = new Color(255, 215, 0);
         public final static Color silver = new Color(192, 192, 192);
         public final static Color bronze = new Color(205, 127, 50);
+        public final static Color cautionRed = new Color(255, 10, 10);
+        public final static Color infoOrange = new Color(255, 200, 0);
     }
 }

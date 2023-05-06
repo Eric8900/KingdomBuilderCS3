@@ -381,11 +381,12 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Constants.Colors.blue);
             g.drawString("Cancel Hex", SX + 20, SY + 35);
         }
-        g.setColor(Constants.Colors.green);
-        g.fillRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
-        g.setColor(Constants.Colors.blue);
-        g.drawRoundRect(30, KingdomFrame.HEIGHT - 90, 50, 50, 50, 50);
-        g.drawString("?", 48, KingdomFrame.HEIGHT - 60);
+        g.setColor(Constants.Colors.cautionRed);
+        g.fillRoundRect(30, KingdomFrame.HEIGHT - 90, 60, 60, 50, 50);
+        g.setColor(Constants.Colors.infoOrange);
+        g.drawRoundRect(30, KingdomFrame.HEIGHT - 90, 60, 60, 50, 50);
+        g.setFont(new Font("Times New Roman", 1, 25));
+        g.drawString("Info", 37, KingdomFrame.HEIGHT - 52);
 
         drawAllPlayerUI(g, true);
         drawDeckDiscard(g);
@@ -400,7 +401,7 @@ public class GamePanel extends JPanel implements MouseListener {
             g.drawImage(infoScreen, 100, 100, KingdomFrame.WIDTH - 200, KingdomFrame.HEIGHT - 200, null);
             g.setColor(Constants.Colors.whiteFade);
             g.setFont(new Font("Times New Roman", 1, 50));
-            g.drawString("Click Anywhere to Exit", KingdomFrame.WIDTH / 2 - 200, 75);
+            g.drawString("READ CAREFULLY! Click Anywhere to Exit! READ CAREFULLY!", 150, 75);
         }
     }
     private void drawDeckDiscard(Graphics g){
@@ -621,6 +622,7 @@ public class GamePanel extends JPanel implements MouseListener {
                 GameState.reset();
                 reset();
                 GameState.setState(State.DRAWCARD);
+                infoScreenDisplay = true;
             }
         }
         else if (GameState.currentState == State.DRAWCARD) {
