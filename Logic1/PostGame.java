@@ -217,16 +217,22 @@ public class PostGame {
             for(int j = 0; j<4; j++){
                 set.add(-GameState.players.get(j).sectorCount[i]);
             }
-            int highest = -1 * set.first();
+            int highest = 0;
+            if (set.size() > 0) {
+                highest = -1 * set.first();
+            }
             set.remove(set.first());
-            int secondHighest = -1 * set.first();
+            int secondHighest = 0;
+            if (set.size() > 0) {
+                secondHighest = -1 * set.first();
+            }
             for(int j = 0; j<4; j++){
                 if(GameState.players.get(j).sectorCount[i] == highest && highest != 0){
                     GameState.players.get(j).getScore[2] += 12;
                     GameState.players.get(j).score += 12;
                 }else if(GameState.players.get(j).sectorCount[i] == secondHighest && secondHighest != 0){
                     GameState.players.get(j).getScore[2] += 6;
-                   GameState.players.get(j).score += 6;
+                    GameState.players.get(j).score += 6;
                 }
             }
         }

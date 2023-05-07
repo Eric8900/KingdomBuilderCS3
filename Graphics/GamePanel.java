@@ -195,6 +195,7 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
             }
             GameState.board = new GameBoard(initBoard, centers);
+            GameState.boardInstance.add(getNonStaticBoard());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -253,7 +254,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(KingdomFrame.WIDTH*3/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
         g.drawRoundRect(KingdomFrame.WIDTH*5/9, KingdomFrame.HEIGHT*6/7, KingdomFrame.WIDTH/9, 100, 20, 20);
         g.setFont(new Font("Times New Roman", 1, 25));
-        g.drawString("Board", KingdomFrame.WIDTH/9*3+72, KingdomFrame.HEIGHT*13/14-15);
+        g.drawString("Game Review", KingdomFrame.WIDTH/9*3+36, KingdomFrame.HEIGHT*13/14-15);
         g.drawString("Main Menu", KingdomFrame.WIDTH/9*5+45, KingdomFrame.HEIGHT*13/14-15);
         g.setFont(new Font("Times New Roman", 1, 50));
         g.setColor(Color.BLACK);
@@ -289,9 +290,9 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setColor(new Color(110, 108, 166));
         g.drawRoundRect((int)(KingdomFrame.WIDTH/2-100), (int)(KingdomFrame.HEIGHT/3*2), 200, 100, 20,20);
         g.drawRoundRect((int)(KingdomFrame.WIDTH/2-380), (int)(KingdomFrame.HEIGHT/3*2 + 140), 750, 100, 20,20);
-        g.setFont(new Font("TimesRoman", Font.BOLD, 30));
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
         g.drawString("PLAY", (int)(KingdomFrame.WIDTH/2-40), (int)(KingdomFrame.HEIGHT/3*2+60));
-        g.drawString("Number of Settlements (0 < N <= 65, Default: 40)", (int)(KingdomFrame.WIDTH/2-320), (int)(KingdomFrame.HEIGHT/3*2+200));
+        g.drawString("Number of Settlements | Max: 65 | Min: 1 | Default: 40", (int)(KingdomFrame.WIDTH/2-340), (int)(KingdomFrame.HEIGHT/3*2+200));
         paintComponents(g);
     }
     private void paintMainGameScene(Graphics g) {
@@ -539,6 +540,8 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawString("Click Anywhere to Exit", (int)(KingdomFrame.WIDTH / 2.75), 150);
     }
     private void paintShowBoard(Graphics g){
+        float borderWidth = 2.0f; // Set the desired border width
+        ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
         g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setColor(Constants.Colors.whiteFade);
         g.fillRoundRect(KingdomFrame.WIDTH*5/11, KingdomFrame.HEIGHT*9/11+15, KingdomFrame.WIDTH/11, KingdomFrame.HEIGHT/11, 20, 20);
@@ -558,8 +561,6 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawImage(boards[3], startX + hOffset, startY + vOffset, width, height, null);
         g.setColor(new Color(50, 50, 50));
         //58(x) 52.8(y)
-        Pair[][] centers = new Pair[20][20];
-        int circleHeight = (int) ((double) height * (48.0 / 440.0)); int circleWidth = (int) ((double)width * (48.0 / 516.666667));
         for (int i = 0; i < 20; i++) {
             int y = (int) (startY + ((double) height * 0.00909091)) + (int) (((double)height * (42.50559555 / 440.0)) * i);
             for (int j = 0; j < 20; j++) {
@@ -580,18 +581,29 @@ public class GamePanel extends JPanel implements MouseListener {
 //                    g.drawOval(x, y, (int) circleWidth, circleHeight);
 //                    g.setColor(Color.BLACK);
 //                }
-                if (GameBoard.GameMatrix[i][j].isLocationTile) {
+                if (GameState.boardInstance.get(GameState.boardInstanceIdx)[i][j].isLocationTile) {
                     g.setFont(new Font("Times New Roman", 1, 30));
                     g.setColor(Color.GREEN);
-                    if (GameBoard.GameMatrix[i][j].locationTileLeft < 1) g.setColor(Color.RED);
-                    g.drawString(" " + GameState.board.GameMatrix[i][j].locationTileLeft, x + 10, y + 20);
+                    if (GameState.boardInstance.get(GameState.boardInstanceIdx)[i][j].locationTileLeft < 1) g.setColor(Color.RED);
+                    g.drawString(" " + GameState.boardInstance.get(GameState.boardInstanceIdx)[i][j].locationTileLeft, x + 10, y + 20);
                     g.setColor(Color.WHITE);
                 }
-                if (GameBoard.GameMatrix[i][j].player >= 0) {
-                    g.drawImage(settlements[GameBoard.GameMatrix[i][j].player], x + 8, y + 5, settlements[0].getWidth() / 2, settlements[0].getHeight() / 2, null);
+                if (GameState.boardInstance.get(GameState.boardInstanceIdx)[i][j].player >= 0) {
+                    g.drawImage(settlements[GameState.boardInstance.get(GameState.boardInstanceIdx)[i][j].player], x + 8, y + 5, settlements[0].getWidth() / 2, settlements[0].getHeight() / 2, null);
                 }
             }
         }
+        g.setColor(Constants.Colors.green);
+        g.fillRoundRect(200, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+        g.fillRoundRect(450, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(200, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+        g.drawRoundRect(450, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 30));
+        g.drawString("Back", 265, KingdomFrame.HEIGHT - 105);
+        g.drawString("Foreward", 485, KingdomFrame.HEIGHT - 105);
+        g.setFont(new Font("Times New Roman", Font.BOLD, 40));
+        g.drawString("Move: " + GameState.boardInstanceIdx, 350, KingdomFrame.HEIGHT - 158);
     }
 
     @Override
@@ -687,6 +699,7 @@ public class GamePanel extends JPanel implements MouseListener {
                                             }
                                         }
                                     }
+                                    GameState.boardInstance.add(getNonStaticBoard());
                                     if (players.get(GameState.currentPlayer).settleActionsLeft < 1) {
                                         currentHighlights = new boolean[20][20];
                                         break out;
@@ -741,6 +754,7 @@ public class GamePanel extends JPanel implements MouseListener {
                                             }
                                         }
                                     }
+                                    GameState.boardInstance.add(getNonStaticBoard());
                                     if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
                                         currentHighlights = new boolean[20][20];
                                         break out;
@@ -822,6 +836,7 @@ public class GamePanel extends JPanel implements MouseListener {
                                             }
                                         }
                                     }
+                                    GameState.boardInstance.add(getNonStaticBoard());
                                     if (players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] < 1) {
                                         currentHighlights = new boolean[20][20];
                                         break out;
@@ -839,6 +854,7 @@ public class GamePanel extends JPanel implements MouseListener {
         else if(GameState.getState() == State.ENDGAME){
             if(x>KingdomFrame.WIDTH*3/9 && x<KingdomFrame.WIDTH*4/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
                 GameState.setState(State.BOARD);
+                GameState.boardInstanceIdx = GameState.boardInstance.size() - 1;
             }
             if(x>KingdomFrame.WIDTH*5/9 && x<KingdomFrame.WIDTH*6/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
                 GameState.setState(State.MAINMENU);
@@ -857,6 +873,22 @@ public class GamePanel extends JPanel implements MouseListener {
             else{
                 if(x>KingdomFrame.WIDTH*5/11 && x<KingdomFrame.WIDTH*6/11 && y>KingdomFrame.HEIGHT*9/11+15 && y<KingdomFrame.HEIGHT*10/11+15){
                     GameState.setState(State.ENDGAME);
+                }
+                //g.drawRoundRect(200, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+                //g.drawRoundRect(450, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
+                if (x >= 200 && x <= 400 && y >= KingdomFrame.HEIGHT - 140 && y <= KingdomFrame.HEIGHT - 90) {
+                    //back
+                    GameState.boardInstanceIdx--;
+                    if (GameState.boardInstanceIdx < 0) {
+                        GameState.boardInstanceIdx = GameState.boardInstance.size() - 1;
+                    }
+                }
+                if (x >= 450 && x <= 650 && y >= KingdomFrame.HEIGHT - 140 && y <= KingdomFrame.HEIGHT - 90) {
+                    //foreward
+                    GameState.boardInstanceIdx++;
+                    if (GameState.boardInstanceIdx == GameState.boardInstance.size()) {
+                        GameState.boardInstanceIdx = 0;
+                    }
                 }
             }
         }
@@ -935,5 +967,17 @@ public class GamePanel extends JPanel implements MouseListener {
         else if (p == 2) return new Color(252,171,20,a);
         else if (p == 3) return new Color(191,179,13,a);
         return Color.BLACK;
+    }
+    //LOL WHAT IS THIS
+    public GameHex[][] getNonStaticBoard() {
+        GameHex[][] nonStatic = new GameHex[20][20];
+        GameHex[][] board = GameBoard.GameMatrix;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                GameHex a = board[i][j];
+                nonStatic[i][j] = new GameHex(a);
+            }
+        }
+        return nonStatic;
     }
 }

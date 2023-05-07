@@ -24,12 +24,12 @@ public class GameHex {
         this.y = y;
         pos = new Pair(i, j);
         terr = t;
-        l = left;
-        r = right;
-        tl = topLeft;
-        tr = topRight;
-        bl = botLeft;
-        br = botRight;
+        left = l;
+        right = r;
+        topLeft = tl;
+        topRight = tr;
+        botLeft = bl;
+        botRight = br;
         player = -1;
         neighbors[0] = l;
         neighbors[1] = r;
@@ -45,6 +45,33 @@ public class GameHex {
             isLocationTile = false;
         }
         id = 20 * i + j;
+    }
+    public GameHex(GameHex a) {
+        x = a.x;
+        y = a.y;
+        pos = new Pair(a.pos.first, a.pos.second);
+        terr = a.terr;
+        left = a.left;
+        right = a.right;
+        topLeft = a.topLeft;
+        topRight = a.topRight;
+        botLeft = a.botLeft;
+        botRight = a.botRight;
+        player = a.player;
+        neighbors[0] = a.left;
+        neighbors[1] = a.right;
+        neighbors[2] = a.topLeft;
+        neighbors[3] = a.topRight;
+        neighbors[4] = a.botLeft;
+        neighbors[5] = a.botRight;
+        if (a.terr >= 7 && a.terr != 14) {
+            isLocationTile = true;
+            locationTileLeft = a.locationTileLeft;
+        }
+        else {
+            isLocationTile = false;
+        }
+        id = 20 * a.pos.first + a.pos.second;
     }
     public void updateNeighbors() {
         neighbors[0] = left;

@@ -65,7 +65,7 @@ public class KingdomFrame extends JFrame {
     }
 
     public static void createTextField1() {
-        textField1.setFont(new Font("TimesRoman", Font.BOLD, 30));
+        textField1.setFont(new Font("Times New Roman", Font.BOLD, 30));
         textField1.setForeground(new Color(110, 108, 166));
         textField1.setBackground(new Color(207, 206, 242));
         textField1.setSelectionColor(Constants.Colors.whiteFade);

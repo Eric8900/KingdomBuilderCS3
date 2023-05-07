@@ -9,8 +9,10 @@ public class GameState {
 	public static GameHex tempChosenGameHex;
 	public static ArrayList<Integer> objCards;
 	public static Sector[] sectors;
+	public static ArrayList<GameHex[][]> boardInstance;
+	public static int boardInstanceIdx;
 	public enum State {
-		DRAWCARD, PLAYSETTLEMENTS, PLAYADDLOCATIONTILE, PLAYMOVELOCATIONTILE, MOVELOCATIONTILE, NEXTTURN, MAINMENU, ENDGAME, BOARD
+		DRAWCARD, PLAYSETTLEMENTS, PLAYADDLOCATIONTILE, PLAYMOVELOCATIONTILE, MOVELOCATIONTILE, NEXTTURN, MAINMENU, ENDGAME, BOARD, OBJECTIVECARD
 	}
 	public GameState() {
 		currentState = State.MAINMENU;
@@ -23,6 +25,7 @@ public class GameState {
 		objCards = new ArrayList<>();
 		objCards = deck.getChosenObjectiveCards();
 		currentPlayer = 0;
+		boardInstance = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
 			players.add(new Player(i));
 		}
