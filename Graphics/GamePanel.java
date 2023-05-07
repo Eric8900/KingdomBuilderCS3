@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.TextField;
 import java.awt.Window;
 import java.awt.BasicStroke;
 import java.awt.event.MouseEvent;
@@ -22,6 +23,7 @@ import java.util.*;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.RepaintManager;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.AttributeSet.ColorAttribute;
@@ -109,6 +111,10 @@ public class GamePanel extends JPanel implements MouseListener {
     public void reset(){
         players = GameState.players;
         try{
+            nextTurnPossible = false;
+            objectiveCardDisplay = false;
+            drawCardWarning = false;
+            cancelMoveLocationTile = false;
             //BOARD RANDOMIZATION INITIALIZATION
             boolean[] used = new boolean[8];
             int[][][] boardConfig = new int[4][10][10];
@@ -269,30 +275,24 @@ public class GamePanel extends JPanel implements MouseListener {
                 g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(1)], KingdomFrame.WIDTH * 7 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
                 g.drawString(""+ GameState.players.get(i).getScore[GameState.deck.getChosenObjectiveCards().get(2)], KingdomFrame.WIDTH * 9 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
                 g.drawString("" + GameState.players.get(i).score, KingdomFrame.WIDTH * 11 / 14-(j), KingdomFrame.HEIGHT * (33+16*i) / 112-(j));
-                switch (i){
-                    case 0:
-                        g.setColor(getColor(0));
-                        break;
-                    case 1:
-                        g.setColor(getColor(1));
-                        break;
-                    case 2:
-                        g.setColor(getColor(2));
-                        break;
-                    default:
-                        g.setColor(getColor(3));
-                }
+                g.setColor(getColor(GameState.players.get(i).num));
             }
         }
     }
     private void paintMainMenu(Graphics g){
+        KingdomFrame.textField1.setBounds((int) (KingdomFrame.WIDTH/2-380), (int) (KingdomFrame.HEIGHT/3*2+260), 750, 60);
+        KingdomFrame.textField1.setHorizontalAlignment(JTextField.CENTER);
         g.drawImage(backgrounds[0], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setColor(new Color(207, 206, 242, 175));
-        g.fillRoundRect(KingdomFrame.WIDTH/2-100, KingdomFrame.HEIGHT/3*2, 200, 100, 20,20);
+        g.fillRoundRect((int) (KingdomFrame.WIDTH/2-100), (int) (KingdomFrame.HEIGHT/3*2), 200, 100, 20,20);
+        g.fillRoundRect((int) (KingdomFrame.WIDTH/2-380), (int) (KingdomFrame.HEIGHT/3*2 + 140), 750, 100, 20,20);
         g.setColor(new Color(110, 108, 166));
-        g.drawRoundRect(KingdomFrame.WIDTH/2-100, KingdomFrame.HEIGHT/3*2, 200, 100, 20,20);
+        g.drawRoundRect((int)(KingdomFrame.WIDTH/2-100), (int)(KingdomFrame.HEIGHT/3*2), 200, 100, 20,20);
+        g.drawRoundRect((int)(KingdomFrame.WIDTH/2-380), (int)(KingdomFrame.HEIGHT/3*2 + 140), 750, 100, 20,20);
         g.setFont(new Font("TimesRoman", Font.BOLD, 30));
-        g.drawString("PLAY", KingdomFrame.WIDTH/2-40, KingdomFrame.HEIGHT/3*2+60);
+        g.drawString("PLAY", (int)(KingdomFrame.WIDTH/2-40), (int)(KingdomFrame.HEIGHT/3*2+60));
+        g.drawString("Number of Settlements (0 < N <= 65, Default: 40)", (int)(KingdomFrame.WIDTH/2-320), (int)(KingdomFrame.HEIGHT/3*2+200));
+        paintComponents(g);
     }
     private void paintMainGameScene(Graphics g) {
         float borderWidth = 2.0f; // Set the desired border width
@@ -621,6 +621,13 @@ public class GamePanel extends JPanel implements MouseListener {
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
                 GameState.reset();
                 reset();
+                String a = KingdomFrame.textField1.getText();
+                if (a.length() > 0 && a.length() < 3 && (a.charAt(0) >= 48 && a.charAt(0) <= 57) && (a.charAt(a.length() - 1) >= 48 && a.charAt(a.length() - 1) <= 57) && (Integer.parseInt(a) < 66 && Integer.parseInt(a) > 0)) {
+                    for (int i = 0; i < 4; i++) {
+                        players.get(i).tilesLeft = Integer.parseInt(a);
+                    }
+                }
+                remove(KingdomFrame.textField1);
                 GameState.setState(State.DRAWCARD);
                 infoScreenDisplay = true;
             }
@@ -835,6 +842,9 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             if(x>KingdomFrame.WIDTH*5/9 && x<KingdomFrame.WIDTH*6/9 && y>KingdomFrame.HEIGHT*6/7 && y<KingdomFrame.HEIGHT*6/7+100){
                 GameState.setState(State.MAINMENU);
+                KingdomFrame.textField1 = new JTextField("40");
+                KingdomFrame.createTextField1();
+                add(KingdomFrame.textField1);
             }
         }
         else if(GameState.getState() == State.BOARD){

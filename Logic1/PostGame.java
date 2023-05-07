@@ -72,7 +72,7 @@ public class PostGame {
                 int player = hexes[i][j].player;
                 if (player == -1) continue;
                 //otherwise we know a player has settlement on this hex
-                if (nextToType(hexes[i][j], 5)) {
+                if (hexes[i][j].terr != 5 && nextToType(hexes[i][j], 5)) {
                     GameState.players.get(player).score++;
                     GameState.players.get(player).getScore[3]++;
                 }
