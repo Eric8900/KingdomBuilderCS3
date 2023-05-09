@@ -424,7 +424,7 @@ public class GamePanel extends JPanel implements MouseListener {
         }
         g.setFont(new Font("Times New Roman", 1, 20));
         g.setColor(new Color(255, 255, 255));
-        g.drawString("Deck",  KingdomFrame.WIDTH*8/15 + 30, 805);
+        g.drawString("Deck: " + GameState.deck.getDeck().size(),  KingdomFrame.WIDTH*8/15 + 15, 805);
         g.drawString("Discard",  KingdomFrame.WIDTH*8/15 + 20, 980);
         g.setColor(Color.WHITE);
     }
