@@ -25,10 +25,6 @@ public class Deck {
         for(int x = 0; x<10; x++){
             objectiveCards.add(x);
         }
-        shuffleObjectiveCards();
-        for (int i = 0; i < 3; i++) {
-            chosenObjectiveCards.add(objectiveCards.get(i));
-        }
         //testing
         /*chosenObjectiveCards.remove(0);
         chosenObjectiveCards.add(4);
@@ -36,6 +32,28 @@ public class Deck {
         chosenObjectiveCards.add(9);
         chosenObjectiveCards.remove(0);
         chosenObjectiveCards.add(6);*/
+    }
+
+    public ArrayList<Integer> randomSetObjCards(){
+        shuffleObjectiveCards();
+        int i = 0;
+        while(chosenObjectiveCards.size()<3){
+            if(!chosenObjectiveCards.contains(objectiveCards.get(i))){
+                chosenObjectiveCards.add(objectiveCards.get(i));
+            }
+            i++;
+            if(i>10){
+                break;
+            }
+        }
+        return chosenObjectiveCards;
+    }
+
+    public ArrayList<Integer> addObjCard(int card){
+        if(!chosenObjectiveCards.contains(card)){
+			chosenObjectiveCards.add(card);
+		}
+        return chosenObjectiveCards;
     }
 
     //Shuffles the deck
