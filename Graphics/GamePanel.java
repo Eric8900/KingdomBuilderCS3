@@ -668,7 +668,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
                 remove(KingdomFrame.textField1);
                 GameState.setState(State.OBJECTIVECARD);
-                infoScreenDisplay = true;
             }
         }
         else if(GameState.currentState == State.OBJECTIVECARD){
@@ -686,7 +685,7 @@ public class GamePanel extends JPanel implements MouseListener {
             }
             if(GameState.objCards.size()>=3){
                 GameState.setState(State.DRAWCARD);
-                GameState.update();
+                infoScreenDisplay = true;
             }
         }
         else if (GameState.currentState == State.DRAWCARD) {

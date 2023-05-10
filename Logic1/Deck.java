@@ -37,14 +37,12 @@ public class Deck {
     public ArrayList<Integer> randomSetObjCards(){
         shuffleObjectiveCards();
         int i = 0;
-        while(chosenObjectiveCards.size()<3){
-            if(!chosenObjectiveCards.contains(objectiveCards.get(i))){
-                chosenObjectiveCards.add(objectiveCards.get(i));
+        if(chosenObjectiveCards.size()<3){
+            while (chosenObjectiveCards.contains(objectiveCards.get(i))){
+                i++;
+                
             }
-            i++;
-            if(i>10){
-                break;
-            }
+            chosenObjectiveCards.add(objectiveCards.get(i));
         }
         return chosenObjectiveCards;
     }
@@ -75,7 +73,9 @@ public class Deck {
         if (deck.size() == 0){
             refillDeck();
         }
-        return deck.get(0);
+        int c = deck.get(0);
+        deck.remove(0);
+        return c;
     }
 
     public void discardTop() {

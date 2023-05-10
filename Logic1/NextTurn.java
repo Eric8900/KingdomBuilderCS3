@@ -10,7 +10,7 @@ public class NextTurn {
         cur = GameState.currentPlayer;
         curr.locActionsLeft = 0;
         curr.settleActionsLeft = 0;
-        GameState.deck.discardTop();
+        GameState.deck.discard(curr.chosenCard);
         GamePanel.currentHighlights = new boolean[20][20];
         GameState.tempChosenGameHex = null;
         curr.chosenCard = -1;
