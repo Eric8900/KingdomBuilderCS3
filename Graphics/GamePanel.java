@@ -205,9 +205,14 @@ public class GamePanel extends JPanel implements MouseListener {
         super.paintComponent(g);
         if(GameState.getState() == State.MAINMENU){
             paintMainMenu(g);
-            //FOR TESTING PURPOSES
-            g.setFont(new Font("Times New Roman", 1, 15));
-            //drawForceEndButton(g);
+
+
+            // //FOR TESTING PURPOSES
+            // g.setFont(new Font("Times New Roman", 1, 15));
+            // //drawForceEndButton(g);
+        }
+        else if(GameState.getState() == State.OBJECTIVECARD){
+            drawChooseObjCardScene(g);
         }
         else if(GameState.getState() == State.ENDGAME){
             paintEndGame(g);
@@ -224,6 +229,28 @@ public class GamePanel extends JPanel implements MouseListener {
             paintMainGameScene(g);
             //FOR TESTING PURPOSES
             //drawForceEndButton(g);
+        }
+    }
+
+    private void drawChooseObjCardScene(Graphics g){
+        g.drawImage(backgrounds[1], 0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT, null);
+        g.setFont(new Font("Times New Roman", 1, 50));
+        g.setColor(Color.BLACK);
+        g.drawString("CHOOSE 3 OBJECTIVE CARDS", KingdomFrame.WIDTH/2-350, KingdomFrame.HEIGHT/7);
+        g.setColor(new Color(255, 255, 255, 200));
+        //g.setColor(new Color(217, 41, 51));
+        g.drawString("CHOOSE 3 OBJECTIVE CARDS", KingdomFrame.WIDTH/2-350-1, KingdomFrame.HEIGHT/7-1);
+        g.setColor(Constants.Colors.whiteFade);
+        g.fillRoundRect(KingdomFrame.WIDTH/2-150, KingdomFrame.HEIGHT*6/7-25, 300, 100, 20, 20);
+        g.setColor(Constants.Colors.blue);
+        g.drawRoundRect(KingdomFrame.WIDTH/2-150, KingdomFrame.HEIGHT*6/7-25, 300, 100, 20, 20);
+        g.setColor(Constants.Colors.cyan);
+        g.setFont(new Font("Times New Roman", 1, 25));
+        g.drawString("Random", KingdomFrame.WIDTH/2-48, KingdomFrame.HEIGHT*6/7+30);
+        for(int i = 0; i<10; i++){
+            if(!GameState.objCards.contains(i)){
+                g.drawImage(objectiveCards[i], KingdomFrame.WIDTH*(i%5+1)/6-100, KingdomFrame.HEIGHT*(i/5+1)/3-150, 200, 300, null);
+            }
         }
     }
 
@@ -640,8 +667,26 @@ public class GamePanel extends JPanel implements MouseListener {
                     }
                 }
                 remove(KingdomFrame.textField1);
-                GameState.setState(State.DRAWCARD);
+                GameState.setState(State.OBJECTIVECARD);
                 infoScreenDisplay = true;
+            }
+        }
+        else if(GameState.currentState == State.OBJECTIVECARD){
+            //g.drawRoundRect(KingdomFrame.WIDTH/2-150, KingdomFrame.HEIGHT*6/7-25, 300, 100, 20, 20);
+            if(x>KingdomFrame.WIDTH/2-150 && x<KingdomFrame.WIDTH/2+150 && y>KingdomFrame.HEIGHT*6/7-25 && y<KingdomFrame.HEIGHT*6/7+75){
+                GameState.randomSetObjCards();
+            }
+            else{
+                for(int i = 0; i<10; i++){
+                    //g.drawImage(objectiveCards[i], KingdomFrame.WIDTH*(i%5+1)/6-100, KingdomFrame.HEIGHT*(i/5+1)/3-150, 200, 300, null);
+                    if(x>KingdomFrame.WIDTH*(i%5+1)/6-100 && x<KingdomFrame.WIDTH*(i%5+1)/6+100 && y>KingdomFrame.HEIGHT*(i/5+1)/3-150 && y<KingdomFrame.HEIGHT*(i/5+1)/3+150){
+                        GameState.addObjCard(i);
+                    }
+                }
+            }
+            if(GameState.objCards.size()>=3){
+                GameState.setState(State.DRAWCARD);
+                GameState.update();
             }
         }
         else if (GameState.currentState == State.DRAWCARD) {

@@ -23,7 +23,6 @@ public class GameState {
 		players = new ArrayList<Player>();
 		deck = new Deck();
 		objCards = new ArrayList<>();
-		objCards = deck.getChosenObjectiveCards();
 		currentPlayer = 0;
 		boardInstance = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
@@ -83,6 +82,10 @@ public class GameState {
 		return null;
 	}
 	
-	
-	
+	public static void addObjCard(int card){
+		objCards = deck.addObjCard(card);
+	}
+	public static void randomSetObjCards(){
+		objCards = deck.randomSetObjCards();
+	}
 }
