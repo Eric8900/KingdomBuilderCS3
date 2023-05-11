@@ -253,19 +253,22 @@ public class GamePanel extends JPanel implements MouseListener {
                 int SY = (100) + (j * (KingdomFrame.HEIGHT / 2 - 40));
                 g.fillRect(SX, SY, KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125);
                 if (cnt == 0) {
+                    g.setColor(new Color(117, 217, 179, 255));
                     g.drawString("Default", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 2.85), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
                     g.drawImage(themePreviews[0], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
                 }
                 if (cnt == 1) {
-                    //g.setColor();
+                    g.setColor(new Color(201, 123, 20, 255));
                     g.drawString("Medieval Expedition", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
                     g.drawImage(themePreviews[1], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
                 }
                 if (cnt == 2) {
+                    g.setColor(new Color(255, 232, 117, 255));
                     g.drawString("Oregon Trail", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 3.8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
                     g.drawImage(themePreviews[2], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
                 }
                 if (cnt == 3) {
+                    g.setColor(new Color(7, 72, 125, 255));
                     g.drawString("Constantinople", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 3.8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
                     g.drawImage(themePreviews[3], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
                 }
