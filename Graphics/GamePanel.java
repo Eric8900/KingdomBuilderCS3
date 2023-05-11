@@ -781,14 +781,26 @@ public class GamePanel extends JPanel implements MouseListener {
                 objectiveCardDisplay = true;
             }
             else{
+                boolean ok = false;
+                int obEndX = KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+1; // (objective card endX)
+                int SXX = obEndX + ((int) ((double) KingdomFrame.WIDTH/2.7*2) - obEndX) / 2 - ((int) (cardBack.getWidth()*1.23) / 2);
+                for (int i = 0; i < 4; i++) {
+                    if (i == GameState.currentPlayer && x >= SXX && x <= SXX + (int)(cardBack.getWidth()*1.25) && y >= KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 && y <= KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 + (int)(cardBack.getHeight()*1.25)) {
+                        GameState.update();
+                        GameState.currentState = GameState.State.PLAYSETTLEMENTS;
+                        GameState.update();
+                        ok = true;
+                    }
+                }
                 //reference: X: KingdomFrame.WIDTH*8/15 Y: 650 WIDTH: (int)(cardBack.getWidth()*scale) HEIGHT: (int)(cardBack.getHeight()*scale)
                 if ((x >= KingdomFrame.WIDTH*8/15) && (x <= KingdomFrame.WIDTH*8/15 + (int)(cardBack.getWidth())) && (y >= 650) && (y <= 650 + (int)(cardBack.getHeight()))) {
                     GameState.update();
                     GameState.setState(State.PLAYSETTLEMENTS);
                     GameState.update();
                     drawCardWarning = false;
+                    ok = true;
                 }
-                else {
+                else if (!ok) {
                     drawCardWarning = true;
                 }
             }
@@ -1086,6 +1098,31 @@ public class GamePanel extends JPanel implements MouseListener {
             players.get(GameState.currentPlayer).selectedAction = -1;
             GameState.currentState = GameState.State.PLAYSETTLEMENTS;
             GameState.update();
+        }
+
+        /*for(int i = 0; i < players.size(); i++){
+            if (GameState.currentPlayer != i) {
+                g.drawImage(cardBack, SX,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(cardBack.getWidth()*1.25),(int)(cardBack.getHeight()*1.25),null);
+            }
+            else if (players.get(i).chosenCard < 0) {
+                if (drawCardWarning) {
+                    g.setColor(Color.RED);
+                    g.fillRect(SX - 5, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 - 5, (int)(terrainCards[0].getWidth()*1.23) + 10, (int)(terrainCards[0].getHeight()*1.23) + 10);
+                }
+                g.drawImage(drawACard, SX, KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80, (int)(terrainCards[0].getWidth()*1.23), (int)(terrainCards[0].getHeight()*1.23), null);
+            }
+            else {
+                g.drawImage(terrainCards[players.get(i).chosenCard],SX,KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80,(int)(terrainCards[players.get(i).chosenCard].getWidth()*1.23),(int)(terrainCards[players.get(i).chosenCard].getHeight()*1.23),null);
+            }
+        }*/
+        int obEndX = KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+1; // (objective card endX)
+        int SXX = obEndX + ((int) ((double) KingdomFrame.WIDTH/2.7*2) - obEndX) / 2 - ((int) (cardBack.getWidth()*1.23) / 2);
+        for (int i = 0; i < 4; i++) {
+            if (i == GameState.currentPlayer && x >= SXX && x <= SXX + (int)(cardBack.getWidth()*1.25) && y >= KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 && y <= KingdomFrame.HEIGHT/5*i+KingdomFrame.HEIGHT/80 + (int)(cardBack.getHeight()*1.25)) {
+                players.get(GameState.currentPlayer).selectedAction = -1;
+                GameState.currentState = GameState.State.PLAYSETTLEMENTS;
+                GameState.update();
+            }
         }
         // END SETTLEMENT TILE SELECTION
     }
