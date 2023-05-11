@@ -769,7 +769,8 @@ public class GamePanel extends JPanel implements MouseListener {
                 }
             }
             if(GameState.objCards.size()>=3){
-                GameState.setState(State.DRAWCARD);
+                GameState.setState(State.PLAYSETTLEMENTS);
+                GameState.update();
                 infoScreenDisplay = true;
             }
         }
@@ -946,7 +947,6 @@ public class GamePanel extends JPanel implements MouseListener {
                 objectiveCardDisplay = true;
             }
             else{
-                checkIfClickedOnLocOrSettle(x, y);
                 //START PLAY LOCATION TILE
                 if (x >= 0 && x <= boardEndX && y >= 0 && y <= boardEndY && players.get(GameState.currentPlayer).locActionsLeft >= 1 && players.get(GameState.currentPlayer).roundLocTiles[players.get(GameState.currentPlayer).selectedAction] > 0) {
                     out: for(int i = 0; i<gm.length; i++){

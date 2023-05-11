@@ -21,7 +21,7 @@ import Logic1.*;
 public class KingdomFrame extends JFrame {
     public static final int WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
     public static final int HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
-    private boolean isFullScreen = true;
+    private boolean isFullScreen = false;
     public static JTextField textField1 = new JTextField("40");
     GamePanel panel = new GamePanel();
 
@@ -35,15 +35,14 @@ public class KingdomFrame extends JFrame {
         setSize(screenSize.width, screenSize.height);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
-        createTextField1();
-        panel.add(textField1);
-        add(panel);
-        setVisible(true);
+        
 
         // Set the frame to fullscreen
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice device = env.getDefaultScreenDevice();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         device.setFullScreenWindow(this);
 
         // Add a key listener
@@ -51,17 +50,14 @@ public class KingdomFrame extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_F11 || e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-                    isFullScreen = !isFullScreen;
-                    if (!isFullScreen) {
-                        device.setFullScreenWindow(null);
-                        setExtendedState(JFrame.NORMAL);
-                    } else {
-                        setExtendedState(JFrame.MAXIMIZED_BOTH);
-                        toggleFullScreen(device);
-                    }
+                    toggleFullScreen(device);
                 }
             }
         });
+        createTextField1();
+        panel.add(textField1);
+        add(panel);
+        setVisible(true);
     }
 
     public static void createTextField1() {
@@ -73,6 +69,17 @@ public class KingdomFrame extends JFrame {
     }
 
     private void toggleFullScreen(GraphicsDevice device) {
-        device.setFullScreenWindow(this);
+        dispose();
+        if (!isFullScreen) {
+            device.setFullScreenWindow(null);
+            setExtendedState(JFrame.NORMAL);
+            setUndecorated(false);
+        } else {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+            setUndecorated(true);
+            device.setFullScreenWindow(this);
+        }
+        isFullScreen = !isFullScreen;
+        setVisible(true);
     }
 }

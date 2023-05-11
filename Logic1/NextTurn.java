@@ -14,9 +14,15 @@ public class NextTurn {
         GamePanel.currentHighlights = new boolean[20][20];
         GameState.tempChosenGameHex = null;
         curr.chosenCard = -1;
+        GameState.setState(State.DRAWCARD);
+        GameState.update();
         GameState.currentPlayer++;
         if (GameState.currentPlayer == 4) GameState.currentPlayer = 0;
-        GameState.setState(GameState.State.DRAWCARD);
+        // GameState.setState(State.DRAWCARD);
+        // if (GameState.players.get(GameState.currentPlayer).chosenCard > -1) {
+        //     GameState.setState(State.PLAYSETTLEMENTS);
+        //     GameState.update();
+        // }
         for (int i = 0; i < 4; i++) {
             GameState.players.get(i).updateRoundLocTiles();
         }
@@ -29,5 +35,7 @@ public class NextTurn {
                 }
             }
         }
+        GameState.setState(State.PLAYSETTLEMENTS);
+        GameState.update();
     }
 }

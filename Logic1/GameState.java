@@ -29,6 +29,13 @@ public class GameState {
 		for (int i = 0; i < 4; i++) {
 			players.add(new Player(i));
 		}
+		for (int i = 0; i < 4; i++) {
+			Player curr = players.get(i);
+			curr.chosenCard = deck.getTop();
+			// give curr player 3 (settlements) + locationTiles size actions left for their turn
+			curr.settleActionsLeft = 3;
+			curr.locActionsLeft = curr.getNumLocationTiles();
+		}
 		for(int i = 0; i<4; i++){
 			sectors[i] = new Sector(new Pair[4], i, new Pair[2]);
 		}
