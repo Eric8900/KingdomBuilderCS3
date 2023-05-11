@@ -11,6 +11,7 @@ public class GameState {
 	public static Sector[] sectors;
 	public static ArrayList<GameHex[][]> boardInstance;
 	public static int boardInstanceIdx;
+	public static int currentTheme = 0;
 	public enum State {
 		DRAWCARD, PLAYSETTLEMENTS, PLAYADDLOCATIONTILE, PLAYMOVELOCATIONTILE, MOVELOCATIONTILE, NEXTTURN, MAINMENU, ENDGAME, BOARD, OBJECTIVECARD
 	}

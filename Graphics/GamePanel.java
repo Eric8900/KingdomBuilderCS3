@@ -40,12 +40,13 @@ public class GamePanel extends JPanel implements MouseListener {
     private BufferedImage[] objectiveCards = new BufferedImage[10];
     private BufferedImage[] terrainCards = new BufferedImage[7];
     private BufferedImage cardBack, startToken, infoScreen;
-    private BufferedImage[] backgrounds = new BufferedImage[2];
+    private BufferedImage[] backgrounds = new BufferedImage[5];
+    private BufferedImage[] themePreviews = new BufferedImage[4];
     public ArrayList<Player> players;
     public HashMap<Integer, String> getObjStr = new HashMap<>();
     public static boolean[][] currentHighlights = new boolean[20][20];
     public boolean  cancelMoveLocationTile = false, drawCardWarning = false, nextTurnPossible = false;
-    private boolean objectiveCardDisplay = false, infoScreenDisplay = false;
+    private boolean objectiveCardDisplay = false, infoScreenDisplay = false, themeSelection = false;
     private BufferedImage drawACard;
     private BufferedImage[] BOARDS = new BufferedImage[16];
     public GamePanel() {
@@ -91,6 +92,13 @@ public class GamePanel extends JPanel implements MouseListener {
             terrainCards[6] = ImageIO.read(GamePanel.class.getResource("/Images/KB-Card-Meadow.png"));
             backgrounds[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-MainMenuBackground.png"));
             backgrounds[1] = ImageIO.read(GamePanel.class.getResource("/Images/KB-BG.jpg"));
+            backgrounds[2] = ImageIO.read(GamePanel.class.getResource("/Images/medievalBG.jpeg"));
+            backgrounds[3] = ImageIO.read(GamePanel.class.getResource("/Images/oregonTrailBG.jpeg"));
+            backgrounds[4] = ImageIO.read(GamePanel.class.getResource("/Images/byzantiumPreview.jpeg"));
+            themePreviews[0] = ImageIO.read(GamePanel.class.getResource("/Images/KB-BG.jpg"));
+            themePreviews[1] = ImageIO.read(GamePanel.class.getResource("/Images/medievalPreview.jpg"));
+            themePreviews[2] = ImageIO.read(GamePanel.class.getResource("/Images/OregonTrail.jpg"));
+            themePreviews[3] = ImageIO.read(GamePanel.class.getResource("/Images/byzantiumBG.jpeg"));
             objectiveCards[0] = ImageIO.read(GamePanel.class.getResource("/Images/MinersObjective.png"));
             objectiveCards[1] = ImageIO.read(GamePanel.class.getResource("/Images/DiscoverersObjective.PNG"));
             objectiveCards[2] = ImageIO.read(GamePanel.class.getResource("/Images/LordsObjective.PNG"));
@@ -232,8 +240,42 @@ public class GamePanel extends JPanel implements MouseListener {
         }
     }
 
+    private void drawThemeSelection(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT);
+        g.setColor(Constants.Colors.whiteFade);
+        g.setFont(new Font("Times New Roman", 1, 50));
+        g.drawString("Select a Theme | Click Empty Space to Exit", KingdomFrame.WIDTH / 2 - 350, 75);
+        int cnt = 0;
+        for (int i = 0; i < 2; i++) {
+            int SX = 75 + (i * KingdomFrame.WIDTH / 2);
+            for (int j = 0; j < 2; j++) {
+                int SY = (100) + (j * (KingdomFrame.HEIGHT / 2 - 40));
+                g.fillRect(SX, SY, KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125);
+                if (cnt == 0) {
+                    g.drawString("Default", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 2.85), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
+                    g.drawImage(themePreviews[0], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
+                }
+                if (cnt == 1) {
+                    //g.setColor();
+                    g.drawString("Medieval Expedition", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
+                    g.drawImage(themePreviews[1], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
+                }
+                if (cnt == 2) {
+                    g.drawString("Oregon Trail", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 3.8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
+                    g.drawImage(themePreviews[2], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
+                }
+                if (cnt == 3) {
+                    g.drawString("Constantinople", SX + (int) ((KingdomFrame.WIDTH / 2 - 125) / 3.8), SY + (KingdomFrame.HEIGHT / 2 - 125) + 50);
+                    g.drawImage(themePreviews[3], SX, SY,  KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125, null);
+                }
+                cnt++;
+            }
+        }
+    }
+
     private void drawChooseObjCardScene(Graphics g){
-        g.drawImage(backgrounds[1], 0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT, null);
+        g.drawImage(backgrounds[GameState.currentTheme + 1], 0, 0, KingdomFrame.WIDTH, KingdomFrame.HEIGHT, null);
         g.setFont(new Font("Times New Roman", 1, 50));
         g.setColor(Color.BLACK);
         g.drawString("CHOOSE 3 OBJECTIVE CARDS", KingdomFrame.WIDTH/2-350, KingdomFrame.HEIGHT/7);
@@ -262,7 +304,7 @@ public class GamePanel extends JPanel implements MouseListener {
     }
 
     public void paintEndGame(Graphics g){
-        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.drawImage(backgrounds[GameState.currentTheme + 1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setColor(Constants.Colors.green);
         g.fillRoundRect(KingdomFrame.WIDTH*1/14, KingdomFrame.HEIGHT*1/14, KingdomFrame.WIDTH*12/14, KingdomFrame.HEIGHT*10/14, 100, 100);
         g.setColor(Constants.Colors.blue);
@@ -325,7 +367,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private void paintMainGameScene(Graphics g) {
         float borderWidth = 2.0f; // Set the desired border width
         ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
-        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.drawImage(backgrounds[GameState.currentTheme + 1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setFont(new Font("Times New Roman", 1, 50));
         g.setColor(Constants.Colors.green);
         int boardEndX = (int) ((double)KingdomFrame.WIDTH / 1.9238477); int boardEndY = (int) ((double) KingdomFrame.HEIGHT / 1.22033898);
@@ -416,6 +458,13 @@ public class GamePanel extends JPanel implements MouseListener {
         g.setFont(new Font("Times New Roman", 1, 25));
         g.drawString("Info", 37, KingdomFrame.HEIGHT - 52);
 
+        g.setColor(Constants.Colors.cautionRed);
+        g.fillRoundRect(120, KingdomFrame.HEIGHT - 90, 88, 60, 50, 50);
+        g.setColor(Constants.Colors.infoOrange);
+        g.drawRoundRect(120, KingdomFrame.HEIGHT - 90, 88, 60, 50, 50);
+        g.setFont(new Font("Times New Roman", 1, 25));
+        g.drawString("Theme", 127, KingdomFrame.HEIGHT - 52);
+
         drawAllPlayerUI(g, true);
         drawDeckDiscard(g);
         drawPlayerTerrainCards(g);
@@ -430,6 +479,9 @@ public class GamePanel extends JPanel implements MouseListener {
             g.setColor(Constants.Colors.whiteFade);
             g.setFont(new Font("Times New Roman", 1, 50));
             g.drawString("READ CAREFULLY! Click Anywhere to Exit! READ CAREFULLY!", 150, 75);
+        }
+        if (themeSelection) {
+            drawThemeSelection(g);
         }
     }
     private void drawDeckDiscard(Graphics g){
@@ -522,7 +574,7 @@ public class GamePanel extends JPanel implements MouseListener {
         int obEndX = KingdomFrame.WIDTH*8/15-12 + (int)(objectiveCards[0].getWidth()*.4)+1; // (objective card endX)
         int SX = obEndX + ((int) ((double) KingdomFrame.WIDTH/2.7*2) - obEndX) / 2 - ((int) (cardBack.getWidth()*1.23) / 2);
         g.setColor(Constants.Colors.green);
-        g.fillRoundRect(SX - 15, KingdomFrame.HEIGHT/80 - 10, (int)(cardBack.getWidth()*1.4) + 10, KingdomFrame.HEIGHT/5*3+KingdomFrame.HEIGHT/80 - 5 + (int)(terrainCards[0].getHeight()*1.3) + 5, 50, 50);
+        g.fillRoundRect(SX - 15, KingdomFrame.HEIGHT/80 - 10, (int)(cardBack.getWidth()*1.4) + 10, KingdomFrame.HEIGHT/5*3+KingdomFrame.HEIGHT/80 - 5 + (int)(terrainCards[0].getHeight()*1.4) + 5, 50, 50);
         g.setColor(Constants.Colors.blue);
         g.drawRoundRect(SX - 15, KingdomFrame.HEIGHT/80 - 10, (int)(cardBack.getWidth()*1.4) + 10, KingdomFrame.HEIGHT/5*3+KingdomFrame.HEIGHT/80 - 5 + (int)(terrainCards[0].getHeight()*1.4) + 5, 50, 50);
         for(int i = 0; i < players.size(); i++){
@@ -569,7 +621,7 @@ public class GamePanel extends JPanel implements MouseListener {
     private void paintShowBoard(Graphics g){
         float borderWidth = 2.0f; // Set the desired border width
         ((Graphics2D) g).setStroke(new BasicStroke(borderWidth));
-        g.drawImage(backgrounds[1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
+        g.drawImage(backgrounds[GameState.currentTheme + 1], 0, 0,KingdomFrame.WIDTH,KingdomFrame.HEIGHT,null);
         g.setColor(Constants.Colors.whiteFade);
         g.fillRoundRect(KingdomFrame.WIDTH*5/11, KingdomFrame.HEIGHT*9/11+15, KingdomFrame.WIDTH/11, KingdomFrame.HEIGHT/11, 20, 20);
         g.setColor(Constants.Colors.blue);
@@ -628,7 +680,7 @@ public class GamePanel extends JPanel implements MouseListener {
         g.drawRoundRect(450, KingdomFrame.HEIGHT - 140, 200, 50, 20, 20);
         g.setFont(new Font("Times New Roman", Font.BOLD, 30));
         g.drawString("Back", 265, KingdomFrame.HEIGHT - 105);
-        g.drawString("Foreward", 485, KingdomFrame.HEIGHT - 105);
+        g.drawString("Forward", 485, KingdomFrame.HEIGHT - 105);
         g.setFont(new Font("Times New Roman", Font.BOLD, 40));
         g.drawString("Move: " + GameState.boardInstanceIdx, 350, KingdomFrame.HEIGHT - 158);
     }
@@ -651,10 +703,40 @@ public class GamePanel extends JPanel implements MouseListener {
         //FORCEEND
         if (infoScreenDisplay) {
             infoScreenDisplay = false;
+            repaint();
+            return;
         }
         else if (x >= 30 && x <= 80 && y >= KingdomFrame.HEIGHT - 90 && y <= KingdomFrame.HEIGHT - 40) {
             //g.fillRoundRect(30, KingdomFrame.HEIGHT - 60, 50, 50, 50, 50);
             infoScreenDisplay = true;
+            repaint();
+            return;
+        }
+        if (themeSelection) {
+            int cnt = 0;
+            boolean ok = false;
+            for (int i = 0; i < 2; i++) {
+                int SX = 75 + (i * KingdomFrame.WIDTH / 2);
+                for (int j = 0; j < 2; j++) {
+                    int SY = (100) + (j * (KingdomFrame.HEIGHT / 2 - 40));
+                    //g.fillRect(SX, SY, KingdomFrame.WIDTH / 2 - 125, KingdomFrame.HEIGHT / 2 - 125);
+                    if (x >= SX && x <= SX + KingdomFrame.WIDTH / 2 - 125 && y >= SY && y <= SY + KingdomFrame.WIDTH / 2 - 125) {
+                        GameState.currentTheme = cnt;
+                        Constants.Colors.updateColors();
+                        ok = true;
+                    }
+                    cnt++;
+                }
+            }
+            themeSelection = false;
+            repaint();
+            return;
+        }
+        //g.fillRoundRect(120, KingdomFrame.HEIGHT - 90, 88, 60, 50, 50);
+        else if (x >= 120 && x <= 208 && y >= KingdomFrame.HEIGHT - 90 && y <= KingdomFrame.HEIGHT - 40) {
+            themeSelection = true;
+            repaint();
+            return;
         }
         if(GameState.currentState == State.MAINMENU){
             if(x>KingdomFrame.WIDTH/2-100&&x<KingdomFrame.WIDTH/2+100&&y>KingdomFrame.HEIGHT/3*2&&y<KingdomFrame.HEIGHT/3*2+100){
