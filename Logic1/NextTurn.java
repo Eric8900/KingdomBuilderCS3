@@ -35,7 +35,9 @@ public class NextTurn {
                 }
             }
         }
-        GameState.setState(State.PLAYSETTLEMENTS);
-        GameState.update();
+        if (GameState.currentState != State.ENDGAME) {
+            GameState.setState(State.PLAYSETTLEMENTS);
+            GameState.update();
+        }
     }
 }
